@@ -9,15 +9,12 @@ https://github.com/chloemrq/Project-Data-Management
 
 # Links to the sources and description 
 
+
+## OECD
+The Organisation for Economic Co-operation and Development (OECD) is an international organisation created in 1948. Its goal is to allow various countries to answer common problems and coordinate domestic and international policies. OECD members share data and receive analysis from experts on social, economic and environmental challenges.  
+
 ### Health expenditure (OECD)
 https://data-explorer.oecd.org/vis?fs[0]=Topic%2C1%7CHealth%23HEA%23%7CHealth%20expenditure%20and%20financing%23HEA_EXP%23&pg=0&fc=Topic&bp=true&snb=4&vw=tb&df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_SHA%40DF_SHA&df[ag]=OECD.ELS.HD&df[vs]=1.0&dq=AUS%2BAUT%2BBEL%2BCAN%2BCHL%2BCOL%2BCRI%2BCZE%2BDNK%2BEST%2BFIN%2BFRA%2BDEU%2BGRC%2BHUN%2BISL%2BIRL%2BISR%2BITA%2BJPN%2BKOR%2BLVA%2BLTU%2BLUX%2BMEX%2BNLD%2BNZL%2BNOR%2BPOL%2BPRT%2BSVK%2BSVN%2BESP%2BSWE%2BCHE%2BTUR%2BGBR%2BUSA%2BARG%2BBRA%2BBGR%2BCHN%2BHRV%2BCYP%2BIND%2BIDN%2BMLT%2BPER%2BROU%2BZAF%2BTHA%2BUKR.A.EXP_HEALTH.PT_B1GQ._T.._T.._T...&pd=2000%2C2024&to[TIME_PERIOD]=false
-
-
-### GDP per capita in 2015 $US (World Bank)
-https://data.worldbank.org/indicator/NY.GDP.PCAP.KD
-
-### Life expectancy (World Bank)
-https://donnees.banquemondiale.org/indicator/SP.DYN.LE00.IN?most_recent_year_desc=true
 
 ### Tax revenues (social contributions) (OECD)
 https://data-explorer.oecd.org/vis?lc=en&tm=comparative%20tables%20tax%20revenue%20data&pg=0&hc[Topic]=&hc[Unit%20of%20measure]=&snb=153&df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_REV_COMP_OECD%40DF_RSOECD&df[ag]=OECD.CTP.TPS&dq=AUS%2BAUT%2BBEL%2BCAN%2BCHL%2BCOL%2BCRI%2BCZE%2BDNK%2BEST%2BFIN%2BFRA%2BDEU%2BGRC%2BHUN%2BISL%2BIRL%2BISR%2BITA%2BJPN%2BKOR%2BLVA%2BLTU%2BLUX%2BMEX%2BNLD%2BNZL%2BNOR%2BPOL%2BPRT%2BSVK%2BSVN%2BESP%2BSWE%2BCHE%2BTUR%2BGBR%2BUSA%2BOECD_REP..S13.T_2000%2BT_2100%2BT_2200%2BT_2300%2BT_2400..PT_B1GQ.A&to[TIME_PERIOD]=false&pd=2000%2C2023&lb=nm&vw=tb&ly[cl]=TIME_PERIOD&ly[rw]=REF_AREA%2CCOMBINED_MEASURE
@@ -25,11 +22,31 @@ https://data-explorer.oecd.org/vis?lc=en&tm=comparative%20tables%20tax%20revenue
 ### Avoidable mortality (OECD)
 https://data-explorer.oecd.org/vis?tm=Mortality%20rate&pg=0&snb=22&vw=tb&df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_HEALTH_STAT%40DF_AM&df[ag]=OECD.ELS.HD&df[vs]=1.1&dq=.A.AVM.DT_10P5HB.._T.......&pd=2000%2C2023&to[TIME_PERIOD]=false
 
+### Number of hospital beds (OECD)
+https://data-explorer.oecd.org/vis?pg=0&bp=true&snb=6&df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_HEALTH_REAC_HOSP%40DF_BEDS_FUNC&df[ag]=OECD.ELS.HD&df[vs]=1.0&dq=..BD..._T._T..&pd=2000%2C2024&to[TIME_PERIOD]=false&vw=tb&lc=en
+
+
+## World bank 
+The world bank group, is a family of five international organizations created in 1944 which help developing countries through leveraged loans. These loans are given for the purpose of pursuing economic development only. 189 countries are currently members of the World bank group. 
+
+### GDP per capita in 2015 $US (World Bank)
+https://data.worldbank.org/indicator/NY.GDP.PCAP.KD
+
+### Life expectancy (World Bank)
+https://donnees.banquemondiale.org/indicator/SP.DYN.LE00.IN?most_recent_year_desc=true
+
+Life expectancy at birth indicates the number of years a newborn baby would have to live if the general rules of mortality at the time of birth were to remain the same throughout its life. Here it is measured by the world bank from 2000 to 2023. 
+
+
+## IMF
+The International Monetary Fund (IMF) is an international financial institution and a specialized agency of the United Nations created in 1944. It is composed of 191 member countries. Its goal is to help its members achieve sustainable growth and to encourage the expansion of trade. The IMF supports certain economic policies that promote financial stability and monetary cooperation. 
+
 ### Unemployment rate (IMF)
 https://data.imf.org/en/Data-Explorer?datasetUrn=IMF.RES:WEO(9.0.0)&INDICATOR=LUR
 
-### Number of hospital beds (OECD)
-https://data-explorer.oecd.org/vis?pg=0&bp=true&snb=6&df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_HEALTH_REAC_HOSP%40DF_BEDS_FUNC&df[ag]=OECD.ELS.HD&df[vs]=1.0&dq=..BD..._T._T..&pd=2000%2C2024&to[TIME_PERIOD]=false&vw=tb&lc=en
+
+## UNDP
+The United Nations Development Programme is a United Nations agency tasked, since 1965, with helping countries eliminate poverty and achieve sustainable economic growth and human development. They intervene by helping countries develop policies, leadership skills, partnerships and institutional capabilities. 
 
 ### Human development index (HDI) (UNDP)
 https://hdr.undp.org/data-center/documentation-and-downloads
