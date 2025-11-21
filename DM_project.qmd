@@ -4,7 +4,7 @@ author: "Karla Otoude and Chloé Marquis"
 format: html
 ---
 
-# Link to the github project 
+# Link to our github project 
 https://github.com/chloemrq/Project-Data-Management
 
 # Links to the sources and description 
@@ -44,6 +44,9 @@ The International Monetary Fund (IMF) is an international financial institution 
 ### Unemployment rate (IMF)
 https://data.imf.org/en/Data-Explorer?datasetUrn=IMF.RES:WEO(9.0.0)&INDICATOR=LUR
 
+Instructions for the data : In the Data Explorer : 
+- Time period : Custom : 01/01/2000 to 12/31/2024
+
 
 ## UNDP
 The United Nations Development Programme is a United Nations agency tasked, since 1965, with helping countries eliminate poverty and achieve sustainable economic growth and human development. They intervene by helping countries develop policies, leadership skills, partnerships and institutional capabilities. 
@@ -71,7 +74,6 @@ library(ggplot2)
 library(dplyr)
 library(tidyr)
 library(vroom)
-library(readr)
 library(readxl)
 ```
 
@@ -79,7 +81,7 @@ library(readxl)
 ### Health expenditure 
 ```{r}
 #| message: false
-health_expenditure <- vroom(here("data", "health_expenditure.csv"))
+health_expenditure <- vroom(here("data", "OECD.ELS.HD,DSD_SHA@DF_SHA,1.0+.A.EXP_HEALTH.PT_B1GQ._T.._T.._T....csv"))
 problems(health_expenditure)
 ```
 There are issues with columns 39/40, but it doesn't impact the variables we need.
@@ -88,27 +90,30 @@ There are issues with columns 39/40, but it doesn't impact the variables we need
 ```{r}
 health_expenditure |> 
   summarise("Number of rows" = n(), 
-            "Number of columns" = ncol(health_expenditure)) |> as.data.frame() |>
+            "Number of columns" = ncol(health_expenditure), "Number of NA" = sum(is.na(health_expenditure))) |> 
+  as.data.frame() |>
   knitr::kable()
 ```
 
 ### Avoidable mortality
 ```{r}
 #| message: false
-avoidable_mortality <- vroom(here("data", "avoidable_mortality.csv"))
+avoidable_mortality <- vroom(here("data", "OECD.ELS.HD,DSD_HEALTH_STAT@DF_AM,1.1+.A.AVM.DT_10P5HB.._T........csv"))
 
 avoidable_mortality |> 
   summarise("Number of rows" = n(), 
-            "Number of columns" = ncol(avoidable_mortality)) |> as.data.frame() |>
+            "Number of columns" = ncol(avoidable_mortality),
+            "Number of NA" = sum(is.na(avoidable_mortality))) |> 
+  as.data.frame() |>
   knitr::kable()
 ```
 
-### GDP per capita
+### GDP per capita 
 Here, when opening the file in excel, we see that the first 5 rows are empty. This header is only on row 5. We need to skip the first 4 rows and use row 5 as column headers.
 ```{r}
 #| message: false
 gdp_per_capita <- vroom(
-  here("data", "gdp_per_capita.csv"),
+  here("data/API_NY.GDP.PCAP.KD_DS2_en_csv_v2_242568", "API_NY.GDP.PCAP.KD_DS2_en_csv_v2_242568.csv"),
   delim = ",",
   skip = 4,           # need to skip the first 4 rows
   col_names = TRUE,   
@@ -116,18 +121,22 @@ gdp_per_capita <- vroom(
 
 gdp_per_capita |> 
   summarise("Number of rows" = n(), 
-            "Number of columns" = ncol(gdp_per_capita)) |> as.data.frame() |>
+            "Number of columns" = ncol(gdp_per_capita),
+            "Number of NA" = sum(is.na(gdp_per_capita))) |> 
+  as.data.frame() |>
   knitr::kable()
 ```
 
 ### Hospital beds 
 ```{r}
 #| message: false
-hospital_beds <- vroom(here("data", "hospital_beds.csv"))
+hospital_beds <- vroom(here("data", "OECD.ELS.HD,DSD_HEALTH_REAC_HOSP@DF_BEDS_FUNC,1.0+..BD..._T._T...csv"))
 
 hospital_beds |> 
   summarise("Number of rows" = n(), 
-            "Number of columns" = ncol(hospital_beds)) |> as.data.frame() |>
+            "Number of columns" = ncol(hospital_beds), 
+            "Number of NA" = sum(is.na(hospital_beds))) |> 
+  as.data.frame() |>
   knitr::kable()
 ```
 
@@ -136,47 +145,56 @@ The header is on row 5. We must delete the comments on the previous lines to pro
 ```{r}
 #| message: false
 life_expectancy <- vroom(
-  here("data", "life_expectancy.csv"), 
+  here("data/API_SP.DYN.LE00.IN_DS2_fr_csv_v2_11258", "API_SP.DYN.LE00.IN_DS2_fr_csv_v2_11258.csv"), 
   delim = ",",
   skip = 4,           # need to skip the first 4 rows
   col_names = TRUE)
 
 life_expectancy |> 
   summarise("Number of rows" = n(), 
-            "Number of columns" = ncol(life_expectancy)) |> as.data.frame() |>
+            "Number of columns" = ncol(life_expectancy),
+            "Number of NA" = sum(is.na(life_expectancy))) |> 
+  as.data.frame() |>
   knitr::kable()
 ```
 
 ### Social security contributions
 ```{r}
 #| message: false
-social_security_contributions <- vroom(here("data", "social_security_contributions.csv"))
+social_security_contributions <- vroom(here("data","OECD.CTP.TPS,DSD_REV_COMP_OECD@DF_RSOECD,+AUS+AUT+BEL+CAN+CHL+COL+CRI+CZE+DNK+EST+FIN+FRA+DEU+GRC+HUN+ISL+IRL+ISR+ITA+JPN+KOR+LVA+LTU+LUX+MEX+NLD+NZL+NOR+POL+PRT+SVK+SVN+ESP+SWE+CHE+TUR+GBR+USA+OECD_REP..S13.T_2000+T_2100+T_2200+T_2300+T_24.csv"))
 
 social_security_contributions |> 
   summarise("Number of rows" = n(), 
-            "Number of columns" = ncol(social_security_contributions)) |> as.data.frame() |>
+            "Number of columns" = ncol(social_security_contributions),
+            "Number of NA" = sum(is.na(social_security_contributions))) |> 
+  as.data.frame() |>
   knitr::kable()
 ```
 
 ### Unemployment
 ```{r}
 #| message: false
-unemployment <- vroom(here("data", "unemployment.csv"))
+unemployment <- vroom(here("data",
+                           "dataset_2025-11-21T14_31_58.442440069Z_DEFAULT_INTEGRATION_IMF.RES_WEO_9.0.0.csv"))
 
 unemployment |> 
   summarise("Number of rows" = n(), 
-            "Number of columns" = ncol(unemployment)) |> as.data.frame() |> 
+            "Number of columns" = ncol(unemployment),
+            "Number of NA" = sum(is.na(unemployment))) |> 
+  as.data.frame() |> 
   knitr::kable()
 ```
 
 ### HDI
 ```{r}
 #| message: false
-hdi <- read_excel("data/hdi.xlsx")
+hdi <- read_excel("data/hdr-data.xlsx")
 
 hdi |> 
   summarise("Number of rows" = n(), 
-            "Number of columns" = ncol(hdi)) |> as.data.frame() |>
+            "Number of columns" = ncol(hdi),
+            "Number of NA" = sum(is.na(hdi))) |> 
+  as.data.frame() |>
   knitr::kable()
 ```
 
