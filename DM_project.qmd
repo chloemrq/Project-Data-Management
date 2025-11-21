@@ -5,7 +5,7 @@ format: html
 ---
 
 # Link to our github project 
-https://github.com/chloemrq/Project-Data-Management
+[here](https://github.com/chloemrq/Project-Data-Management)
 
 # Links to the sources and description 
 
@@ -109,7 +109,7 @@ avoidable_mortality |>
 ```
 
 ### GDP per capita 
-Here, when opening the file in excel, we see that the first 5 rows are empty. This header is only on row 5. We need to skip the first 4 rows and use row 5 as column headers.
+Here, when opening the file in excel, we see that the first 4 rows are empty. This header is only on row 5. We need to skip the first 4 rows and use row 5 as column headers.
 ```{r}
 #| message: false
 gdp_per_capita <- vroom(
@@ -196,5 +196,101 @@ hdi |>
             "Number of NA" = sum(is.na(hdi))) |> 
   as.data.frame() |>
   knitr::kable()
+```
+
+# Some data cleaning before merging 
+
+We first need to keep only the interesting variables and years in all our data sets. We will later merge all data sets with the country code (almost the same in all data sets, minor exception in the unemployment data set). We will also convert the gdp per capita, life expectancy and unemployment data sets to long formats before merging. 
+
+### Health expenditure 
+```{r}
+# selecting only interesting variables 
+health_expenditure <- health_expenditure |>
+  select(REF_AREA, TIME_PERIOD, OBS_VALUE)
+
+# checking the class of these variables 
+sapply(health_expenditure, class)
+```
+
+### Tax revenues (social security contributions)
+```{r}
+# We keep only the total social security contributions, and not the detail such as "paid by employer / employee, etc"
+social_security_contributions <- social_security_contributions |>
+  select(REF_AREA, `Catégorie de recettes`, TIME_PERIOD, OBS_VALUE) |>
+  filter(`Catégorie de recettes` == "Cotisations de sécurité sociale (CSS)") |>
+  select(-`Catégorie de recettes`)
+
+# no need to chack the class because this data set comes from the source as health expenditure (OECD).
+```
+
+
+### Avoidable mortality
+```{r}
+avoidable_mortality <- avoidable_mortality |>
+  select(REF_AREA, TIME_PERIOD, OBS_VALUE)
+```
+
+### Hospital beds 
+```{r}
+hospital_beds <- hospital_beds |>
+  select(REF_AREA, TIME_PERIOD, OBS_VALUE)
+```
+
+### Life expectancy 
+```{r}
+# we select only the period we are working on : 2000 to 2024
+life_expectancy <- life_expectancy |>
+  select(`Country Code`, as.character(2000:2024)) |>
+  rename(REF_AREA = `Country Code`)
+
+# pivot this data set to a long format 
+life_expectancy_long <- pivot_longer(life_expectancy, cols=as.character(2000:2024), names_to="TIME_PERIOD", 
+                                     values_to="OBS_VALUE")
+
+sapply(life_expectancy_long, class)
+life_expectancy_long$TIME_PERIOD = as.numeric(life_expectancy_long$TIME_PERIOD)
+```
+
+### GDP per capita 
+```{r}
+gdp_per_capita <- gdp_per_capita |>
+  select(`Country Code`, as.character(2000:2024)) |>
+  rename(REF_AREA = `Country Code`) # harmonizing the key variable for merging
+
+# pivot to a long format 
+gdp_per_capita_long <- pivot_longer(gdp_per_capita, cols=as.character(2000:2024), names_to="TIME_PERIOD", 
+                                     values_to="OBS_VALUE")
+
+sapply(gdp_per_capita_long, class)
+gdp_per_capita_long$TIME_PERIOD = as.numeric(gdp_per_capita_long$TIME_PERIOD)
+```
+
+
+### Unemployment 
+```{r}
+unemployment <- unemployment |>
+  select(SERIES_CODE, as.character(2000:2024)) |>
+  rename(REF_AREA = SERIES_CODE)
+
+# country code is in the format "ZAF.LUR.A". We only keep "ZAF", and drop the rest for all rows. 
+unemployment$REF_AREA <- sub("\\..*$", "", unemployment$REF_AREA) 
+
+# pivot to a long format 
+unemployment_long <- pivot_longer(unemployment, cols=as.character(2000:2024), names_to="TIME_PERIOD", 
+                                     values_to="OBS_VALUE")
+
+sapply(unemployment_long, class)
+unemployment_long$TIME_PERIOD = as.numeric(unemployment_long$TIME_PERIOD)
+```
+
+### HDI
+```{r}
+hdi <- hdi |>
+  select(countryIsoCode, year, value) |>
+  rename(REF_AREA = countryIsoCode)
+
+sapply(hdi, class)
+hdi$year = as.numeric(hdi$year)
+hdi$value = as.numeric(hdi$value)
 ```
 
