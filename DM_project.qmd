@@ -161,7 +161,7 @@ life_expectancy |>
 ### Social security contributions
 ```{r}
 #| message: false
-social_security_contributions <- vroom(here("data","OECD.CTP.TPS,DSD_REV_COMP_OECD@DF_RSOECD,+AUS+AUT+BEL+CAN+CHL+COL+CRI+CZE+DNK+EST+FIN+FRA+DEU+GRC+HUN+ISL+IRL+ISR+ITA+JPN+KOR+LVA+LTU+LUX+MEX+NLD+NZL+NOR+POL+PRT+SVK+SVN+ESP+SWE+CHE+TUR+GBR+USA+OECD_REP..S13.T_2000+T_2100+T_2200+T_2300+T_24.csv"))
+social_security_contributions <- vroom(here("data","OECD.CTP.TPS,DSD_REV_COMP_OECD@DF_RSOECD.csv"))
 
 social_security_contributions |> 
   summarise("Number of rows" = n(), 
