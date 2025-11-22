@@ -220,7 +220,7 @@ social_security_contributions <- social_security_contributions |>
   filter(`Catégorie de recettes` == "Cotisations de sécurité sociale (CSS)") |>
   select(-`Catégorie de recettes`)
 
-# no need to chack the class because this data set comes from the source as health expenditure (OECD).
+# no need to check the class because this data set comes from the source as health expenditure (OECD).
 ```
 
 
@@ -287,10 +287,54 @@ unemployment_long$TIME_PERIOD = as.numeric(unemployment_long$TIME_PERIOD)
 ```{r}
 hdi <- hdi |>
   select(countryIsoCode, year, value) |>
-  rename(REF_AREA = countryIsoCode)
+  rename(REF_AREA = countryIsoCode, TIME_PERIOD = year, OBS_VALUE = value)
 
 sapply(hdi, class)
-hdi$year = as.numeric(hdi$year)
-hdi$value = as.numeric(hdi$value)
+hdi$TIME_PERIOD = as.numeric(hdi$TIME_PERIOD)
+hdi$OBS_VALUE = as.numeric(hdi$OBS_VALUE)
 ```
+
+
+# Merging the different data sets
+
+In order to have one unique database to work on, we need to merge the various data sets. To do so, we will use the variables "REF_AREA" and "TIME_PERIOD" together as our key.
+
+```{r}
+database <- avoidable_mortality |>
+  left_join(gdp_per_capita_long, by = c("REF_AREA", "TIME_PERIOD"), suffix = c("", "_gdp")) |>
+  left_join(hdi, by = c("REF_AREA", "TIME_PERIOD"), suffix = c("", "_hdi")) |>
+  left_join(health_expenditure, by = c("REF_AREA", "TIME_PERIOD"), suffix = c("", "_health_exp")) |>
+  left_join(hospital_beds, by = c("REF_AREA", "TIME_PERIOD"), suffix = c("", "_hosp_beds")) |>
+  left_join(life_expectancy_long, by = c("REF_AREA", "TIME_PERIOD"), suffix = c("", "_life_exp")) |>
+  left_join(social_security_contributions, by = c("REF_AREA", "TIME_PERIOD"), suffix = c("", "_ssc")) |>
+  left_join(unemployment_long, by = c("REF_AREA", "TIME_PERIOD"), suffix = c("", "_unemp"))
+
+
+# Giving a better name to the avoidable mortality column
+database <- database  |>
+  rename(OBS_VALUE_mortality = OBS_VALUE)
+```
+
+
+# Presentation of the main variables
+
+- `REF_AREA` : first 3 letters of the country whose data is shown.
+
+- `TIME_PERIOD` : year for which the data was collected.
+
+- `OBS_VALUE_mortality` : avoidable mortality, the number of "avoidable deaths" per 100000 inhabitants annually. It contains contains both “preventable mortality” and “treatable (or amenable) mortality”. The first refers to deaths that can be avoided through effective public health and primary prevention interventions. The second refers to timely and effective health care interventions, including prevention and treatment. 
+
+- `OBS_VALUE_hdi` : human development index, per country, annually. It is between 0 and 1, 1 meaning the country in question is well developed. 
+
+- `OBS_VALUE_gdp` : GDP per capita, per country, annually. It is measured in constant US dollars from 2015.
+
+- `OBS_VALUE_hosp_beds` : number of hospital beds available per country, annually.
+
+- `OBS_VALUE_life_exp` : life expectancy of a country's inhabitants, in years. It indicates the number of years a newborn baby would have to live if the general rules of mortality at the time of birth were to remain the same throughout its life
+
+- `OBS_VALUE_ssc` : social security contribution, tax revenues collected and allocated to social protection per country, annually. 
+
+- `OBS_VALUE_unemp` : unemployment rate per country, annually. 
+
+- `OBS_VALUE_health_exp` : health expenditure observed annually. It is measured in percentage of the country’s GDP. It was computed using financial flows related to the consumption of healthcare goods and services. 
 
