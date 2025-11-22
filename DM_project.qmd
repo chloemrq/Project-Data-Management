@@ -338,3 +338,43 @@ database <- database  |>
 
 - `OBS_VALUE_health_exp` : health expenditure observed annually. It is measured in percentage of the country’s GDP. It was computed using financial flows related to the consumption of healthcare goods and services. 
 
+
+
+
+# Graphical representation of our main variable : avoidable mortality (OBS_VALUE_mortality)
+
+
+### Global avoidable mortality
+First we can take a look at the number of avoidable deaths globally
+```{r}
+database |>
+  group_by(TIME_PERIOD) |>
+  summarise(mean_mortality = mean(OBS_VALUE_mortality, na.rm = TRUE)) |>
+  ggplot(aes(x = TIME_PERIOD, y = mean_mortality)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "Average avoidable mortality in the world (2000-2023)",
+    y = "Number of avoidable deaths",
+    x = "Year")
+```
+This graph reveals a downward trend in avoidable mortality from 2000 to 2019 cut by a sudden increase in 2020 and 2021.
+However it seems that, afterward, the variable goes back to its previous trend.
+
+
+### Avoidable mortality per country
+It is also interesting to check this variable per country 
+```{r}
+database |>
+  ggplot(aes(x = TIME_PERIOD, y = OBS_VALUE_mortality)) +
+  geom_line() +
+  facet_wrap(~ REF_AREA, scales = "free_y") +
+  theme_minimal(base_size = 7.5) +
+  scale_x_continuous(breaks = c(2000, 2010, 2020)) +
+  labs(
+    x = "",
+    y = "",
+    title = "Avoidable mortality per country (2000-2023)")
+```
+Many countries seem to share the same trends, even though it is not true for every single country we will study. In addition we can also see here the impact of certain crises (in 2020 mostly).
+
