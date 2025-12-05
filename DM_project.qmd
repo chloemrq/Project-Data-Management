@@ -5,35 +5,36 @@ format: html
 ---
 
 # Link to our github project 
-[here](https://github.com/chloemrq/Project-Data-Management)
+[Our Github Project](https://github.com/chloemrq/Project-Data-Management)
+
+# Research question 
+### TO DO !!!!!!!
 
 # Links to the sources and description 
-
-
 ## OECD
 The Organisation for Economic Co-operation and Development (OECD) is an international organisation created in 1948. Its goal is to allow various countries to answer common problems and coordinate domestic and international policies. OECD members share data and receive analysis from experts on social, economic and environmental challenges.  
 
 ### Health expenditure (OECD)
-https://data-explorer.oecd.org/vis?fs[0]=Topic%2C1%7CHealth%23HEA%23%7CHealth%20expenditure%20and%20financing%23HEA_EXP%23&pg=0&fc=Topic&bp=true&snb=4&vw=tb&df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_SHA%40DF_SHA&df[ag]=OECD.ELS.HD&df[vs]=1.0&dq=AUS%2BAUT%2BBEL%2BCAN%2BCHL%2BCOL%2BCRI%2BCZE%2BDNK%2BEST%2BFIN%2BFRA%2BDEU%2BGRC%2BHUN%2BISL%2BIRL%2BISR%2BITA%2BJPN%2BKOR%2BLVA%2BLTU%2BLUX%2BMEX%2BNLD%2BNZL%2BNOR%2BPOL%2BPRT%2BSVK%2BSVN%2BESP%2BSWE%2BCHE%2BTUR%2BGBR%2BUSA%2BARG%2BBRA%2BBGR%2BCHN%2BHRV%2BCYP%2BIND%2BIDN%2BMLT%2BPER%2BROU%2BZAF%2BTHA%2BUKR.A.EXP_HEALTH.PT_B1GQ._T.._T.._T...&pd=2000%2C2024&to[TIME_PERIOD]=false
+[Health expenditure (OECD)](https://data-explorer.oecd.org/vis?fs[0]=Topic%2C1%7CHealth%23HEA%23%7CHealth%20expenditure%20and%20financing%23HEA_EXP%23&pg=0&fc=Topic&bp=true&snb=4&vw=tb&df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_SHA%40DF_SHA&df[ag]=OECD.ELS.HD&df[vs]=1.0&dq=AUS%2BAUT%2BBEL%2BCAN%2BCHL%2BCOL%2BCRI%2BCZE%2BDNK%2BEST%2BFIN%2BFRA%2BDEU%2BGRC%2BHUN%2BISL%2BIRL%2BISR%2BITA%2BJPN%2BKOR%2BLVA%2BLTU%2BLUX%2BMEX%2BNLD%2BNZL%2BNOR%2BPOL%2BPRT%2BSVK%2BSVN%2BESP%2BSWE%2BCHE%2BTUR%2BGBR%2BUSA%2BARG%2BBRA%2BBGR%2BCHN%2BHRV%2BCYP%2BIND%2BIDN%2BMLT%2BPER%2BROU%2BZAF%2BTHA%2BUKR.A.EXP_HEALTH.PT_B1GQ._T.._T.._T...&pd=2000%2C2024&to[TIME_PERIOD]=false)
 
 ### Tax revenues (social contributions) (OECD)
-https://data-explorer.oecd.org/vis?lc=en&tm=comparative%20tables%20tax%20revenue%20data&pg=0&hc[Topic]=&hc[Unit%20of%20measure]=&snb=153&df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_REV_COMP_OECD%40DF_RSOECD&df[ag]=OECD.CTP.TPS&dq=AUS%2BAUT%2BBEL%2BCAN%2BCHL%2BCOL%2BCRI%2BCZE%2BDNK%2BEST%2BFIN%2BFRA%2BDEU%2BGRC%2BHUN%2BISL%2BIRL%2BISR%2BITA%2BJPN%2BKOR%2BLVA%2BLTU%2BLUX%2BMEX%2BNLD%2BNZL%2BNOR%2BPOL%2BPRT%2BSVK%2BSVN%2BESP%2BSWE%2BCHE%2BTUR%2BGBR%2BUSA%2BOECD_REP..S13.T_2000%2BT_2100%2BT_2200%2BT_2300%2BT_2400..PT_B1GQ.A&to[TIME_PERIOD]=false&pd=2000%2C2023&lb=nm&vw=tb&ly[cl]=TIME_PERIOD&ly[rw]=REF_AREA%2CCOMBINED_MEASURE
+[Tax revenues (OECD)](https://data-explorer.oecd.org/vis?lc=en&tm=comparative%20tables%20tax%20revenue%20data&pg=0&hc[Topic]=&hc[Unit%20of%20measure]=&snb=153&df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_REV_COMP_OECD%40DF_RSOECD&df[ag]=OECD.CTP.TPS&dq=AUS%2BAUT%2BBEL%2BCAN%2BCHL%2BCOL%2BCRI%2BCZE%2BDNK%2BEST%2BFIN%2BFRA%2BDEU%2BGRC%2BHUN%2BISL%2BIRL%2BISR%2BITA%2BJPN%2BKOR%2BLVA%2BLTU%2BLUX%2BMEX%2BNLD%2BNZL%2BNOR%2BPOL%2BPRT%2BSVK%2BSVN%2BESP%2BSWE%2BCHE%2BTUR%2BGBR%2BUSA%2BOECD_REP..S13.T_2000%2BT_2100%2BT_2200%2BT_2300%2BT_2400..PT_B1GQ.A&to[TIME_PERIOD]=false&pd=2000%2C2023&lb=nm&vw=tb&ly[cl]=TIME_PERIOD&ly[rw]=REF_AREA%2CCOMBINED_MEASURE)
 
 ### Avoidable mortality (OECD)
-https://data-explorer.oecd.org/vis?tm=Mortality%20rate&pg=0&snb=22&vw=tb&df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_HEALTH_STAT%40DF_AM&df[ag]=OECD.ELS.HD&df[vs]=1.1&dq=.A.AVM.DT_10P5HB.._T.......&pd=2000%2C2023&to[TIME_PERIOD]=false
+[Avoidale mortality (OECD)](https://data-explorer.oecd.org/vis?tm=Mortality%20rate&pg=0&snb=22&vw=tb&df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_HEALTH_STAT%40DF_AM&df[ag]=OECD.ELS.HD&df[vs]=1.1&dq=.A.AVM.DT_10P5HB.._T.......&pd=2000%2C2023&to[TIME_PERIOD]=false)
 
 ### Number of hospital beds (OECD)
-https://data-explorer.oecd.org/vis?pg=0&bp=true&snb=6&df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_HEALTH_REAC_HOSP%40DF_BEDS_FUNC&df[ag]=OECD.ELS.HD&df[vs]=1.0&dq=..BD..._T._T..&pd=2000%2C2024&to[TIME_PERIOD]=false&vw=tb&lc=en
+[Hospital beds (OECD)](https://data-explorer.oecd.org/vis?pg=0&bp=true&snb=6&df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_HEALTH_REAC_HOSP%40DF_BEDS_FUNC&df[ag]=OECD.ELS.HD&df[vs]=1.0&dq=..BD..._T._T..&pd=2000%2C2024&to[TIME_PERIOD]=false&vw=tb&lc=en)
 
 
 ## World bank 
 The world bank group, is a family of five international organizations created in 1944 which help developing countries through leveraged loans. These loans are given for the purpose of pursuing economic development only. 189 countries are currently members of the World bank group. 
 
 ### GDP per capita in 2015 $US (World Bank)
-https://data.worldbank.org/indicator/NY.GDP.PCAP.KD
+[GDP per capita (World Bank)](https://data.worldbank.org/indicator/NY.GDP.PCAP.KD)
 
 ### Life expectancy (World Bank)
-https://donnees.banquemondiale.org/indicator/SP.DYN.LE00.IN?most_recent_year_desc=true
+[Life expectancy (World Bank)](https://donnees.banquemondiale.org/indicator/SP.DYN.LE00.IN?most_recent_year_desc=true)
 
 Life expectancy at birth indicates the number of years a newborn baby would have to live if the general rules of mortality at the time of birth were to remain the same throughout its life. Here it is measured by the world bank from 2000 to 2023. 
 
@@ -42,7 +43,7 @@ Life expectancy at birth indicates the number of years a newborn baby would have
 The International Monetary Fund (IMF) is an international financial institution and a specialized agency of the United Nations created in 1944. It is composed of 191 member countries. Its goal is to help its members achieve sustainable growth and to encourage the expansion of trade. The IMF supports certain economic policies that promote financial stability and monetary cooperation. 
 
 ### Unemployment rate (IMF)
-https://data.imf.org/en/Data-Explorer?datasetUrn=IMF.RES:WEO(9.0.0)&INDICATOR=LUR
+[Unemployment rate (IMF)](https://data.imf.org/en/Data-Explorer?datasetUrn=IMF.RES:WEO(9.0.0)&INDICATOR=LUR)
 
 Instructions for the data : In the Data Explorer : 
 - Time period : Custom : 01/01/2000 to 12/31/2024
@@ -52,7 +53,7 @@ Instructions for the data : In the Data Explorer :
 The United Nations Development Programme is a United Nations agency tasked, since 1965, with helping countries eliminate poverty and achieve sustainable economic growth and human development. They intervene by helping countries develop policies, leadership skills, partnerships and institutional capabilities. 
 
 ### Human development index (HDI) (UNDP)
-https://hdr.undp.org/data-center/documentation-and-downloads
+[HDI (UNDP)](https://hdr.undp.org/data-center/documentation-and-downloads)
 
 Instructions for the data : 
 - Filter by index : HDI
@@ -84,13 +85,15 @@ library(readxl)
 health_expenditure <- vroom(here("data", "OECD.ELS.HD,DSD_SHA@DF_SHA,1.0+.A.EXP_HEALTH.PT_B1GQ._T.._T.._T....csv"))
 problems(health_expenditure)
 ```
-There are issues with columns 39/40, but it doesn't impact the variables we need.
+There are issues with columns 39/40. Opening the file in Excel tells us that these columns are mostly empty and "P" appears on row 1116. This is just a comment on the data that is not useful to us in the project and it doesn't impact the variables of interest. Columns 39 and 40 will just delete these columns during the data cleaning process. Therefore, we load the data without resolving this issue.
 
 
+We compute summary statistics including the proportion of missing values. Although several datasets show a relatively high percentage of missing values, this does not significantly affect our final merged dataset as our analysis relies mostly on 2 columns (time period and observed value) of each dataset.
 ```{r}
 health_expenditure |> 
   summarise("Number of rows" = n(), 
-            "Number of columns" = ncol(health_expenditure), "Number of NA" = sum(is.na(health_expenditure))) |> 
+            "Number of columns" = ncol(health_expenditure), 
+            "Percentage of NA" = paste0(round(sum(is.na(health_expenditure)) / (n() * ncol(health_expenditure)) * 100, 2), "%")) |> 
   as.data.frame() |>
   knitr::kable()
 ```
@@ -103,13 +106,13 @@ avoidable_mortality <- vroom(here("data", "OECD.ELS.HD,DSD_HEALTH_STAT@DF_AM,1.1
 avoidable_mortality |> 
   summarise("Number of rows" = n(), 
             "Number of columns" = ncol(avoidable_mortality),
-            "Number of NA" = sum(is.na(avoidable_mortality))) |> 
+            "Percentage of NA" = paste0(round(sum(is.na(avoidable_mortality)) / (n() * ncol(avoidable_mortality)) * 100, 2), "%")) |> 
   as.data.frame() |>
   knitr::kable()
 ```
 
 ### GDP per capita 
-Here, when opening the file in excel, we see that the first 4 rows are empty. This header is only on row 5. We need to skip the first 4 rows and use row 5 as column headers.
+When opening the file in Excel, we see that the first 4 rows are empty. We need to skip the first 4 rows and use row 5 as column headers.
 ```{r}
 #| message: false
 gdp_per_capita <- vroom(
@@ -122,7 +125,7 @@ gdp_per_capita <- vroom(
 gdp_per_capita |> 
   summarise("Number of rows" = n(), 
             "Number of columns" = ncol(gdp_per_capita),
-            "Number of NA" = sum(is.na(gdp_per_capita))) |> 
+            "Percentage of NA" = paste0(round(sum(is.na(gdp_per_capita)) / (n() * ncol(gdp_per_capita)) * 100, 2), "%")) |> 
   as.data.frame() |>
   knitr::kable()
 ```
@@ -135,7 +138,7 @@ hospital_beds <- vroom(here("data", "OECD.ELS.HD,DSD_HEALTH_REAC_HOSP@DF_BEDS_FU
 hospital_beds |> 
   summarise("Number of rows" = n(), 
             "Number of columns" = ncol(hospital_beds), 
-            "Number of NA" = sum(is.na(hospital_beds))) |> 
+            "Percentage of NA" = paste0(round(sum(is.na(hospital_beds)) / (n() * ncol(hospital_beds)) * 100, 2), "%")) |> 
   as.data.frame() |>
   knitr::kable()
 ```
@@ -153,7 +156,7 @@ life_expectancy <- vroom(
 life_expectancy |> 
   summarise("Number of rows" = n(), 
             "Number of columns" = ncol(life_expectancy),
-            "Number of NA" = sum(is.na(life_expectancy))) |> 
+            "Percentage of NA" = paste0(round(sum(is.na(life_expectancy)) / (n() * ncol(life_expectancy)) * 100, 2), "%")) |> 
   as.data.frame() |>
   knitr::kable()
 ```
@@ -166,7 +169,7 @@ social_security_contributions <- vroom(here("data","OECD.CTP.TPS,DSD_REV_COMP_OE
 social_security_contributions |> 
   summarise("Number of rows" = n(), 
             "Number of columns" = ncol(social_security_contributions),
-            "Number of NA" = sum(is.na(social_security_contributions))) |> 
+            "Percentage of NA" = paste0(round(sum(is.na(social_security_contributions)) / (n() * ncol(social_security_contributions)) * 100, 2), "%")) |> 
   as.data.frame() |>
   knitr::kable()
 ```
@@ -180,7 +183,7 @@ unemployment <- vroom(here("data",
 unemployment |> 
   summarise("Number of rows" = n(), 
             "Number of columns" = ncol(unemployment),
-            "Number of NA" = sum(is.na(unemployment))) |> 
+            "Percentage of NA" = paste0(round(sum(is.na(unemployment)) / (n() * ncol(unemployment)) * 100, 2), "%")) |> 
   as.data.frame() |> 
   knitr::kable()
 ```
@@ -193,14 +196,14 @@ hdi <- read_excel("data/hdr-data.xlsx")
 hdi |> 
   summarise("Number of rows" = n(), 
             "Number of columns" = ncol(hdi),
-            "Number of NA" = sum(is.na(hdi))) |> 
+            "Percentage of NA" = paste0(round(sum(is.na(hdi)) / (n() * ncol(hdi)) * 100, 2), "%")) |> 
   as.data.frame() |>
   knitr::kable()
 ```
 
 # Some data cleaning before merging 
 
-We first need to keep only the interesting variables and years in all our data sets. We will later merge all data sets with the country code (almost the same in all data sets, minor exception in the unemployment data set). We will also convert the gdp per capita, life expectancy and unemployment data sets to long formats before merging. 
+We first need to keep only the interesting variables (observations, time period and country code) in all our datasets. We will later merge all data sets with the country code (almost the same in all datasets, minor exception in the unemployment dataset). We will also convert the GDP per capita, life expectancy and unemployment data sets to long formats, so that all datasets are in the same format before merging.  
 
 ### Health expenditure 
 ```{r}
@@ -220,7 +223,8 @@ social_security_contributions <- social_security_contributions |>
   filter(`Catégorie de recettes` == "Cotisations de sécurité sociale (CSS)") |>
   select(-`Catégorie de recettes`)
 
-# no need to check the class because this data set comes from the source as health expenditure (OECD).
+# checking the class of these variables 
+sapply(health_expenditure, class)
 ```
 
 
@@ -238,49 +242,65 @@ hospital_beds <- hospital_beds |>
 
 ### Life expectancy 
 ```{r}
-# we select only the period we are working on : 2000 to 2024
+# we select only the period we are working on : 2000 to 2023
 life_expectancy <- life_expectancy |>
-  select(`Country Code`, as.character(2000:2024)) |>
-  rename(REF_AREA = `Country Code`)
+  select(`Country Code`, as.character(2000:2023)) |>
+  rename(REF_AREA = `Country Code`) # renaming to harmonise with the other datasets
 
 # pivot this data set to a long format 
-life_expectancy_long <- pivot_longer(life_expectancy, cols=as.character(2000:2024), names_to="TIME_PERIOD", 
+life_expectancy_long <- pivot_longer(life_expectancy, cols=as.character(2000:2023), names_to="TIME_PERIOD", 
                                      values_to="OBS_VALUE")
 
+# checking the class of variables 
 sapply(life_expectancy_long, class)
+```
+
+```{r}
+# Changing the TIME_PERIOD variable to numeric 
 life_expectancy_long$TIME_PERIOD = as.numeric(life_expectancy_long$TIME_PERIOD)
+sapply(life_expectancy_long, class)
 ```
 
 ### GDP per capita 
 ```{r}
 gdp_per_capita <- gdp_per_capita |>
-  select(`Country Code`, as.character(2000:2024)) |>
+  select(`Country Code`, as.character(2000:2023)) |>
   rename(REF_AREA = `Country Code`) # harmonizing the key variable for merging
 
 # pivot to a long format 
-gdp_per_capita_long <- pivot_longer(gdp_per_capita, cols=as.character(2000:2024), names_to="TIME_PERIOD", 
+gdp_per_capita_long <- pivot_longer(gdp_per_capita, cols=as.character(2000:2023), names_to="TIME_PERIOD", 
                                      values_to="OBS_VALUE")
 
 sapply(gdp_per_capita_long, class)
+```
+
+```{r}
+# Changing the TIME_PERIOD variable to numeric
 gdp_per_capita_long$TIME_PERIOD = as.numeric(gdp_per_capita_long$TIME_PERIOD)
+sapply(gdp_per_capita_long, class)
 ```
 
 
 ### Unemployment 
 ```{r}
 unemployment <- unemployment |>
-  select(SERIES_CODE, as.character(2000:2024)) |>
-  rename(REF_AREA = SERIES_CODE)
+  select(SERIES_CODE, as.character(2000:2023)) |>
+  rename(REF_AREA = SERIES_CODE) # harmonizing the country code 
 
 # country code is in the format "ZAF.LUR.A". We only keep "ZAF", and drop the rest for all rows. 
 unemployment$REF_AREA <- sub("\\..*$", "", unemployment$REF_AREA) 
 
 # pivot to a long format 
-unemployment_long <- pivot_longer(unemployment, cols=as.character(2000:2024), names_to="TIME_PERIOD", 
+unemployment_long <- pivot_longer(unemployment, cols=as.character(2000:2023), names_to="TIME_PERIOD", 
                                      values_to="OBS_VALUE")
 
 sapply(unemployment_long, class)
+```
+
+```{r}
+# Changing the TIME_PERIOD variable to numeric
 unemployment_long$TIME_PERIOD = as.numeric(unemployment_long$TIME_PERIOD)
+sapply(unemployment_long, class)
 ```
 
 ### HDI
@@ -289,15 +309,21 @@ hdi <- hdi |>
   select(countryIsoCode, year, value) |>
   rename(REF_AREA = countryIsoCode, TIME_PERIOD = year, OBS_VALUE = value)
 
+# Checking variable class
 sapply(hdi, class)
+```
+
+```{r}
+# The TIME_PERIOD and OBS_VALUE need to be converted to a numeric format 
 hdi$TIME_PERIOD = as.numeric(hdi$TIME_PERIOD)
 hdi$OBS_VALUE = as.numeric(hdi$OBS_VALUE)
+sapply(hdi, class)
 ```
 
 
 # Merging the different data sets
 
-In order to have one unique database to work on, we need to merge the various data sets. To do so, we will use the variables "REF_AREA" and "TIME_PERIOD" together as our key.
+In order to have one unique database to work on, we need to merge the various data sets. To do so, we will use the variables "REF_AREA" and "TIME_PERIOD" together as our key. Our aim is to analyse the impact of the selected variables on `avoidable_mortality`, our dependent variable. Thereofre, we use `left_join` to merge all data, relative to the data in the `avoidable_mortality` dataset.
 
 ```{r}
 database <- avoidable_mortality |>
@@ -313,8 +339,25 @@ database <- avoidable_mortality |>
 # Giving a better name to the avoidable mortality column
 database <- database  |>
   rename(OBS_VALUE_mortality = OBS_VALUE)
+
+# short overview of our merged database
+head(database, n=5)
 ```
 
+
+# Summary statistics of the merged dataset
+```{r}
+database |> 
+  summarise("Number of rows" = n(), 
+            "Number of columns" = ncol(database),
+            "Percentage of NA" = paste0(round(sum(is.na(database)) / (n() * ncol(database)) * 100, 2), "%"),
+            "Number of countries studied" = n_distinct(REF_AREA), 
+            "Time period" = paste0(min(TIME_PERIOD), "-", max(TIME_PERIOD))) |> 
+  as.data.frame() |>
+  knitr::kable()
+```
+
+We should note that, as a consequence of the `left_join` and the gaps in the  `avoidable_mortality` dataset, there is missing data for several years for some countries : Turkey (2000 to 2008) and Greece (2000 to 2013). Although this represents a limitation of the dataset used, we decide to keep both countries, as we cannot afford to lose more data (997 data points). We therefore keep all 46 countries, over the period 2000-2023. 
 
 # Presentation of the main variables
 
@@ -354,27 +397,42 @@ database |>
   geom_line() +
   geom_point() +
   labs(
-    title = "Average avoidable mortality in the world (2000-2023)",
+    title = "Average avoidable mortality in the world (2000-2023), per 100,000 inhabitants annually",
     y = "Number of avoidable deaths",
     x = "Year")
 ```
-This graph reveals a downward trend in avoidable mortality from 2000 to 2019 cut by a sudden increase in 2020 and 2021.
+This graph reveals a downward trend in avoidable mortality from 2000 to 2019 cut by a sudden increase in 2020 and 2021 during Covid-19.
 However it seems that, afterward, the variable goes back to its previous trend.
 
 
 ### Avoidable mortality per country
-It is also interesting to check this variable per country 
+We also check the `avoidable_mortality` variable per country. 
 ```{r}
 database |>
   ggplot(aes(x = TIME_PERIOD, y = OBS_VALUE_mortality)) +
   geom_line() +
-  facet_wrap(~ REF_AREA, scales = "free_y") +
+  facet_wrap(~ REF_AREA) + # we do not use free_y so that we can compare rates between countries 
   theme_minimal(base_size = 7.5) +
   scale_x_continuous(breaks = c(2000, 2010, 2020)) +
   labs(
     x = "",
     y = "",
-    title = "Avoidable mortality per country (2000-2023)")
+    title = "Avoidable mortality per country (2000-2023), per 100,000 inhabitants annually")
 ```
-Many countries seem to share the same trends, even though it is not true for every single country we will study. In addition we can also see here the impact of certain crises (in 2020 mostly).
+Most countries share the same downward sloping trend in avoidable mortality. We can only observe a long term increase in the avoidable mortality rate in Thailand (THA) and South Africa (ZAF) before 2010. In addition, we can see the impact of the Covid-19 crisis clearly in some countries : Mexico (MEX), Peru (PER). Moreover, the high mortality rate in South Africa makes it difficult to observe the increase in avoidable mortality in other countries, particularly the most developed ones. 
+
+
+```{r}
+database |>
+  ggplot(aes(x = REF_AREA, y = OBS_VALUE_mortality)) +
+  geom_boxplot(outlier.shape = NA) +
+  theme_minimal(base_size = 7.5) +
+  labs(
+    x = "Country",
+    y = "Avoidable mortality per 100,000",
+    title = "Avoidable mortality per country (2000-2023)") +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+
 
