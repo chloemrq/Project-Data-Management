@@ -1,7 +1,9 @@
 ---
 title: "DM Project"
 author: "Karla Otoude and Chloé Marquis"
-format: html
+format: 
+  default: html
+  default: pdf
 ---
 
 # Link to our github project 
@@ -88,7 +90,7 @@ problems(health_expenditure)
 There are issues with columns 39/40. Opening the file in Excel tells us that these columns are mostly empty and "P" appears on row 1116. This is just a comment on the data that is not useful to us in the project and it doesn't impact the variables of interest. Columns 39 and 40 will just delete these columns during the data cleaning process. Therefore, we load the data without resolving this issue.
 
 
-We compute summary statistics including the proportion of missing values. Although several datasets show a relatively high percentage of missing values, this does not significantly affect our final merged dataset as our analysis relies mostly on 2 columns (time period and observed value) of each dataset.
+We compute summary statistics including the percentage of missing values. Although several datasets show a relatively high percentage of missing values, this does not significantly affect our final merged dataset as our analysis relies mostly on 2 columns (time period and observed value) of each dataset.
 ```{r}
 health_expenditure |> 
   summarise("Number of rows" = n(), 
@@ -203,7 +205,7 @@ hdi |>
 
 # Some data cleaning before merging 
 
-We first need to keep only the interesting variables (observations, time period and country code) in all our datasets. We will later merge all data sets with the country code (almost the same in all datasets, minor exception in the unemployment dataset). We will also convert the GDP per capita, life expectancy and unemployment data sets to long formats, so that all datasets are in the same format before merging.  
+We first need to keep only the interesting variables (observations, time period and country code) in all our datasets. We will later merge all data sets using the country code (almost the same in all datasets, minor exception in the unemployment dataset). We will also convert the GDP per capita, life expectancy and unemployment data sets to long formats, so that all datasets are in the same format before merging. We also check the class of all variables before merging.
 
 ### Health expenditure 
 ```{r}
@@ -314,16 +316,16 @@ sapply(hdi, class)
 ```
 
 ```{r}
-# The TIME_PERIOD and OBS_VALUE need to be converted to a numeric format 
+# TIME_PERIOD and OBS_VALUE need to be converted to a numeric format 
 hdi$TIME_PERIOD = as.numeric(hdi$TIME_PERIOD)
 hdi$OBS_VALUE = as.numeric(hdi$OBS_VALUE)
 sapply(hdi, class)
 ```
 
 
-# Merging the different data sets
+# Merging the data sets
 
-In order to have one unique database to work on, we need to merge the various data sets. To do so, we will use the variables "REF_AREA" and "TIME_PERIOD" together as our key. Our aim is to analyse the impact of the selected variables on `avoidable_mortality`, our dependent variable. Thereofre, we use `left_join` to merge all data, relative to the data in the `avoidable_mortality` dataset.
+In order to have one unique database to work on, we need to merge all the datasets. To do so, we will use the variables `REF_AREA` and `TIME_PERIOD` together as our key. Our aim is to analyse the impact of the selected variables on `avoidable_mortality`, our dependent variable. Therefore, we use `left_join` to merge all data, relative to the data available in the `avoidable_mortality` dataset.
 
 ```{r}
 database <- avoidable_mortality |>
@@ -357,7 +359,49 @@ database |>
   knitr::kable()
 ```
 
-We should note that, as a consequence of the `left_join` and the gaps in the  `avoidable_mortality` dataset, there is missing data for several years for some countries : Turkey (2000 to 2008) and Greece (2000 to 2013). Although this represents a limitation of the dataset used, we decide to keep both countries, as we cannot afford to lose more data (997 data points). We therefore keep all 46 countries, over the period 2000-2023. 
+We should note that, as a consequence of the `left_join` and the gaps in the  `avoidable_mortality` dataset, there is missing data for several years for some countries : Turkey (2000 to 2008) and Greece (2000 to 2013). Although this represents a limitation of the dataset used, we decide to keep both countries, as we cannot afford to lose more data. We therefore keep all 46 countries, over the period 2000-2023.
+
+### Summarising the number of NA per variable 
+
+```{r}
+colSums(is.na(database)) |>
+knitr::kable(caption = "Number of NA per column")
+```
+
+### Identifying missing values per country and per variable
+
+```{r}
+database |>
+  group_by(REF_AREA) |>
+  summarise(across(everything(), ~ sum(is.na(.)), .names = "{col}")) |> # number of NA
+  filter(rowSums(across(!REF_AREA)) > 0) |> # removing variables with 0 NA 
+  select(REF_AREA, where(~ any(. > 0))) |> # removing countries with 0 NA across all variables 
+  knitr::kable(caption = "Missing values by country and variable")
+```
+A significant amount of values are missing in `OBS_VALUE_ssc` (social contributions). However, we cannot deduce that there are no social contributions in these countries, only that they have not been reported. As the missing values span over several years at a time, and often at the beginning of the time period, replacing them with a 0 or imputing them would result in a risk distorting our results by forcing an artificial trend. We therefore retain the missing values and keep the corresponding countries in the analysis, particularly given the already limited size of our sample. 
+
+There are 12 missing values in `OBS_VALUE_health_exp`. They also correspond to missing values at the beginning of the time period. For instance, the health expenditure data is missing for Romania (ROU) from 2000 to 2002. Given both the small number of missing values, we also choose not to impute this variable.
+
+Finally, 126 values are missing in `OBS_VALUE_hosp_beds` also in the beginning of the time periods available (e.g. 2007-2008 for Ireland). As with the previous variables, imputing these values would require imposing information that we do not have, and thus we retain them as missing.
+
+# Limitations of the merged database 
+The datasets used in this project present several limitations that must be considered when interpreting the results.
+
+First, some variables contain an important proportion of missing values (e.g. social contributions and hospital beds). The NA are primarily concentrated at the beginning of the time period studied (2000-2023) and likely reflect data reporting issues rather than an absence of social policies such as health contributions, usually marked as 0 in the rest of the dataset. 
+This will naturally impact our results, especially since the missing data often comes from developing countries, thus biasing the results towards the trends observed in developed countries. 
+
+Second, the temporal coverage varies between countries. Indeed, there is no data for Turkey before 2009 or for Greece before 2014. This unevenness reduces the length of the time series for some countries and will influence the statistical analysis later on.
+
+### TO DO : what will the modelling deal with this ?
+
+```{r}
+# removing countries with too many NAs 
+database <- database |>
+  filter(!REF_AREA %in% c("ZAF", "ARG", "PER", "THA"))
+
+dim(database)
+```
+
 
 # Presentation of the main variables
 
@@ -401,8 +445,7 @@ database |>
     y = "Number of avoidable deaths",
     x = "Year")
 ```
-This graph reveals a downward trend in avoidable mortality from 2000 to 2019 cut by a sudden increase in 2020 and 2021 during Covid-19.
-However it seems that, afterward, the variable goes back to its previous trend.
+This graph reveals a downward trend in avoidable mortality from 2000 to 2019 cut by a sudden increase in 2020 and 2021 during Covid-19. However it seems that, afterward, the variable goes back to its previous trend.
 
 
 ### Avoidable mortality per country
@@ -419,20 +462,11 @@ database |>
     y = "",
     title = "Avoidable mortality per country (2000-2023), per 100,000 inhabitants annually")
 ```
-Most countries share the same downward sloping trend in avoidable mortality. We can only observe a long term increase in the avoidable mortality rate in Thailand (THA) and South Africa (ZAF) before 2010. In addition, we can see the impact of the Covid-19 crisis clearly in some countries : Mexico (MEX), Peru (PER). Moreover, the high mortality rate in South Africa makes it difficult to observe the increase in avoidable mortality in other countries, particularly the most developed ones. 
+Most countries share the same downward sloping trend in avoidable mortality. We can only observe a long term increase in the avoidable mortality rate in Thailand (THA) and South Africa (ZAF) before 2010. In addition, we can see the impact of the Covid-19 crisis clearly in some countries : Mexico (MEX), Peru (PER). 
+Moreover, the high mortality rate in South Africa (1,000 deaths per 100,000 inhabitants around 2005) makes it more difficult to observe the trend and shocks in avoidable mortality in other countries, particularly the most developed ones. 
 
 
-```{r}
-database |>
-  ggplot(aes(x = REF_AREA, y = OBS_VALUE_mortality)) +
-  geom_boxplot(outlier.shape = NA) +
-  theme_minimal(base_size = 7.5) +
-  labs(
-    x = "Country",
-    y = "Avoidable mortality per 100,000",
-    title = "Avoidable mortality per country (2000-2023)") +
-    theme(axis.text.x = element_text(angle = 90, hjust = 1))
-```
+
 
 
 
