@@ -26,7 +26,7 @@ Considering our research question, we will use multiple datasets and variables.
 
 For explanatory variables, in order to estimate the strength and quality of a country’s health protection scheme, we will have : 
 - Health expenditure 
-- Social expenditures 
+- Social expenditure aggregates
 - Number of hospitals beds 
 
 We also have more general variables such as :
@@ -36,13 +36,9 @@ We also have more general variables such as :
 - Life expectancy
 They will be used as control variables, since richer countries tend to have better living conditions which may lead to a generally healthier population, without the need for a strong health protection. 
 
-Finally, the explained variables will be : 
+Finally, the explained variable will be : 
 - Avoidable mortality 
 It will be used to estimate the population’s general health. 
-
-
-
-Another method we might use to deal with differences between countries is **K clustering** on the variables with no missing values. This way we will be able to study countries with similar structures or wealth level together and compare them to other groups of countries. It will probably be more efficient than simply studying countries individually. 
 
 
 # Links to the sources and description 
@@ -406,8 +402,8 @@ knitr::kable(caption = "Number of NA per column")
 database |>
   group_by(REF_AREA) |>
   summarise(across(everything(), ~ sum(is.na(.)), .names = "{col}")) |> # number of NA
-  filter(rowSums(across(!REF_AREA)) > 0) |> # removing variables with 0 NA 
-  select(REF_AREA, where(~ any(. > 0))) |> # removing countries with 0 NA across all variables 
+  filter(rowSums(across(!REF_AREA)) > 0) |> # keep countries with at least 1 NA
+  select(REF_AREA, where(~ any(. > 0))) |> # keep variables with at least 1 country with 1 NA
   knitr::kable(caption = "Missing values by country and variable")
 ```
 
