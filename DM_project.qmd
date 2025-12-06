@@ -2,19 +2,48 @@
 title: "DM Project"
 author: "Karla Otoude and Chloé Marquis"
 format: 
-  default: html
-  default: pdf
+  html: default
+  pdf: default
 ---
 
 # Link to our github project 
 [Our Github Project](https://github.com/chloemrq/Project-Data-Management)
 
 # Research question 
-### TO DO !!!!!!!
+**How does the level of social protection impact the general population health ?** 
+
+We want to identify if a stronger social and health protection (quantified by different variables such as health expenditure, tax revenues, etc) has an impact on the avoidable mortality rate. In order to do so we will analyse data collected in OECD countries from 2000 to 2023. 
+
+There are two goals in our analysis :
+The first is to understand the global evolution of the data and the reasons behind its trends.
+The second is to study the Covid-19 crisis. We believe it revealed how necessary having a proper social protection is to limit the number of deaths during a pandemic. 
+
 
 # Method 
-LMM = linear mixed model with lags. 
-Maybe K clustering on the variables with no missing values 
+To conduct our study we will be using a **linear mixed model (LMM)** with lags. Such a model will allow us to properly study the OECD countries taking into account their differences. It also a fitting model since we are working with time-based data. 
+
+Considering our research question, we will use multiple datasets and variables.
+
+For explanatory variables, in order to estimate the strength and quality of a country’s health protection scheme, we will have : 
+- Health expenditure 
+- Social expenditures 
+- Number of hospitals beds 
+
+We also have more general variables such as :
+- GDP per capita 
+- Unemployment rate 
+- Human development index 
+- Life expectancy
+They will be used as control variables, since richer countries tend to have better living conditions which may lead to a generally healthier population, without the need for a strong health protection. 
+
+Finally, the explained variables will be : 
+- Avoidable mortality 
+It will be used to estimate the population’s general health. 
+
+
+
+Another method we might use to deal with differences between countries is **K clustering** on the variables with no missing values. This way we will be able to study countries with similar structures or wealth level together and compare them to other groups of countries. It will probably be more efficient than simply studying countries individually. 
+
 
 # Links to the sources and description 
 ## OECD
