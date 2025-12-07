@@ -53,7 +53,7 @@ The Organisation for Economic Co-operation and Development (OECD) is an internat
 
 
 ### Avoidable mortality (OECD)
-[Avoidale mortality (OECD)](https://data-explorer.oecd.org/vis?tm=Mortality%20rate&pg=0&snb=22&vw=tb&df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_HEALTH_STAT%40DF_AM&df[ag]=OECD.ELS.HD&df[vs]=1.1&dq=.A.AVM.DT_10P5HB.._T.......&pd=2000%2C2023&to[TIME_PERIOD]=false)
+[Avoidable mortality (OECD)](https://data-explorer.oecd.org/vis?tm=Mortality%20rate&pg=0&snb=22&vw=tb&df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_HEALTH_STAT%40DF_AM&df[ag]=OECD.ELS.HD&df[vs]=1.1&dq=.A.AVM.DT_10P5HB.._T.......&pd=2000%2C2023&to[TIME_PERIOD]=false)
 
 ### Number of hospital beds (OECD)
 [Hospital beds (OECD)](https://data-explorer.oecd.org/vis?pg=0&bp=true&snb=6&df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_HEALTH_REAC_HOSP%40DF_BEDS_FUNC&df[ag]=OECD.ELS.HD&df[vs]=1.0&dq=..BD..._T._T..&pd=2000%2C2024&to[TIME_PERIOD]=false&vw=tb&lc=en)
@@ -262,12 +262,16 @@ sapply(social_expenditure, class)
 ```{r}
 avoidable_mortality <- avoidable_mortality |>
   select(REF_AREA, TIME_PERIOD, OBS_VALUE)
+
+sapply(avoidable_mortality, class)
 ```
 
 ### Hospital beds 
 ```{r}
 hospital_beds <- hospital_beds |>
   select(REF_AREA, TIME_PERIOD, OBS_VALUE)
+
+sapply(hospital_beds, class)
 ```
 
 ### Life expectancy 
@@ -415,7 +419,7 @@ database <- database |>
 
 dim(database)
 ```
-There are 133 missing values in `OBS_VALUE_social_expenditure`. However, we cannot deduce that there are no social contributions in these countries, only that they have not been reported. As the missing values span over several years at a time, and often at the beginning of the time period, replacing them with a 0 or imputing them would result in a risk distorting our results by forcing an artificial trend. We therefore retain the missing values. However, we decide to remove 5 countries of our analysis : South Africa (ZAF), Argentina (ARG), Peru (PER), Thailand (THA) and Brazil (BRA) as there are too many values missing to analyse them further during teh modelling phase.  
+There are 133 missing values in `OBS_VALUE_social_expenditure`. However, we cannot deduce that there are no social contributions in these countries, only that they have not been reported. As the missing values span over several years at a time, and often at the beginning of the time period, replacing them with a 0 or imputing them would result in a risk distorting our results by forcing an artificial trend. We therefore retain the missing values. However, we decide to remove 5 countries of our analysis : South Africa (ZAF), Argentina (ARG), Peru (PER), Thailand (THA) and Brazil (BRA) as there are too many values missing to analyse them further during the modelling phase.  
 
 There are 12 missing values in `OBS_VALUE_health_exp`. They also correspond to missing values at the beginning of the time period. For instance, the health expenditure data is missing for Romania (ROU) from 2000 to 2002. Given both the small number of missing values, we also choose not to impute this variable.
 
