@@ -9,7 +9,7 @@ execute:
 # Link to our github project 
 [Our Github Project](https://github.com/chloemrq/Project-Data-Management)
 
-# Research question 
+# I. Research question 
 **How does the level of social protection impact the general population health ?** 
 
 We want to identify if a stronger social and health protection (quantified by different variables such as health expenditure, tax revenues, etc) has an impact on the avoidable mortality rate. In order to do so we will analyse data collected in OECD countries from 2000 to 2023. 
@@ -40,8 +40,9 @@ Finally, the explained variable will be :
 - Avoidable mortality 
 It will be used to estimate the population’s general health. 
 
-# Loading the packages 
+ 
 ```{r}
+# Loading the packages
 #| message: false
 library(here)
 here::i_am("Project-Data-Management.Rproj")
@@ -57,13 +58,47 @@ library(vroom)
 library(readxl)
 ```
 
+# II. Description of the datasets
+This report relies on 8 datasets. Here is a short description of each of them. More details on the datasets and their descriptive statistics can be found in Phase 2.
 
-# Loading the cleaned dataset from phase 2
+#### Health expenditure - OECD (2025)
+This dataset details the annual health expenditure and financing as a percentage of GDP for 52 countries. The data is available for a period ranging from 2000 to 2024. It was computed using financial flows related to the consumption of healthcare goods and services from different health providers such as Hospitals or Residential long-term care facilities.  
+
+### Avoidable mortality - OECD (2025)
+This dataset describes the number of "avoidable deaths" per 100000 inhabitants annually for the period 2000-2024 for 46 countries. It contains contains both “preventable mortality” and “treatable (or amenable) mortality”. The first refers to deaths that can be avoided through effective public health and primary prevention interventions. The second refers to timely and effective health care interventions, including prevention and treatment.Both indicators refer to premature mortality (under age 75).
+
+### GDP per Capita - World Bank (2024)
+The GDP per Capita dataset presents the GDP per capita (constant 2015 US$) from 1960 to 2024 for 70 countries. This indicator is expressed in constant prices, meaning the series has been adjusted to account for price changes over time. The reference year for this adjustment is 2015. This indicator is expressed in United States dollars. 
+
+### Hospital beds - OECD (2025)
+This dataset provides data on the number of total hospitals beds by function of healthcare and by type of care (ie. somatic or psychiatric care) for the period 2000-2024 for 48 different countries. Total hospital beds are the sum of the following categories:
+Curative care (acute care) beds in hospitals, Rehabilitative care beds in hospitals, Long-term care beds in hospitals, All other beds in hospitals not elsewhere classified. 
+
+### Life expectancy - World Bank (2023)
+This dataset provides the life expectancy in years for women and men for a period ranging from 1960 to 2023, for 69 different countries or economies. 
+
+### Social Expenditure Aggregate - OECD (2025)
+This dataset includes internationally comparable statistics on public and mandatory and voluntary private social expenditure at programme level (e.g. Old age, Survivors, Incapacity-related benefits, Health, etc) It covers 38 OECD countries and some accession countries for the period 1980-2021/23 and estimates for aggregates for 2022-24.
+
+### Unemployement Rate - IMF (2025)
+This IMF dataset describes the percentage of the labor force that is unemployed and actively seeking employment. It is available from 1980 to 2025 and features 120 geographic regions. 
+
+### HDI (Human Development Index) - UNDP ()
+This dataset describes the human development index, per country (195), annually (1990-2023). It is a summary measure of average achievement in key dimensions of human development: a long and healthy life, being knowledgeable and having a decent standard of living. The HDI is between 0 (low human development) and 1 (very high human development).
+
+
+
+
 ```{r}
+# Loading the cleaned dataset from phase 2
+#| message: false
+#| warning: false
 database <- vroom(here("data", "cleaned_database.csv"))
 ```
-# Loading the raw datasets to create a brief description table 
+
+
 ```{r}
+# Loading the raw datasets to create a brief description table
 #| message: false
 #| warning: false
 health_expenditure <- vroom(here("data", "OECD.ELS.HD,DSD_SHA@DF_SHA,1.0+.A.EXP_HEALTH.PT_B1GQ._T.._T.._T....csv"))
@@ -91,6 +126,7 @@ unemployment <- vroom(here("data", "dataset_2025-11-21T14_31_58.442440069Z_DEFAU
 
 hdi <- read_excel("data/hdr-data.xlsx")
 ```
+
 
 # Description table 
 ```{r}

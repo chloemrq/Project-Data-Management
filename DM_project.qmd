@@ -448,7 +448,7 @@ Second, the temporal coverage varies between countries. Indeed, there is no data
 
 - `OBS_VALUE_hdi` : human development index, per country, annually. It is between 0 and 1, 1 meaning the country in question is well developed. 
 
-- `OBS_VALUE_gdp` : GDP per capita, per country, annually. It is measured in constant US dollars from 2015.
+- `OBS_VALUE_gdp` : GDP per capita, per country, annually. It is measured in constant US dollars from 2015. Gross domestic product is the total income earned through the production of goods and services in an economic territory during an accounting period.
 
 - `OBS_VALUE_hosp_beds` : number of hospital beds available per country, annually.
 
@@ -458,7 +458,7 @@ Second, the temporal coverage varies between countries. Indeed, there is no data
 
 - `OBS_VALUE_unemp` : unemployment rate per country, annually. 
 
-- `OBS_VALUE_health_exp` : health expenditure observed annually. It is measured in percentage of the country’s GDP. It was computed using financial flows related to the consumption of healthcare goods and services. 
+- `OBS_VALUE_health_exp` : health expenditure observed annually. It is measured in percentage of the country’s GDP. It was computed using financial flows related to the consumption of healthcare goods and services. Health expenditure can be filtered by "healthcare provider" such as Hospitals, Residential long-term care facilities, etc. The total of these categories was selected in the downloaded dataset.
 
 
 
