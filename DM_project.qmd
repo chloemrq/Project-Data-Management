@@ -375,7 +375,11 @@ database <- database  |>
   rename(OBS_VALUE_mortality = OBS_VALUE)
 
 # short overview of our merged database
-head(database, n=5)
+head(database, n=5) |>
+  knitr::kable()
+
+# we save this cleaned version of the database so that it is directly reusable in phase 3
+vroom_write(database, here("data", "cleaned_database.csv"), delim = ",")
 ```
 
 
