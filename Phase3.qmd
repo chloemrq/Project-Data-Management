@@ -62,6 +62,7 @@ library(dplyr)
 library(tidyr)
 library(vroom)
 library(readxl)
+library(patchwork)
 ```
 
 # II. Description of the datasets
@@ -219,6 +220,43 @@ The country with the lowest avoidable death rate is Switzerland (CHE) and the hi
 
 It is important to note that we this report primarily studies developed countries with the most available data from 2000 to 2023. We chose to exclude the following countries : South Africa (ZAF), Argentina (ARG), Peru (PER), Thailand (THA) and Brazil (BRA) as the data is not sufficient to proceed with proper data analysis. Thus, our conclusions will be biased due to the fact that we study more developed countries with, perhaps, more similar institutional structures and resistance to global health crises such as Covid-19. 
 
+### Visualising *avoidable_mortality* against independent variables
+The goal of our analysis is to determine if certain variables explain the level of avoidable mortality. We can start the data analysis by simply plotting some independent variables against *avoidable_mortality* and observe the general trend. 
 
+```{r}
+ggplot(database, aes(x = OBS_VALUE_health_exp, y = OBS_VALUE_mortality)) +
+  geom_point(aes(color = REF_AREA)) +
+  theme(legend.position = "right") +
+  labs(title = "Avoidable mortality against Health Expenditure") +
+  geom_smooth(method = "lm", se = FALSE) 
+```
 
+As expected, as the level of health expenditure increases, avoidable mortality tends to decrease. Australia (AUS) detaches itself from other countries by having a particularly high level of health expenditure, but still a moderately high level of avoidable mortality. Most countries are situated on the left side of the graph (with low health expenditure) showcasing both countries with high and low rates of avoidable mortality for the same level of health expenditure. 
 
+```{r}
+ggplot(database, aes(x = OBS_VALUE_unemp, y = OBS_VALUE_mortality)) +
+  geom_point(aes(color = REF_AREA)) +
+  theme(legend.position = "none") +
+  labs(title = "Avoidable mortality against Unemployment") +
+  geom_smooth(method = "lm", se = FALSE)
+```
+Here, the trend indicates that as unemployment increases, avoidable mortality does too. Most countries have low levels of unemployment and low rates of avoidable mortality. 
+In the bottom right, Spain (ESP) and Greece (GRC) display very high rates of unemployment while keeping their avoidable mortality rates among the lowest of all countries. On the contrary, countries such as Mexico (MEX) in purple showcase high levels of avoidable mortality with very low rates of unemployment. 
+
+```{r}
+ggplot(database, aes(x = OBS_VALUE_gdp, y = OBS_VALUE_mortality)) +
+  geom_point(aes(color = REF_AREA)) +
+  theme(legend.position = "none") +
+  labs(title = "Avoidable mortality against GDP per Capita") +
+  geom_smooth(method = "lm", se = FALSE)
+```
+This graph suggests that as GDP per capita increases, the rate of avoidable mortality decreases. The avoidable mortality rate doesn't seem to go below 100 deaths per 100,000 inhabitants. Thus, as GDP per capita increases, avoidable mortality remains between 100 and 300 deaths per 100,000 inhabitants suggesting marginal change in mortality as a country's population becomes richer.
+
+```{r}
+ggplot(database, aes(x = OBS_VALUE_life_exp, y = OBS_VALUE_mortality)) +
+  geom_point(aes(color = REF_AREA)) +
+  theme(legend.position = "none") +
+  labs(title = "Avoidable mortality against Life Expectancy") +
+  geom_smooth(method = "lm", se = FALSE)
+```
+The correlation between avoidable mortality and life expectancy seems strong in this graph. Indeed, as life expectancy increases, avoidable mortality decreases linearly for all countries. Two countries (Türkiye (TUR) in pink and Colombia (COL) in brown) find themselves slightly below the trend line, with lower mortality than the trend would suggest for their level of life expectancy. 
