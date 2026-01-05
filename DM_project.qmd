@@ -377,9 +377,6 @@ database <- database  |>
 # short overview of our merged database
 head(database, n=5) |>
   knitr::kable()
-
-# we save this cleaned version of the database so that it is directly reusable in phase 3
-vroom_write(database, here("data", "cleaned_database.csv"), delim = ",")
 ```
 
 
@@ -422,6 +419,9 @@ database <- database |>
   filter(!REF_AREA %in% c("ZAF", "ARG", "PER", "THA", "BRA"))
 
 dim(database)
+
+# we save this cleaned version of the database so that it is directly reusable in phase 3
+vroom_write(database, here("data", "cleaned_database.csv"), delim = ",")
 ```
 There are 133 missing values in `OBS_VALUE_social_expenditure`. However, we cannot deduce that there are no social contributions in these countries, only that they have not been reported. As the missing values span over several years at a time, and often at the beginning of the time period, replacing them with a 0 or imputing them would result in a risk distorting our results by forcing an artificial trend. We therefore retain the missing values. However, we decide to remove 5 countries of our analysis : South Africa (ZAF), Argentina (ARG), Peru (PER), Thailand (THA) and Brazil (BRA) as there are too many values missing to analyse them further during the modelling phase.  
 
