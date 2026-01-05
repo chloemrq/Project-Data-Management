@@ -62,7 +62,6 @@ library(dplyr)
 library(tidyr)
 library(vroom)
 library(readxl)
-library(patchwork)
 ```
 
 # II. Description of the datasets
@@ -90,7 +89,7 @@ This dataset includes internationally comparable statistics on public and mandat
 ### Unemployement Rate - IMF (2025)
 This IMF dataset describes the percentage of the labor force that is unemployed and actively seeking employment. It is available from 1980 to 2025 and features 120 geographic regions. 
 
-### HDI (Human Development Index) - UNDP ()
+### HDI (Human Development Index) - UNDP (2025)
 This dataset describes the human development index, per country (195), annually (1990-2023). It is a summary measure of average achievement in key dimensions of human development: a long and healthy life, being knowledgeable and having a decent standard of living. The HDI is between 0 (low human development) and 1 (very high human development).
 
 
@@ -260,3 +259,7 @@ ggplot(database, aes(x = OBS_VALUE_life_exp, y = OBS_VALUE_mortality)) +
   geom_smooth(method = "lm", se = FALSE)
 ```
 The correlation between avoidable mortality and life expectancy seems strong in this graph. Indeed, as life expectancy increases, avoidable mortality decreases linearly for all countries. Two countries (Türkiye (TUR) in pink and Colombia (COL) in brown) find themselves slightly below the trend line, with lower mortality than the trend would suggest for their level of life expectancy. 
+
+# 4. Econometric Analysis : Linear Mixed Model (LMM)
+
+
