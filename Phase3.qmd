@@ -62,7 +62,69 @@ library(readxl)
 ```{r}
 database <- vroom(here("data", "cleaned_database.csv"))
 ```
+# Loading the raw datasets to create a brief description table 
+```{r}
+#| message: false
+#| warning: false
+health_expenditure <- vroom(here("data", "OECD.ELS.HD,DSD_SHA@DF_SHA,1.0+.A.EXP_HEALTH.PT_B1GQ._T.._T.._T....csv"))
 
+avoidable_mortality <- vroom(here("data", "OECD.ELS.HD,DSD_HEALTH_STAT@DF_AM,1.1+.A.AVM.DT_10P5HB.._T........csv"))
+
+gdp_per_capita <- vroom(
+  here("data/API_NY.GDP.PCAP.KD_DS2_en_csv_v2_242568", "API_NY.GDP.PCAP.KD_DS2_en_csv_v2_242568.csv"),
+  delim = ",",
+  skip = 4,           # need to skip the first 4 rows
+  col_names = TRUE,   
+)
+
+hospital_beds <- vroom(here("data", "OECD.ELS.HD,DSD_HEALTH_REAC_HOSP@DF_BEDS_FUNC,1.0+..BD..._T._T...csv"))
+
+life_expectancy <- vroom(
+  here("data/API_SP.DYN.LE00.IN_DS2_fr_csv_v2_11258", "API_SP.DYN.LE00.IN_DS2_fr_csv_v2_11258.csv"), 
+  delim = ",",
+  skip = 4,           # need to skip the first 4 rows
+  col_names = TRUE)
+
+social_expenditure <- vroom(here("data","OECD.ELS.SPD,DSD_SOCX_AGG@DF_SOCX_AGG,1.0PT_B1GQ.ES10._T.csv"))
+
+unemployment <- vroom(here("data", "dataset_2025-11-21T14_31_58.442440069Z_DEFAULT_INTEGRATION_IMF.RES_WEO_9.0.0.csv"))
+
+hdi <- read_excel("data/hdr-data.xlsx")
+```
+
+# Description table 
+```{r}
+#| message: false
+#| warning: false
+data_sets <- list(
+  list(name = "Health Expenditure", data = health_expenditure),
+  list(name = "Avoidable Mortality", data = avoidable_mortality),
+  list(name = "GDP per Capita", data = gdp_per_capita),
+  list(name = "Number of Hospital Beds", data = hospital_beds),
+  list(name = "Life Expectancy", data = life_expectancy),
+  list(name = "Social Expenditure", data = social_expenditure),
+  list(name = "Unemployement", data = unemployment),
+  list(name = "HDI", data = hdi)
+)
+
+get_summary <- function(dataset) {
+  data <- dataset$data
+  dataset_name <- dataset$name
+
+  data.frame(
+    Dataset = dataset_name,
+    Observations = nrow(data),
+    Variables = ncol(data)
+  )
+}
+
+# Apply to all datasets
+summary_list <- lapply(data_sets, get_summary)
+summary_table <- do.call(rbind, summary_list)
+
+# Display the table
+knitr::kable(summary_table, caption = "Brief summary of the datasets used in this report")
+```
 
 
 
