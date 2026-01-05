@@ -19,7 +19,7 @@ The first is to understand the global evolution of the data and the reasons behi
 The second is to study the Covid-19 crisis. We believe it revealed how necessary having a proper social protection is to limit the number of deaths during a pandemic. 
 
 
-# Method 
+## Method 
 To conduct our study we will be using a **linear mixed model (LMM)** with lags. Such a model will allow us to properly study the OECD countries taking into account their differences. It also a fitting model since we are working with time-based data. 
 
 Considering our research question, we will use multiple datasets and variables.
@@ -65,7 +65,7 @@ This report relies on 8 datasets. Here is a short description of each of them. M
 This dataset details the annual health expenditure and financing as a percentage of GDP for 52 countries. The data is available for a period ranging from 2000 to 2024. It was computed using financial flows related to the consumption of healthcare goods and services from different health providers such as Hospitals or Residential long-term care facilities.  
 
 ### Avoidable mortality - OECD (2025)
-This dataset describes the number of "avoidable deaths" per 100000 inhabitants annually for the period 2000-2024 for 46 countries. It contains contains both “preventable mortality” and “treatable (or amenable) mortality”. The first refers to deaths that can be avoided through effective public health and primary prevention interventions. The second refers to timely and effective health care interventions, including prevention and treatment.Both indicators refer to premature mortality (under age 75).
+This dataset describes the number of "avoidable deaths" per 100,000 inhabitants annually for the period 2000-2024 for 46 countries. It contains contains both “preventable mortality” and “treatable (or amenable) mortality”. The first refers to deaths that can be avoided through effective public health and primary prevention interventions. The second refers to timely and effective health care interventions, including prevention and treatment.Both indicators refer to premature mortality (under age 75).
 
 ### GDP per Capita - World Bank (2024)
 The GDP per Capita dataset presents the GDP per capita (constant 2015 US$) from 1960 to 2024 for 70 countries. This indicator is expressed in constant prices, meaning the series has been adjusted to account for price changes over time. The reference year for this adjustment is 2015. This indicator is expressed in United States dollars. 
@@ -128,8 +128,8 @@ hdi <- read_excel("data/hdr-data.xlsx")
 ```
 
 
-# Description table 
 ```{r}
+# Description table 
 #| message: false
 #| warning: false
 data_sets <- list(
@@ -162,8 +162,56 @@ summary_table <- do.call(rbind, summary_list)
 knitr::kable(summary_table, caption = "Brief summary of the datasets used in this report")
 ```
 
+## Description of the merged and cleaned dataset 
+```{r}
+database |> 
+  summarise("Number of rows" = n(), 
+            "Number of columns" = ncol(database),
+            "Percentage of NA" = paste0(round(sum(is.na(database)) / (n() * ncol(database)) * 100, 2), "%"),
+            "Number of countries studied" = n_distinct(REF_AREA), 
+            "Time period" = paste0(min(TIME_PERIOD), "-", max(TIME_PERIOD))) |> 
+  as.data.frame() |>
+  knitr::kable()
+```
 
 
+# 3. Data Analysis 
+*Graphical representation of our main variable : avoidable mortality (OBS_VALUE_mortality)*
+
+
+### Global avoidable mortality
+First we can take a look at the number of avoidable deaths globally
+```{r}
+database |>
+  group_by(TIME_PERIOD) |>
+  summarise(mean_mortality = mean(OBS_VALUE_mortality, na.rm = TRUE)) |>
+  ggplot(aes(x = TIME_PERIOD, y = mean_mortality)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "Average avoidable mortality in the world (2000-2023), per 100,000 inhabitants annually",
+    y = "Number of avoidable deaths",
+    x = "Year")
+```
+This graph reveals a downward trend in avoidable mortality from 2000 to 2019 cut by a sudden increase in 2020 and 2021 during Covid-19. However it seems that, afterward, the variable will go back to its previous trend.
+
+
+### Avoidable mortality per country
+We also check the `avoidable_mortality` variable per country. 
+```{r}
+database |>
+  ggplot(aes(x = TIME_PERIOD, y = OBS_VALUE_mortality, color=REF_AREA)) +
+  geom_line() +
+  scale_x_continuous(breaks = c(2000, 2010, 2020)) +
+  labs(
+    x = "Year",
+    y = "Number of avoidable deaths",
+    title = "Avoidable mortality per country (2000-2023), per 100,000 inhabitants annually")
+```
+Most countries share the same downward sloping trend in avoidable mortality. A distinct increase appears in 2019, with a peak in 2020 and a decrease to previous trend values from 2021 in all countries. 
+The country with the lowest avoidable death rate is Switzerland (CHE) and the highest is Latvia at the beginning of the 2000s, then surpassed by Lithuania (LTU) around 2007. We must also notice the increase in avoidable deaths from around 400 to almost 650 per 100,000 inhabitants in Mexico in 2019. 
+
+It is important to note that we this report primarily studies developed countries with the most available data from 2000 to 2023. We chose to exclude the following countries : South Africa (ZAF), Argentina (ARG), Peru (PER), Thailand (THA) and Brazil (BRA) as the data is not sufficient to proceed with proper data analysis. Thus, our conclusions will be biased due to the fact that we study more developed countries with, perhaps, more similar institutional structures and resistance to global health crises such as Covid-19. 
 
 
 
