@@ -1,0 +1,1983 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Karla Otoude and Chloé Marquis">
+
+<title>DM Project</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="DM_project_files/libs/clipboard/clipboard.min.js"></script>
+<script src="DM_project_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="DM_project_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="DM_project_files/libs/quarto-html/popper.min.js"></script>
+<script src="DM_project_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="DM_project_files/libs/quarto-html/anchor.min.js"></script>
+<link href="DM_project_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="DM_project_files/libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="DM_project_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="DM_project_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="DM_project_files/libs/bootstrap/bootstrap-bb462d781dde1847d9e3ccf7736099dd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="DM_project.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">DM Project</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Karla Otoude and Chloé Marquis </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="link-to-our-github-project" class="level1">
+<h1>Link to our github project</h1>
+<p><a href="https://github.com/chloemrq/Project-Data-Management">Our Github Project</a></p>
+</section>
+<section id="research-question" class="level1">
+<h1>Research question</h1>
+<p><strong>How does the level of social protection impact the general population health ?</strong></p>
+<p>We want to identify if a stronger social and health protection (quantified by different variables such as health expenditure, tax revenues, etc) has an impact on the avoidable mortality rate. In order to do so we will analyse data collected in OECD countries from 2000 to 2023.</p>
+<p>There are two goals in our analysis : The first is to understand the global evolution of the data and the reasons behind its trends. The second is to study the Covid-19 crisis. We believe it revealed how necessary having a proper social protection is to limit the number of deaths during a pandemic.</p>
+</section>
+<section id="method" class="level1">
+<h1>Method</h1>
+<p>To conduct our study we will be using a <strong>linear mixed model (LMM)</strong> with lags. Such a model will allow us to properly study the OECD countries taking into account their differences. It also a fitting model since we are working with time-based data.</p>
+<p>Considering our research question, we will use multiple datasets and variables.</p>
+<p>For explanatory variables, in order to estimate the strength and quality of a country’s health protection scheme, we will have : - Health expenditure - Social expenditure aggregates - Number of hospitals beds</p>
+<p>We also have more general variables such as : - GDP per capita - Unemployment rate - Human development index - Life expectancy They will be used as control variables, since richer countries tend to have better living conditions which may lead to a generally healthier population, without the need for a strong health protection.</p>
+<p>Finally, the explained variable will be : - Avoidable mortality It will be used to estimate the population’s general health.</p>
+</section>
+<section id="links-to-the-sources-and-description" class="level1">
+<h1>Links to the sources and description</h1>
+<section id="oecd" class="level2">
+<h2 class="anchored" data-anchor-id="oecd">OECD</h2>
+<p>The Organisation for Economic Co-operation and Development (OECD) is an international organisation created in 1948. Its goal is to allow various countries to answer common problems and coordinate domestic and international policies. OECD members share data and receive analysis from experts on social, economic and environmental challenges.</p>
+<section id="health-expenditure-oecd" class="level3">
+<h3 class="anchored" data-anchor-id="health-expenditure-oecd">Health expenditure (OECD)</h3>
+<p><a href="https://data-explorer.oecd.org/vis?fs%5B0%5D=Topic%2C1%7CHealth%23HEA%23%7CHealth%20expenditure%20and%20financing%23HEA_EXP%23&amp;pg=0&amp;fc=Topic&amp;bp=true&amp;snb=4&amp;vw=tb&amp;df%5Bds%5D=dsDisseminateFinalDMZ&amp;df%5Bid%5D=DSD_SHA%40DF_SHA&amp;df%5Bag%5D=OECD.ELS.HD&amp;df%5Bvs%5D=1.0&amp;dq=AUS%2BAUT%2BBEL%2BCAN%2BCHL%2BCOL%2BCRI%2BCZE%2BDNK%2BEST%2BFIN%2BFRA%2BDEU%2BGRC%2BHUN%2BISL%2BIRL%2BISR%2BITA%2BJPN%2BKOR%2BLVA%2BLTU%2BLUX%2BMEX%2BNLD%2BNZL%2BNOR%2BPOL%2BPRT%2BSVK%2BSVN%2BESP%2BSWE%2BCHE%2BTUR%2BGBR%2BUSA%2BARG%2BBRA%2BBGR%2BCHN%2BHRV%2BCYP%2BIND%2BIDN%2BMLT%2BPER%2BROU%2BZAF%2BTHA%2BUKR.A.EXP_HEALTH.PT_B1GQ._T.._T.._T...&amp;pd=2000%2C2024&amp;to%5BTIME_PERIOD%5D=false">Health expenditure (OECD)</a></p>
+</section>
+<section id="social-expenditure-aggregate-oecd" class="level3">
+<h3 class="anchored" data-anchor-id="social-expenditure-aggregate-oecd">Social expenditure aggregate (OECD)</h3>
+<p><a href="https://data-explorer.oecd.org/vis?fs%5B0%5D=Topic%2C1%7CSociety%23SOC%23%7CSocial%20policy%23SOC_PRO%23&amp;pg=0&amp;fc=Topic&amp;bp=true&amp;snb=12&amp;df%5Bds%5D=dsDisseminateFinalDMZ&amp;df%5Bid%5D=DSD_SOCX_AGG%40DF_SOCX_AGG&amp;df%5Bag%5D=OECD.ELS.SPD&amp;df%5Bvs%5D=1.0&amp;dq=AUS%2BAUT%2BBEL%2BCAN%2BCHL%2BCOL%2BCRI%2BCZE%2BDNK%2BEST%2BFIN%2BFRA%2BDEU%2BGRC%2BHUN%2BISL%2BIRL%2BISR%2BITA%2BJPN%2BKOR%2BLVA%2BLTU%2BLUX%2BMEX%2BNLD%2BNZL%2BNOR%2BPOL%2BPRT%2BSVK%2BSVN%2BESP%2BSWE%2BCHE%2BTUR%2BGBR%2BUSA%2BBGR%2BHRV%2BPER%2BROU.A..PT_B1GQ.ES10._T._T.&amp;pd=2000%2C&amp;to%5BTIME_PERIOD%5D=false&amp;vw=tb">Social expenditure aggregate (OECD)</a></p>
+</section>
+<section id="avoidable-mortality-oecd" class="level3">
+<h3 class="anchored" data-anchor-id="avoidable-mortality-oecd">Avoidable mortality (OECD)</h3>
+<p><a href="https://data-explorer.oecd.org/vis?tm=Mortality%20rate&amp;pg=0&amp;snb=22&amp;vw=tb&amp;df%5Bds%5D=dsDisseminateFinalDMZ&amp;df%5Bid%5D=DSD_HEALTH_STAT%40DF_AM&amp;df%5Bag%5D=OECD.ELS.HD&amp;df%5Bvs%5D=1.1&amp;dq=.A.AVM.DT_10P5HB.._T.......&amp;pd=2000%2C2023&amp;to%5BTIME_PERIOD%5D=false">Avoidable mortality (OECD)</a></p>
+</section>
+<section id="number-of-hospital-beds-oecd" class="level3">
+<h3 class="anchored" data-anchor-id="number-of-hospital-beds-oecd">Number of hospital beds (OECD)</h3>
+<p><a href="https://data-explorer.oecd.org/vis?pg=0&amp;bp=true&amp;snb=6&amp;df%5Bds%5D=dsDisseminateFinalDMZ&amp;df%5Bid%5D=DSD_HEALTH_REAC_HOSP%40DF_BEDS_FUNC&amp;df%5Bag%5D=OECD.ELS.HD&amp;df%5Bvs%5D=1.0&amp;dq=..BD..._T._T..&amp;pd=2000%2C2024&amp;to%5BTIME_PERIOD%5D=false&amp;vw=tb&amp;lc=en">Hospital beds (OECD)</a></p>
+</section>
+</section>
+<section id="world-bank" class="level2">
+<h2 class="anchored" data-anchor-id="world-bank">World bank</h2>
+<p>The world bank group, is a family of five international organizations created in 1944 which help developing countries through leveraged loans. These loans are given for the purpose of pursuing economic development only. 189 countries are currently members of the World bank group.</p>
+<section id="gdp-per-capita-in-2015-us-world-bank" class="level3">
+<h3 class="anchored" data-anchor-id="gdp-per-capita-in-2015-us-world-bank">GDP per capita in 2015 $US (World Bank)</h3>
+<p><a href="https://data.worldbank.org/indicator/NY.GDP.PCAP.KD">GDP per capita (World Bank)</a></p>
+</section>
+<section id="life-expectancy-world-bank" class="level3">
+<h3 class="anchored" data-anchor-id="life-expectancy-world-bank">Life expectancy (World Bank)</h3>
+<p><a href="https://donnees.banquemondiale.org/indicator/SP.DYN.LE00.IN?most_recent_year_desc=true">Life expectancy (World Bank)</a></p>
+<p>Life expectancy at birth indicates the number of years a newborn baby would have to live if the general rules of mortality at the time of birth were to remain the same throughout its life. Here it is measured by the world bank from 2000 to 2023.</p>
+</section>
+</section>
+<section id="imf" class="level2">
+<h2 class="anchored" data-anchor-id="imf">IMF</h2>
+<p>The International Monetary Fund (IMF) is an international financial institution and a specialized agency of the United Nations created in 1944. It is composed of 191 member countries. Its goal is to help its members achieve sustainable growth and to encourage the expansion of trade. The IMF supports certain economic policies that promote financial stability and monetary cooperation.</p>
+<section id="unemployment-rate-imf" class="level3">
+<h3 class="anchored" data-anchor-id="unemployment-rate-imf">Unemployment rate (IMF)</h3>
+<p><a href="https://data.imf.org/en/Data-Explorer?datasetUrn=IMF.RES:WEO(9.0.0)&amp;INDICATOR=LUR">Unemployment rate (IMF)</a></p>
+<p>Instructions for the data : In the Data Explorer : - Time period : Custom : 01/01/2000 to 12/31/2024</p>
+</section>
+</section>
+<section id="undp" class="level2">
+<h2 class="anchored" data-anchor-id="undp">UNDP</h2>
+<p>The United Nations Development Programme is a United Nations agency tasked, since 1965, with helping countries eliminate poverty and achieve sustainable economic growth and human development. They intervene by helping countries develop policies, leadership skills, partnerships and institutional capabilities.</p>
+<section id="human-development-index-hdi-undp" class="level3">
+<h3 class="anchored" data-anchor-id="human-development-index-hdi-undp">Human development index (HDI) (UNDP)</h3>
+<p><a href="https://hdr.undp.org/data-center/documentation-and-downloads">HDI (UNDP)</a></p>
+<p>Instructions for the data : - Filter by index : HDI - Filter by indicator : Human development index (value) - Filter by year : 2000 - 2023 - Filter by group/region/country/territory : Select all countries</p>
+</section>
+</section>
+</section>
+<section id="loading-the-packages" class="level1">
+<h1>Loading the packages</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>here<span class="sc">::</span><span class="fu">i_am</span>(<span class="st">"Project-Data-Management.Rproj"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vroom)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: le package 'readxl' a été compilé avec la version R 4.5.2</code></pre>
+</div>
+</div>
+</section>
+<section id="loading-the-datasets-and-summary" class="level1">
+<h1>Loading the datasets and summary</h1>
+<section id="health-expenditure" class="level3">
+<h3 class="anchored" data-anchor-id="health-expenditure">Health expenditure</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>health_expenditure <span class="ot">&lt;-</span> <span class="fu">vroom</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"OECD.ELS.HD,DSD_SHA@DF_SHA,1.0+.A.EXP_HEALTH.PT_B1GQ._T.._T.._T....csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: One or more parsing issues, call `problems()` on your data frame for details,
+e.g.:
+  dat &lt;- vroom(...)
+  problems(dat)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">problems</span>(health_expenditure)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 5
+    row   col expected           actual            file                         
+  &lt;int&gt; &lt;int&gt; &lt;chr&gt;              &lt;chr&gt;             &lt;chr&gt;                        
+1  1116    39 1/0/T/F/TRUE/FALSE P                 C:/Users/karla/Documents/Uni…
+2  1116    40 1/0/T/F/TRUE/FALSE Provisional value C:/Users/karla/Documents/Uni…</code></pre>
+</div>
+</div>
+<p>There are issues with columns 39/40. Opening the file in Excel tells us that these columns are mostly empty and “P” appears on row 1116. This is just a comment on the data that is not useful to us in the project and it doesn’t impact the variables of interest. Columns 39 and 40 will just delete these columns during the data cleaning process. Therefore, we load the data without resolving this issue.</p>
+<p>We compute summary statistics including the percentage of missing values. Although several datasets show a relatively high percentage of missing values, this does not significantly affect our final merged dataset as our analysis relies mostly on 2 columns (time period and observed value) of each dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>health_expenditure <span class="sc">|&gt;</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">"Number of rows"</span> <span class="ot">=</span> <span class="fu">n</span>(), </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Number of columns"</span> <span class="ot">=</span> <span class="fu">ncol</span>(health_expenditure), </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Percentage of NA"</span> <span class="ot">=</span> <span class="fu">paste0</span>(<span class="fu">round</span>(<span class="fu">sum</span>(<span class="fu">is.na</span>(health_expenditure)) <span class="sc">/</span> (<span class="fu">n</span>() <span class="sc">*</span> <span class="fu">ncol</span>(health_expenditure)) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>), <span class="st">"%"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Number of rows</th>
+<th style="text-align: right;">Number of columns</th>
+<th style="text-align: left;">Percentage of NA</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1246</td>
+<td style="text-align: right;">46</td>
+<td style="text-align: left;">25.62%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="avoidable-mortality" class="level3">
+<h3 class="anchored" data-anchor-id="avoidable-mortality">Avoidable mortality</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>avoidable_mortality <span class="ot">&lt;-</span> <span class="fu">vroom</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"OECD.ELS.HD,DSD_HEALTH_STAT@DF_AM,1.1+.A.AVM.DT_10P5HB.._T........csv"</span>))</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>avoidable_mortality <span class="sc">|&gt;</span> </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">"Number of rows"</span> <span class="ot">=</span> <span class="fu">n</span>(), </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Number of columns"</span> <span class="ot">=</span> <span class="fu">ncol</span>(avoidable_mortality),</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Percentage of NA"</span> <span class="ot">=</span> <span class="fu">paste0</span>(<span class="fu">round</span>(<span class="fu">sum</span>(<span class="fu">is.na</span>(avoidable_mortality)) <span class="sc">/</span> (<span class="fu">n</span>() <span class="sc">*</span> <span class="fu">ncol</span>(avoidable_mortality)) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>), <span class="st">"%"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Number of rows</th>
+<th style="text-align: right;">Number of columns</th>
+<th style="text-align: left;">Percentage of NA</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">997</td>
+<td style="text-align: right;">44</td>
+<td style="text-align: left;">18.18%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="gdp-per-capita" class="level3">
+<h3 class="anchored" data-anchor-id="gdp-per-capita">GDP per capita</h3>
+<p>When opening the file in Excel, we see that the first 4 rows are empty. We need to skip the first 4 rows and use row 5 as column headers.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>gdp_per_capita <span class="ot">&lt;-</span> <span class="fu">vroom</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">here</span>(<span class="st">"data/API_NY.GDP.PCAP.KD_DS2_en_csv_v2_242568"</span>, <span class="st">"API_NY.GDP.PCAP.KD_DS2_en_csv_v2_242568.csv"</span>),</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">delim =</span> <span class="st">","</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">skip =</span> <span class="dv">4</span>,           <span class="co"># need to skip the first 4 rows</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">col_names =</span> <span class="cn">TRUE</span>,   </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>gdp_per_capita <span class="sc">|&gt;</span> </span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">"Number of rows"</span> <span class="ot">=</span> <span class="fu">n</span>(), </span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Number of columns"</span> <span class="ot">=</span> <span class="fu">ncol</span>(gdp_per_capita),</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Percentage of NA"</span> <span class="ot">=</span> <span class="fu">paste0</span>(<span class="fu">round</span>(<span class="fu">sum</span>(<span class="fu">is.na</span>(gdp_per_capita)) <span class="sc">/</span> (<span class="fu">n</span>() <span class="sc">*</span> <span class="fu">ncol</span>(gdp_per_capita)) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>), <span class="st">"%"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Number of rows</th>
+<th style="text-align: right;">Number of columns</th>
+<th style="text-align: left;">Percentage of NA</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">266</td>
+<td style="text-align: right;">70</td>
+<td style="text-align: left;">17.84%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="hospital-beds" class="level3">
+<h3 class="anchored" data-anchor-id="hospital-beds">Hospital beds</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>hospital_beds <span class="ot">&lt;-</span> <span class="fu">vroom</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"OECD.ELS.HD,DSD_HEALTH_REAC_HOSP@DF_BEDS_FUNC,1.0+..BD..._T._T...csv"</span>))</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>hospital_beds <span class="sc">|&gt;</span> </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">"Number of rows"</span> <span class="ot">=</span> <span class="fu">n</span>(), </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Number of columns"</span> <span class="ot">=</span> <span class="fu">ncol</span>(hospital_beds), </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Percentage of NA"</span> <span class="ot">=</span> <span class="fu">paste0</span>(<span class="fu">round</span>(<span class="fu">sum</span>(<span class="fu">is.na</span>(hospital_beds)) <span class="sc">/</span> (<span class="fu">n</span>() <span class="sc">*</span> <span class="fu">ncol</span>(hospital_beds)) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>), <span class="st">"%"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Number of rows</th>
+<th style="text-align: right;">Number of columns</th>
+<th style="text-align: left;">Percentage of NA</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1034</td>
+<td style="text-align: right;">38</td>
+<td style="text-align: left;">36.41%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="life-expectancy" class="level3">
+<h3 class="anchored" data-anchor-id="life-expectancy">Life expectancy</h3>
+<p>The header is on row 5. We must delete the comments on the previous lines to properly load the dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>life_expectancy <span class="ot">&lt;-</span> <span class="fu">vroom</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">here</span>(<span class="st">"data/API_SP.DYN.LE00.IN_DS2_fr_csv_v2_11258"</span>, <span class="st">"API_SP.DYN.LE00.IN_DS2_fr_csv_v2_11258.csv"</span>), </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">delim =</span> <span class="st">","</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">skip =</span> <span class="dv">4</span>,           <span class="co"># need to skip the first 4 rows</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">col_names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>life_expectancy <span class="sc">|&gt;</span> </span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">"Number of rows"</span> <span class="ot">=</span> <span class="fu">n</span>(), </span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Number of columns"</span> <span class="ot">=</span> <span class="fu">ncol</span>(life_expectancy),</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Percentage of NA"</span> <span class="ot">=</span> <span class="fu">paste0</span>(<span class="fu">round</span>(<span class="fu">sum</span>(<span class="fu">is.na</span>(life_expectancy)) <span class="sc">/</span> (<span class="fu">n</span>() <span class="sc">*</span> <span class="fu">ncol</span>(life_expectancy)) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>), <span class="st">"%"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Number of rows</th>
+<th style="text-align: right;">Number of columns</th>
+<th style="text-align: left;">Percentage of NA</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">266</td>
+<td style="text-align: right;">70</td>
+<td style="text-align: left;">3.39%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="social-expenditure-aggregates" class="level3">
+<h3 class="anchored" data-anchor-id="social-expenditure-aggregates">Social expenditure aggregates</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>social_expenditure <span class="ot">&lt;-</span> <span class="fu">vroom</span>(<span class="fu">here</span>(<span class="st">"data"</span>,<span class="st">"OECD.ELS.SPD,DSD_SOCX_AGG@DF_SOCX_AGG,1.0PT_B1GQ.ES10._T.csv"</span>))</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>social_expenditure <span class="sc">|&gt;</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">"Number of rows"</span> <span class="ot">=</span> <span class="fu">n</span>(), </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Number of columns"</span> <span class="ot">=</span> <span class="fu">ncol</span>(social_expenditure),</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Percentage of NA"</span> <span class="ot">=</span> <span class="fu">paste0</span>(<span class="fu">round</span>(<span class="fu">sum</span>(<span class="fu">is.na</span>(social_expenditure)) <span class="sc">/</span> (<span class="fu">n</span>() <span class="sc">*</span> <span class="fu">ncol</span>(social_expenditure)) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>), <span class="st">"%"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Number of rows</th>
+<th style="text-align: right;">Number of columns</th>
+<th style="text-align: left;">Percentage of NA</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1046</td>
+<td style="text-align: right;">34</td>
+<td style="text-align: left;">11.9%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="unemployment" class="level3">
+<h3 class="anchored" data-anchor-id="unemployment">Unemployment</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>unemployment <span class="ot">&lt;-</span> <span class="fu">vroom</span>(<span class="fu">here</span>(<span class="st">"data"</span>,</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                           <span class="st">"dataset_2025-11-21T14_31_58.442440069Z_DEFAULT_INTEGRATION_IMF.RES_WEO_9.0.0.csv"</span>))</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>unemployment <span class="sc">|&gt;</span> </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">"Number of rows"</span> <span class="ot">=</span> <span class="fu">n</span>(), </span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Number of columns"</span> <span class="ot">=</span> <span class="fu">ncol</span>(unemployment),</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Percentage of NA"</span> <span class="ot">=</span> <span class="fu">paste0</span>(<span class="fu">round</span>(<span class="fu">sum</span>(<span class="fu">is.na</span>(unemployment)) <span class="sc">/</span> (<span class="fu">n</span>() <span class="sc">*</span> <span class="fu">ncol</span>(unemployment)) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>), <span class="st">"%"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Number of rows</th>
+<th style="text-align: right;">Number of columns</th>
+<th style="text-align: left;">Percentage of NA</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">122</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: left;">4.05%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="hdi" class="level3">
+<h3 class="anchored" data-anchor-id="hdi">HDI</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>hdi <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/hdr-data.xlsx"</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>hdi <span class="sc">|&gt;</span> </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">"Number of rows"</span> <span class="ot">=</span> <span class="fu">n</span>(), </span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Number of columns"</span> <span class="ot">=</span> <span class="fu">ncol</span>(hdi),</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Percentage of NA"</span> <span class="ot">=</span> <span class="fu">paste0</span>(<span class="fu">round</span>(<span class="fu">sum</span>(<span class="fu">is.na</span>(hdi)) <span class="sc">/</span> (<span class="fu">n</span>() <span class="sc">*</span> <span class="fu">ncol</span>(hdi)) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>), <span class="st">"%"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Number of rows</th>
+<th style="text-align: right;">Number of columns</th>
+<th style="text-align: left;">Percentage of NA</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">4484</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: left;">20%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</section>
+<section id="some-data-cleaning-before-merging" class="level1">
+<h1>Some data cleaning before merging</h1>
+<p>We first need to keep only the interesting variables (observations, time period and country code) in all our datasets. We will later merge all data sets using the country code (almost the same in all datasets, minor exception in the unemployment dataset). We will also convert the GDP per capita, life expectancy and unemployment data sets to long formats, so that all datasets are in the same format before merging. We also check the class of all variables before merging.</p>
+<section id="health-expenditure-1" class="level3">
+<h3 class="anchored" data-anchor-id="health-expenditure-1">Health expenditure</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># selecting only interesting variables </span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>health_expenditure <span class="ot">&lt;-</span> health_expenditure <span class="sc">|&gt;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(REF_AREA, TIME_PERIOD, OBS_VALUE)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co"># checking the class of these variables </span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(health_expenditure, class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   REF_AREA TIME_PERIOD   OBS_VALUE 
+"character"   "numeric"   "numeric" </code></pre>
+</div>
+</div>
+</section>
+<section id="social-expenditure-aggregates-1" class="level3">
+<h3 class="anchored" data-anchor-id="social-expenditure-aggregates-1">Social expenditure aggregates</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We keep only the total social security contributions, and not the detail such as "paid by employer / employee, etc"</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>social_expenditure <span class="ot">&lt;-</span> social_expenditure <span class="sc">|&gt;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(REF_AREA, TIME_PERIOD, OBS_VALUE)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co"># checking the class of these variables </span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(social_expenditure, class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   REF_AREA TIME_PERIOD   OBS_VALUE 
+"character"   "numeric"   "numeric" </code></pre>
+</div>
+</div>
+</section>
+<section id="avoidable-mortality-1" class="level3">
+<h3 class="anchored" data-anchor-id="avoidable-mortality-1">Avoidable mortality</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>avoidable_mortality <span class="ot">&lt;-</span> avoidable_mortality <span class="sc">|&gt;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(REF_AREA, TIME_PERIOD, OBS_VALUE)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(avoidable_mortality, class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   REF_AREA TIME_PERIOD   OBS_VALUE 
+"character"   "numeric"   "numeric" </code></pre>
+</div>
+</div>
+</section>
+<section id="hospital-beds-1" class="level3">
+<h3 class="anchored" data-anchor-id="hospital-beds-1">Hospital beds</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>hospital_beds <span class="ot">&lt;-</span> hospital_beds <span class="sc">|&gt;</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(REF_AREA, TIME_PERIOD, OBS_VALUE)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(hospital_beds, class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   REF_AREA TIME_PERIOD   OBS_VALUE 
+"character"   "numeric"   "numeric" </code></pre>
+</div>
+</div>
+</section>
+<section id="life-expectancy-1" class="level3">
+<h3 class="anchored" data-anchor-id="life-expectancy-1">Life expectancy</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># we select only the period we are working on : 2000 to 2023</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>life_expectancy <span class="ot">&lt;-</span> life_expectancy <span class="sc">|&gt;</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span>, <span class="fu">as.character</span>(<span class="dv">2000</span><span class="sc">:</span><span class="dv">2023</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">REF_AREA =</span> <span class="st">`</span><span class="at">Country Code</span><span class="st">`</span>) <span class="co"># renaming to harmonise with the other datasets</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="co"># pivot this data set to a long format </span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>life_expectancy_long <span class="ot">&lt;-</span> <span class="fu">pivot_longer</span>(life_expectancy, <span class="at">cols=</span><span class="fu">as.character</span>(<span class="dv">2000</span><span class="sc">:</span><span class="dv">2023</span>), <span class="at">names_to=</span><span class="st">"TIME_PERIOD"</span>, </span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">values_to=</span><span class="st">"OBS_VALUE"</span>)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="co"># checking the class of variables </span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(life_expectancy_long, class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   REF_AREA TIME_PERIOD   OBS_VALUE 
+"character" "character"   "numeric" </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Changing the TIME_PERIOD variable to numeric </span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>life_expectancy_long<span class="sc">$</span>TIME_PERIOD <span class="ot">=</span> <span class="fu">as.numeric</span>(life_expectancy_long<span class="sc">$</span>TIME_PERIOD)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(life_expectancy_long, class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   REF_AREA TIME_PERIOD   OBS_VALUE 
+"character"   "numeric"   "numeric" </code></pre>
+</div>
+</div>
+</section>
+<section id="gdp-per-capita-1" class="level3">
+<h3 class="anchored" data-anchor-id="gdp-per-capita-1">GDP per capita</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>gdp_per_capita <span class="ot">&lt;-</span> gdp_per_capita <span class="sc">|&gt;</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span>, <span class="fu">as.character</span>(<span class="dv">2000</span><span class="sc">:</span><span class="dv">2023</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">REF_AREA =</span> <span class="st">`</span><span class="at">Country Code</span><span class="st">`</span>) <span class="co"># harmonizing the key variable for merging</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co"># pivot to a long format </span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>gdp_per_capita_long <span class="ot">&lt;-</span> <span class="fu">pivot_longer</span>(gdp_per_capita, <span class="at">cols=</span><span class="fu">as.character</span>(<span class="dv">2000</span><span class="sc">:</span><span class="dv">2023</span>), <span class="at">names_to=</span><span class="st">"TIME_PERIOD"</span>, </span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">values_to=</span><span class="st">"OBS_VALUE"</span>)</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(gdp_per_capita_long, class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   REF_AREA TIME_PERIOD   OBS_VALUE 
+"character" "character"   "numeric" </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Changing the TIME_PERIOD variable to numeric</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>gdp_per_capita_long<span class="sc">$</span>TIME_PERIOD <span class="ot">=</span> <span class="fu">as.numeric</span>(gdp_per_capita_long<span class="sc">$</span>TIME_PERIOD)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(gdp_per_capita_long, class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   REF_AREA TIME_PERIOD   OBS_VALUE 
+"character"   "numeric"   "numeric" </code></pre>
+</div>
+</div>
+</section>
+<section id="unemployment-1" class="level3">
+<h3 class="anchored" data-anchor-id="unemployment-1">Unemployment</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>unemployment <span class="ot">&lt;-</span> unemployment <span class="sc">|&gt;</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(SERIES_CODE, <span class="fu">as.character</span>(<span class="dv">2000</span><span class="sc">:</span><span class="dv">2023</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">REF_AREA =</span> SERIES_CODE) <span class="co"># harmonizing the country code </span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="co"># country code is in the format "ZAF.LUR.A". We only keep "ZAF", and drop the rest for all rows. </span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>unemployment<span class="sc">$</span>REF_AREA <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">..*$"</span>, <span class="st">""</span>, unemployment<span class="sc">$</span>REF_AREA) </span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="co"># pivot to a long format </span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>unemployment_long <span class="ot">&lt;-</span> <span class="fu">pivot_longer</span>(unemployment, <span class="at">cols=</span><span class="fu">as.character</span>(<span class="dv">2000</span><span class="sc">:</span><span class="dv">2023</span>), <span class="at">names_to=</span><span class="st">"TIME_PERIOD"</span>, </span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">values_to=</span><span class="st">"OBS_VALUE"</span>)</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(unemployment_long, class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   REF_AREA TIME_PERIOD   OBS_VALUE 
+"character" "character"   "numeric" </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Changing the TIME_PERIOD variable to numeric</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>unemployment_long<span class="sc">$</span>TIME_PERIOD <span class="ot">=</span> <span class="fu">as.numeric</span>(unemployment_long<span class="sc">$</span>TIME_PERIOD)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(unemployment_long, class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   REF_AREA TIME_PERIOD   OBS_VALUE 
+"character"   "numeric"   "numeric" </code></pre>
+</div>
+</div>
+</section>
+<section id="hdi-1" class="level3">
+<h3 class="anchored" data-anchor-id="hdi-1">HDI</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>hdi <span class="ot">&lt;-</span> hdi <span class="sc">|&gt;</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(countryIsoCode, year, value) <span class="sc">|&gt;</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">REF_AREA =</span> countryIsoCode, <span class="at">TIME_PERIOD =</span> year, <span class="at">OBS_VALUE =</span> value)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking variable class</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(hdi, class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   REF_AREA TIME_PERIOD   OBS_VALUE 
+"character" "character" "character" </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># TIME_PERIOD and OBS_VALUE need to be converted to a numeric format </span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>hdi<span class="sc">$</span>TIME_PERIOD <span class="ot">=</span> <span class="fu">as.numeric</span>(hdi<span class="sc">$</span>TIME_PERIOD)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>hdi<span class="sc">$</span>OBS_VALUE <span class="ot">=</span> <span class="fu">as.numeric</span>(hdi<span class="sc">$</span>OBS_VALUE)</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(hdi, class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   REF_AREA TIME_PERIOD   OBS_VALUE 
+"character"   "numeric"   "numeric" </code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="merging-the-data-sets" class="level1">
+<h1>Merging the data sets</h1>
+<p>In order to have one unique database to work on, we need to merge all the datasets. To do so, we will use the variables <code>REF_AREA</code> and <code>TIME_PERIOD</code> together as our key. Our aim is to analyse the impact of the selected variables on <code>avoidable_mortality</code>, our dependent variable. Therefore, we use <code>left_join</code> to merge all data, relative to the data available in the <code>avoidable_mortality</code> dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>database <span class="ot">&lt;-</span> avoidable_mortality <span class="sc">|&gt;</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(gdp_per_capita_long, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"REF_AREA"</span>, <span class="st">"TIME_PERIOD"</span>), <span class="at">suffix =</span> <span class="fu">c</span>(<span class="st">""</span>, <span class="st">"_gdp"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(hdi, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"REF_AREA"</span>, <span class="st">"TIME_PERIOD"</span>), <span class="at">suffix =</span> <span class="fu">c</span>(<span class="st">""</span>, <span class="st">"_hdi"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(health_expenditure, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"REF_AREA"</span>, <span class="st">"TIME_PERIOD"</span>), <span class="at">suffix =</span> <span class="fu">c</span>(<span class="st">""</span>, <span class="st">"_health_exp"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(hospital_beds, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"REF_AREA"</span>, <span class="st">"TIME_PERIOD"</span>), <span class="at">suffix =</span> <span class="fu">c</span>(<span class="st">""</span>, <span class="st">"_hosp_beds"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(life_expectancy_long, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"REF_AREA"</span>, <span class="st">"TIME_PERIOD"</span>), <span class="at">suffix =</span> <span class="fu">c</span>(<span class="st">""</span>, <span class="st">"_life_exp"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(social_expenditure, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"REF_AREA"</span>, <span class="st">"TIME_PERIOD"</span>), <span class="at">suffix =</span> <span class="fu">c</span>(<span class="st">""</span>, <span class="st">"_social_expenditure"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(unemployment_long, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"REF_AREA"</span>, <span class="st">"TIME_PERIOD"</span>), <span class="at">suffix =</span> <span class="fu">c</span>(<span class="st">""</span>, <span class="st">"_unemp"</span>))</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Giving a better name to the avoidable mortality column</span></span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>database <span class="ot">&lt;-</span> database  <span class="sc">|&gt;</span></span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">OBS_VALUE_mortality =</span> OBS_VALUE)</span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a><span class="co"># short overview of our merged database</span></span>
+<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(database, <span class="at">n=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 10
+  REF_AREA TIME_PERIOD OBS_VALUE_mortality OBS_VALUE_gdp OBS_VALUE_hdi
+  &lt;chr&gt;          &lt;dbl&gt;               &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;
+1 AUS             2000                 237        45860.         0.897
+2 AUS             2001                 227        46191.         0.9  
+3 AUS             2002                 218        47486.         0.902
+4 AUS             2003                 207        48394.         0.906
+5 AUS             2004                 199        49902.         0.91 
+# ℹ 5 more variables: OBS_VALUE_health_exp &lt;dbl&gt;, OBS_VALUE_hosp_beds &lt;dbl&gt;,
+#   OBS_VALUE_life_exp &lt;dbl&gt;, OBS_VALUE_social_expenditure &lt;dbl&gt;,
+#   OBS_VALUE_unemp &lt;dbl&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="summary-statistics-of-the-merged-dataset" class="level1">
+<h1>Summary statistics of the merged dataset</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>database <span class="sc">|&gt;</span> </span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">"Number of rows"</span> <span class="ot">=</span> <span class="fu">n</span>(), </span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Number of columns"</span> <span class="ot">=</span> <span class="fu">ncol</span>(database),</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Percentage of NA"</span> <span class="ot">=</span> <span class="fu">paste0</span>(<span class="fu">round</span>(<span class="fu">sum</span>(<span class="fu">is.na</span>(database)) <span class="sc">/</span> (<span class="fu">n</span>() <span class="sc">*</span> <span class="fu">ncol</span>(database)) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>), <span class="st">"%"</span>),</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Number of countries studied"</span> <span class="ot">=</span> <span class="fu">n_distinct</span>(REF_AREA), </span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Time period"</span> <span class="ot">=</span> <span class="fu">paste0</span>(<span class="fu">min</span>(TIME_PERIOD), <span class="st">"-"</span>, <span class="fu">max</span>(TIME_PERIOD))) <span class="sc">|&gt;</span> </span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span></span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 20%">
+<col style="width: 18%">
+<col style="width: 31%">
+<col style="width: 13%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Number of rows</th>
+<th style="text-align: right;">Number of columns</th>
+<th style="text-align: left;">Percentage of NA</th>
+<th style="text-align: right;">Number of countries studied</th>
+<th style="text-align: left;">Time period</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">997</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: left;">2.72%</td>
+<td style="text-align: right;">46</td>
+<td style="text-align: left;">2000-2023</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>We should note that, as a consequence of the <code>left_join</code> and the gaps in the <code>avoidable_mortality</code> dataset, there is missing data for several years for some countries : Turkey (2000 to 2008) and Greece (2000 to 2013). Although this represents a limitation of the dataset used, we decide to keep both countries, as we cannot afford to lose more data. We therefore keep all 46 countries, over the period 2000-2023.</p>
+<section id="summarising-the-number-of-na-per-variable" class="level3">
+<h3 class="anchored" data-anchor-id="summarising-the-number-of-na-per-variable">Summarising the number of NA per variable</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(database)) <span class="sc">|&gt;</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"Number of NA per column"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Number of NA per column</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">REF_AREA</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TIME_PERIOD</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">OBS_VALUE_mortality</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">OBS_VALUE_gdp</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">OBS_VALUE_hdi</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">OBS_VALUE_health_exp</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">OBS_VALUE_hosp_beds</td>
+<td style="text-align: right;">126</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">OBS_VALUE_life_exp</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">OBS_VALUE_social_expenditure</td>
+<td style="text-align: right;">133</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">OBS_VALUE_unemp</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="identifying-missing-values-per-country-and-per-variable" class="level3">
+<h3 class="anchored" data-anchor-id="identifying-missing-values-per-country-and-per-variable">Identifying missing values per country and per variable</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>database <span class="sc">|&gt;</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(REF_AREA) <span class="sc">|&gt;</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(.)), <span class="at">.names =</span> <span class="st">"{col}"</span>)) <span class="sc">|&gt;</span> <span class="co"># number of NA</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">rowSums</span>(<span class="fu">across</span>(<span class="sc">!</span>REF_AREA)) <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">|&gt;</span> <span class="co"># keep countries with at least 1 NA</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(REF_AREA, <span class="fu">where</span>(<span class="sc">~</span> <span class="fu">any</span>(. <span class="sc">&gt;</span> <span class="dv">0</span>))) <span class="sc">|&gt;</span> <span class="co"># keep variables with at least 1 country with 1 NA</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"Missing values by country and variable"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Missing values by country and variable</caption>
+<colgroup>
+<col style="width: 11%">
+<col style="width: 26%">
+<col style="width: 25%">
+<col style="width: 36%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">REF_AREA</th>
+<th style="text-align: right;">OBS_VALUE_health_exp</th>
+<th style="text-align: right;">OBS_VALUE_hosp_beds</th>
+<th style="text-align: right;">OBS_VALUE_social_expenditure</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">ARG</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">23</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">AUS</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">BGR</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">BRA</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">22</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">COL</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CRI</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DNK</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">HRV</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">IRL</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ISL</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">LUX</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">NOR</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">NZL</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PER</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">POL</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ROU</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">THA</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ZAF</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">21</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># removing countries with too many NA </span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>database <span class="ot">&lt;-</span> database <span class="sc">|&gt;</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>REF_AREA <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"ZAF"</span>, <span class="st">"ARG"</span>, <span class="st">"PER"</span>, <span class="st">"THA"</span>, <span class="st">"BRA"</span>))</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(database)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 888  10</code></pre>
+</div>
+</div>
+<p>There are 133 missing values in <code>OBS_VALUE_social_expenditure</code>. However, we cannot deduce that there are no social contributions in these countries, only that they have not been reported. As the missing values span over several years at a time, and often at the beginning of the time period, replacing them with a 0 or imputing them would result in a risk distorting our results by forcing an artificial trend. We therefore retain the missing values. However, we decide to remove 5 countries of our analysis : South Africa (ZAF), Argentina (ARG), Peru (PER), Thailand (THA) and Brazil (BRA) as there are too many values missing to analyse them further during the modelling phase.</p>
+<p>There are 12 missing values in <code>OBS_VALUE_health_exp</code>. They also correspond to missing values at the beginning of the time period. For instance, the health expenditure data is missing for Romania (ROU) from 2000 to 2002. Given both the small number of missing values, we also choose not to impute this variable.</p>
+<p>Finally, 126 values are missing in <code>OBS_VALUE_hosp_beds</code> also in the beginning of the time periods available (e.g.&nbsp;2007-2008 for Ireland). As with the previous variables, imputing these values would require imposing information that we do not have, and thus we retain them as missing.</p>
+</section>
+</section>
+<section id="limitations-of-the-merged-database" class="level1">
+<h1>Limitations of the merged database</h1>
+<p>The datasets used in this project present several limitations that must be considered when interpreting the results.</p>
+<p>First, some variables contain an important proportion of missing values (e.g.&nbsp;social expenditure and hospital beds). The NA are primarily concentrated at the beginning of the time period studied (2000-2023) and likely reflect data reporting issues rather than an absence of social policies such as health contributions, usually marked as 0 in the rest of the dataset. This will naturally impact our results, especially since the missing data often comes from developing countries, thus biasing the results towards the trends observed in developed countries.</p>
+<p>Second, the temporal coverage varies between countries. Indeed, there is no data for Turkey before 2009 or for Greece before 2014. This unevenness reduces the length of the time series for some countries and will influence the statistical analysis later on.</p>
+</section>
+<section id="presentation-of-the-main-variables" class="level1">
+<h1>Presentation of the main variables</h1>
+<ul>
+<li><p><code>REF_AREA</code> : first 3 letters of the country whose data is shown.</p></li>
+<li><p><code>TIME_PERIOD</code> : year for which the data was collected.</p></li>
+<li><p><code>OBS_VALUE_mortality</code> : avoidable mortality, the number of “avoidable deaths” per 100000 inhabitants annually. It contains contains both “preventable mortality” and “treatable (or amenable) mortality”. The first refers to deaths that can be avoided through effective public health and primary prevention interventions. The second refers to timely and effective health care interventions, including prevention and treatment.</p></li>
+<li><p><code>OBS_VALUE_hdi</code> : human development index, per country, annually. It is between 0 and 1, 1 meaning the country in question is well developed.</p></li>
+<li><p><code>OBS_VALUE_gdp</code> : GDP per capita, per country, annually. It is measured in constant US dollars from 2015.</p></li>
+<li><p><code>OBS_VALUE_hosp_beds</code> : number of hospital beds available per country, annually.</p></li>
+<li><p><code>OBS_VALUE_life_exp</code> : life expectancy of a country’s inhabitants, in years. It indicates the number of years a newborn baby would have to live if the general rules of mortality at the time of birth were to remain the same throughout its life</p></li>
+<li><p><code>OBS_VALUE_social_expenditure</code> : social expenditure aggregate including : Old age, Survivors, Incapacity-related benefits, Health, Family, Active labor market programmes, Unemployment, Housing, and Other social policy areas. It is measured in percentage per GDP for all countries.</p></li>
+<li><p><code>OBS_VALUE_unemp</code> : unemployment rate per country, annually.</p></li>
+<li><p><code>OBS_VALUE_health_exp</code> : health expenditure observed annually. It is measured in percentage of the country’s GDP. It was computed using financial flows related to the consumption of healthcare goods and services.</p></li>
+</ul>
+</section>
+<section id="graphical-representation-of-our-main-variable-avoidable-mortality-obs_value_mortality" class="level1">
+<h1>Graphical representation of our main variable : avoidable mortality (OBS_VALUE_mortality)</h1>
+<section id="global-avoidable-mortality" class="level3">
+<h3 class="anchored" data-anchor-id="global-avoidable-mortality">Global avoidable mortality</h3>
+<p>First we can take a look at the number of avoidable deaths globally</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>database <span class="sc">|&gt;</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(TIME_PERIOD) <span class="sc">|&gt;</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_mortality =</span> <span class="fu">mean</span>(OBS_VALUE_mortality, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> TIME_PERIOD, <span class="at">y =</span> mean_mortality)) <span class="sc">+</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Average avoidable mortality in the world (2000-2023), per 100,000 inhabitants annually"</span>,</span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of avoidable deaths"</span>,</span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Year"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="DM_project_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This graph reveals a downward trend in avoidable mortality from 2000 to 2019 cut by a sudden increase in 2020 and 2021 during Covid-19. However it seems that, afterward, the variable goes back to its previous trend.</p>
+</section>
+<section id="avoidable-mortality-per-country" class="level3">
+<h3 class="anchored" data-anchor-id="avoidable-mortality-per-country">Avoidable mortality per country</h3>
+<p>We also check the <code>avoidable_mortality</code> variable per country.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>database <span class="sc">|&gt;</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> TIME_PERIOD, <span class="at">y =</span> OBS_VALUE_mortality)) <span class="sc">+</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> REF_AREA) <span class="sc">+</span> <span class="co"># we do not use free_y so that we can compare rates between countries </span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="fl">7.5</span>) <span class="sc">+</span></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">2000</span>, <span class="dv">2010</span>, <span class="dv">2020</span>)) <span class="sc">+</span></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">""</span>,</span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">""</span>,</span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Avoidable mortality per country (2000-2023), per 100,000 inhabitants annually"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="DM_project_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Most countries share the same downward sloping trend in avoidable mortality. We can only observe a long term increase in the avoidable mortality rate in Thailand (THA) and South Africa (ZAF) before 2010. In addition, we can see the impact of the Covid-19 crisis clearly in some countries : Mexico (MEX), Peru (PER). Moreover, the high mortality rate in South Africa (1,000 deaths per 100,000 inhabitants around 2005) makes it more difficult to observe the trend and shocks in avoidable mortality in other countries, particularly the most developed ones.</p>
+</section>
+</section>
+<section id="test-lag-operator" class="level1">
+<h1>Test lag operator</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>data_lagged <span class="ot">&lt;-</span> database <span class="sc">|&gt;</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(REF_AREA) <span class="sc">|&gt;</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(TIME_PERIOD) <span class="sc">|&gt;</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">mortality_lag1 =</span> <span class="fu">lag</span>(OBS_VALUE_mortality, <span class="dv">1</span>),</span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">mortality_lag2 =</span> <span class="fu">lag</span>(OBS_VALUE_mortality, <span class="dv">2</span>),</span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">healthExp_lag1 =</span> <span class="fu">lag</span>(OBS_VALUE_health_exp, <span class="dv">1</span>),</span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">healthExp_lag2 =</span> <span class="fu">lag</span>(OBS_VALUE_health_exp, <span class="dv">2</span>),</span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">hospBeds_lag1 =</span> <span class="fu">lag</span>(OBS_VALUE_hosp_beds, <span class="dv">1</span>),</span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">hospBeds_lag2 =</span> <span class="fu">lag</span>(OBS_VALUE_hosp_beds, <span class="dv">2</span>),</span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">socialExp_lag1 =</span> <span class="fu">lag</span>(OBS_VALUE_social_expenditure, <span class="dv">1</span>),</span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">socialExp_lag2 =</span> <span class="fu">lag</span>(OBS_VALUE_social_expenditure, <span class="dv">2</span>)</span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="test-models" class="level1">
+<h1>Test models</h1>
+<p>The model I want to try is :</p>
+<p>Mortality_{y,t} = health expenditure (normal + lag) + social expenditure (normal + lag) + number of hospital beds (normal + lag) + GDP per capita (random effect) + Unemployment rate (random effect) + HDI (random effect) + Life expectancy (random effect)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: le package 'lme4' a été compilé avec la version R 4.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Le chargement a nécessité le package : Matrix</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attachement du package : 'Matrix'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Les objets suivants sont masqués depuis 'package:tidyr':
+
+    expand, pack, unpack</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>first_test <span class="ot">&lt;-</span> <span class="fu">lmer</span>(OBS_VALUE_mortality <span class="sc">~</span> mortality_lag1 <span class="sc">+</span> mortality_lag2 <span class="sc">+</span> healthExp_lag1 <span class="sc">+</span> healthExp_lag2 <span class="sc">+</span> hospBeds_lag1 <span class="sc">+</span> hospBeds_lag2 <span class="sc">+</span> OBS_VALUE_gdp <span class="sc">+</span> OBS_VALUE_unemp <span class="sc">+</span> OBS_VALUE_hdi <span class="sc">+</span> OBS_VALUE_life_exp <span class="sc">+</span> (OBS_VALUE_gdp <span class="sc">+</span> OBS_VALUE_unemp <span class="sc">+</span> OBS_VALUE_hdi <span class="sc">+</span> OBS_VALUE_life_exp <span class="sc">|</span> REF_AREA),</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> data_lagged, <span class="at">REML =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Some predictor variables are on very different scales: consider rescaling. 
+You may also use (g)lmerControl(autoscale = TRUE) to improve numerical stability.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(first_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: 
+OBS_VALUE_mortality ~ mortality_lag1 + mortality_lag2 + healthExp_lag1 +  
+    healthExp_lag2 + hospBeds_lag1 + hospBeds_lag2 + OBS_VALUE_gdp +  
+    OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp + (OBS_VALUE_gdp +  
+    OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp | REF_AREA)
+   Data: data_lagged
+
+      AIC       BIC    logLik -2*log(L)  df.resid 
+   6325.4    6450.0   -3135.7    6271.4       719 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.0513 -0.4927 -0.0132  0.4906 11.8910 
+
+Random effects:
+ Groups   Name               Variance  Std.Dev. Corr                   
+ REF_AREA (Intercept)        6.717e+01  8.19588                        
+          OBS_VALUE_gdp      2.905e-05  0.00539 -0.91                  
+          OBS_VALUE_unemp    1.553e+01  3.94075  0.44 -0.39            
+          OBS_VALUE_hdi      1.716e+02 13.09843  0.22 -0.22  0.00      
+          OBS_VALUE_life_exp 9.394e+00  3.06496  0.65 -0.67  0.38  0.84
+ Residual                    1.305e+02 11.42211                        
+Number of obs: 746, groups:  REF_AREA, 41
+
+Fixed effects:
+                     Estimate Std. Error t value
+(Intercept)         2.756e+03  6.927e+01  39.780
+mortality_lag1      1.869e-01  2.690e-02   6.948
+mortality_lag2     -1.435e-01  2.682e-02  -5.350
+healthExp_lag1     -3.954e-01  1.325e+00  -0.298
+healthExp_lag2      5.182e-01  1.344e+00   0.386
+hospBeds_lag1      -2.254e-04  1.268e-04  -1.778
+hospBeds_lag2       1.745e-04  1.268e-04   1.376
+OBS_VALUE_gdp      -1.408e-03  1.026e-03  -1.373
+OBS_VALUE_unemp     8.796e-01  7.638e-01   1.152
+OBS_VALUE_hdi       7.143e+02  7.373e+01   9.689
+OBS_VALUE_life_exp -3.942e+01  1.132e+00 -34.825
+
+Correlation of Fixed Effects:
+            (Intr) mrtl_1 mrtl_2 hltE_1 hltE_2 hspB_1 hspB_2 OBS_VALUE_g
+mortlty_lg1 -0.429                                                      
+mortlty_lg2 -0.180 -0.665                                               
+hlthExp_lg1 -0.098 -0.212  0.283                                        
+hlthExp_lg2  0.231  0.103 -0.229 -0.717                                 
+hospBds_lg1  0.027 -0.035  0.022  0.036  0.028                          
+hospBds_lg2 -0.053  0.027 -0.029  0.001 -0.006 -0.967                   
+OBS_VALUE_g  0.111 -0.026  0.074 -0.052 -0.047 -0.007 -0.018            
+OBS_VALUE_n  0.049  0.008  0.026 -0.115  0.010  0.008 -0.036 -0.074     
+OBS_VALUE_h -0.202 -0.109  0.168 -0.104 -0.055 -0.047  0.048 -0.269     
+OBS_VALUE__ -0.616  0.405 -0.036  0.126 -0.146  0.003  0.004 -0.223     
+            OBS_VALUE_n OBS_VALUE_h
+mortlty_lg1                        
+mortlty_lg2                        
+hlthExp_lg1                        
+hlthExp_lg2                        
+hospBds_lg1                        
+hospBds_lg2                        
+OBS_VALUE_g                        
+OBS_VALUE_n                        
+OBS_VALUE_h -0.040                 
+OBS_VALUE__  0.064      -0.483     
+fit warnings:
+Some predictor variables are on very different scales: consider rescaling. 
+You may also use (g)lmerControl(autoscale = TRUE) to improve numerical stability.</code></pre>
+</div>
+</div>
+<p>We can see two things :</p>
+<ul>
+<li>Firstly, the second lag’s value for each of the explanatory variables are not impacting the explained variable as we could have thought. They always evolve in the “opposite direction” (positive when the first lag is negative and negative when the first lag is positive).</li>
+</ul>
+<p>What we can assume is that there is not really a direct effect of the second lag on the explained variable and that they only affect the explained variable through their relation with the first lag. Therefore we can probably remove them from our regressions.</p>
+<ul>
+<li>Secondly, when assuming this many variables have random effects (here, gdp, hdi, unemployment and life expectancy), we notice there is a lot of correlation between the variables with random effects. Especially, there is a lot of correlation between each of these variables and the intercept. Therefore it is probably not relevant to have these variables as random effects.</li>
+</ul>
+<p>After this first test, what I am going to try is to largely reduce the number of random effects, and only use one lag, as the second one is negative meaning it does not seem to directly affect mortality but rather have a strong link with the first lag :</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>second_test <span class="ot">&lt;-</span> <span class="fu">lmer</span>(OBS_VALUE_mortality <span class="sc">~</span> mortality_lag1 <span class="sc">+</span> healthExp_lag1 <span class="sc">+</span> hospBeds_lag1 <span class="sc">+</span> OBS_VALUE_gdp <span class="sc">+</span> OBS_VALUE_unemp <span class="sc">+</span> OBS_VALUE_hdi <span class="sc">+</span> OBS_VALUE_life_exp <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> REF_AREA), <span class="at">data =</span> data_lagged, <span class="at">REML =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Some predictor variables are on very different scales: consider rescaling. 
+You may also use (g)lmerControl(autoscale = TRUE) to improve numerical stability.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(second_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: 
+OBS_VALUE_mortality ~ mortality_lag1 + healthExp_lag1 + hospBeds_lag1 +  
+    OBS_VALUE_gdp + OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp +  
+    (1 | REF_AREA)
+   Data: data_lagged
+
+      AIC       BIC    logLik -2*log(L)  df.resid 
+   6657.8    6704.5   -3318.9    6637.8       780 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-4.1635 -0.4504 -0.0189  0.4252 11.4544 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ REF_AREA (Intercept) 453.0    21.28   
+ Residual             215.4    14.68   
+Number of obs: 790, groups:  REF_AREA, 41
+
+Fixed effects:
+                     Estimate Std. Error t value
+(Intercept)         2.266e+03  7.018e+01  32.291
+mortality_lag1      2.449e-01  2.189e-02  11.188
+healthExp_lag1      9.080e-01  7.087e-01   1.281
+hospBeds_lag1       6.237e-06  9.063e-06   0.688
+OBS_VALUE_gdp       1.689e-04  1.422e-04   1.188
+OBS_VALUE_unemp     1.351e+00  2.335e-01   5.788
+OBS_VALUE_hdi       4.119e+02  5.048e+01   8.159
+OBS_VALUE_life_exp -3.108e+01  1.013e+00 -30.691
+
+Correlation of Fixed Effects:
+            (Intr) mrtl_1 hltE_1 hspB_1 OBS_VALUE_g OBS_VALUE_n OBS_VALUE_h
+mortlty_lg1 -0.858                                                         
+hlthExp_lg1  0.174 -0.004                                                  
+hospBds_lg1  0.013 -0.003 -0.043                                           
+OBS_VALUE_g  0.166  0.000  0.011 -0.010                                    
+OBS_VALUE_n  0.043 -0.107 -0.179  0.002  0.258                             
+OBS_VALUE_h  0.017 -0.031 -0.293  0.021 -0.304       0.237                 
+OBS_VALUE__ -0.845  0.699 -0.058 -0.038 -0.042      -0.187      -0.536     
+fit warnings:
+Some predictor variables are on very different scales: consider rescaling. 
+You may also use (g)lmerControl(autoscale = TRUE) to improve numerical stability.</code></pre>
+</div>
+</div>
+<p>Third test model not forgetting the current values for our explanatory variables (variables at lag = 0) and adding social expenditures because i forgot :</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>third_test <span class="ot">&lt;-</span> <span class="fu">lmer</span>(OBS_VALUE_mortality <span class="sc">~</span> mortality_lag1 <span class="sc">+</span> OBS_VALUE_social_expenditure <span class="sc">+</span> socialExp_lag1 <span class="sc">+</span> OBS_VALUE_health_exp <span class="sc">+</span> healthExp_lag1 <span class="sc">+</span> OBS_VALUE_hosp_beds <span class="sc">+</span> hospBeds_lag1 <span class="sc">+</span> OBS_VALUE_gdp <span class="sc">+</span> OBS_VALUE_unemp <span class="sc">+</span> OBS_VALUE_hdi <span class="sc">+</span> OBS_VALUE_life_exp <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> REF_AREA), <span class="at">data =</span> data_lagged, <span class="at">REML =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Some predictor variables are on very different scales: consider rescaling. 
+You may also use (g)lmerControl(autoscale = TRUE) to improve numerical stability.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(third_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: OBS_VALUE_mortality ~ mortality_lag1 + OBS_VALUE_social_expenditure +  
+    socialExp_lag1 + OBS_VALUE_health_exp + healthExp_lag1 +  
+    OBS_VALUE_hosp_beds + hospBeds_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp +  
+    OBS_VALUE_hdi + OBS_VALUE_life_exp + (1 | REF_AREA)
+   Data: data_lagged
+
+      AIC       BIC    logLik -2*log(L)  df.resid 
+   6495.0    6560.0   -3233.5    6467.0       758 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-5.0433 -0.4683 -0.0107  0.4330 11.7165 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ REF_AREA (Intercept) 438.2    20.93   
+ Residual             209.4    14.47   
+Number of obs: 772, groups:  REF_AREA, 41
+
+Fixed effects:
+                               Estimate Std. Error t value
+(Intercept)                   2.140e+03  7.276e+01  29.407
+mortality_lag1                2.948e-01  2.335e-02  12.627
+OBS_VALUE_social_expenditure -7.100e-02  5.858e-01  -0.121
+socialExp_lag1                1.248e-01  5.755e-01   0.217
+OBS_VALUE_health_exp          6.857e+00  1.903e+00   3.603
+healthExp_lag1               -4.987e+00  1.880e+00  -2.652
+OBS_VALUE_hosp_beds           1.278e-04  1.499e-04   0.853
+hospBeds_lag1                -1.226e-04  1.486e-04  -0.825
+OBS_VALUE_gdp                 2.072e-04  1.426e-04   1.453
+OBS_VALUE_unemp               1.231e+00  2.517e-01   4.890
+OBS_VALUE_hdi                 3.860e+02  5.472e+01   7.053
+OBS_VALUE_life_exp           -2.948e+01  1.057e+00 -27.890
+
+Correlation of Fixed Effects:
+              (Intr) mrtl_1 OBS_VALUE_s_ sclE_1 OBS_VALUE_hl_ hltE_1
+mortlty_lg1   -0.868                                                
+OBS_VALUE_s_   0.003  0.049                                         
+soclExp_lg1   -0.004  0.008 -0.750                                  
+OBS_VALUE_hl_ -0.156  0.164 -0.649        0.542                     
+hlthExp_lg1    0.195 -0.161  0.536       -0.645 -0.878              
+OBS_VALUE_hs_ -0.019  0.035  0.053        0.031 -0.013        -0.017
+hospBds_lg1    0.020 -0.036 -0.051       -0.029  0.010         0.017
+OBS_VALUE_g    0.145  0.030  0.085        0.020  0.013        -0.047
+OBS_VALUE_n    0.057 -0.143 -0.120       -0.102  0.016         0.006
+OBS_VALUE_h    0.031 -0.075 -0.071       -0.106 -0.081         0.035
+OBS_VALUE_l_  -0.839  0.717  0.019        0.051  0.160        -0.181
+              OBS_VALUE_hs_ hspB_1 OBS_VALUE_g OBS_VALUE_n OBS_VALUE_h
+mortlty_lg1                                                           
+OBS_VALUE_s_                                                          
+soclExp_lg1                                                           
+OBS_VALUE_hl_                                                         
+hlthExp_lg1                                                           
+OBS_VALUE_hs_                                                         
+hospBds_lg1   -0.998                                                  
+OBS_VALUE_g    0.038        -0.038                                    
+OBS_VALUE_n    0.005        -0.006  0.186                             
+OBS_VALUE_h   -0.066         0.066 -0.325       0.340                 
+OBS_VALUE_l_   0.042        -0.044 -0.010      -0.244      -0.557     
+fit warnings:
+Some predictor variables are on very different scales: consider rescaling. 
+You may also use (g)lmerControl(autoscale = TRUE) to improve numerical stability.</code></pre>
+</div>
+</div>
+<p>4th test with a new random effect : gdp (taking into account countries’ richness level)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>fourth_test <span class="ot">&lt;-</span> <span class="fu">lmer</span>(OBS_VALUE_mortality <span class="sc">~</span> mortality_lag1 <span class="sc">+</span> OBS_VALUE_social_expenditure <span class="sc">+</span> socialExp_lag1 <span class="sc">+</span> OBS_VALUE_health_exp <span class="sc">+</span> healthExp_lag1 <span class="sc">+</span> OBS_VALUE_hosp_beds <span class="sc">+</span> hospBeds_lag1 <span class="sc">+</span> OBS_VALUE_gdp <span class="sc">+</span> OBS_VALUE_unemp <span class="sc">+</span> OBS_VALUE_hdi <span class="sc">+</span> OBS_VALUE_life_exp <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> OBS_VALUE_gdp <span class="sc">|</span> REF_AREA), <span class="at">data =</span> data_lagged, <span class="at">REML =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Some predictor variables are on very different scales: consider rescaling. 
+You may also use (g)lmerControl(autoscale = TRUE) to improve numerical stability.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>boundary (singular) fit: see help('isSingular')</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fourth_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: OBS_VALUE_mortality ~ mortality_lag1 + OBS_VALUE_social_expenditure +  
+    socialExp_lag1 + OBS_VALUE_health_exp + healthExp_lag1 +  
+    OBS_VALUE_hosp_beds + hospBeds_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp +  
+    OBS_VALUE_hdi + OBS_VALUE_life_exp + (1 + OBS_VALUE_gdp |      REF_AREA)
+   Data: data_lagged
+
+      AIC       BIC    logLik -2*log(L)  df.resid 
+   6394.3    6468.7   -3181.1    6362.3       756 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.8824 -0.4768  0.0108  0.3979 11.9111 
+
+Random effects:
+ Groups   Name          Variance  Std.Dev.  Corr 
+ REF_AREA (Intercept)   1.688e+03 41.091307      
+          OBS_VALUE_gdp 3.326e-06  0.001824 -0.85
+ Residual               1.642e+02 12.812578      
+Number of obs: 772, groups:  REF_AREA, 41
+
+Fixed effects:
+                               Estimate Std. Error t value
+(Intercept)                   2.340e+03  6.866e+01  34.088
+mortality_lag1                1.903e-01  2.262e-02   8.411
+OBS_VALUE_social_expenditure  1.741e-01  5.353e-01   0.325
+socialExp_lag1                1.405e-01  5.292e-01   0.266
+OBS_VALUE_health_exp          5.077e+00  1.727e+00   2.940
+healthExp_lag1               -3.026e+00  1.747e+00  -1.732
+OBS_VALUE_hosp_beds           1.336e-04  1.350e-04   0.989
+hospBeds_lag1                -1.297e-04  1.335e-04  -0.971
+OBS_VALUE_gdp                -7.485e-04  4.229e-04  -1.770
+OBS_VALUE_unemp               7.401e-01  2.687e-01   2.754
+OBS_VALUE_hdi                 5.538e+02  5.808e+01   9.534
+OBS_VALUE_life_exp           -3.338e+01  1.012e+00 -32.987
+
+Correlation of Fixed Effects:
+              (Intr) mrtl_1 OBS_VALUE_s_ sclE_1 OBS_VALUE_hl_ hltE_1
+mortlty_lg1   -0.819                                                
+OBS_VALUE_s_   0.014  0.042                                         
+soclExp_lg1   -0.027  0.005 -0.669                                  
+OBS_VALUE_hl_ -0.171  0.181 -0.648        0.510                     
+hlthExp_lg1    0.202 -0.173  0.478       -0.636 -0.821              
+OBS_VALUE_hs_ -0.009  0.037  0.056        0.035 -0.006        -0.006
+hospBds_lg1    0.005 -0.038 -0.053       -0.030  0.006         0.012
+OBS_VALUE_g    0.074  0.088  0.050       -0.054 -0.009        -0.060
+OBS_VALUE_n    0.080 -0.018 -0.129       -0.144  0.038        -0.027
+OBS_VALUE_h   -0.012 -0.086 -0.093       -0.106 -0.066         0.042
+OBS_VALUE_l_  -0.804  0.666  0.024        0.080  0.164        -0.189
+              OBS_VALUE_hs_ hspB_1 OBS_VALUE_g OBS_VALUE_n OBS_VALUE_h
+mortlty_lg1                                                           
+OBS_VALUE_s_                                                          
+soclExp_lg1                                                           
+OBS_VALUE_hl_                                                         
+hlthExp_lg1                                                           
+OBS_VALUE_hs_                                                         
+hospBds_lg1   -0.996                                                  
+OBS_VALUE_g    0.017        -0.033                                    
+OBS_VALUE_n    0.003        -0.016  0.322                             
+OBS_VALUE_h   -0.077         0.076 -0.297       0.186                 
+OBS_VALUE_l_   0.040        -0.037  0.014      -0.218      -0.564     
+fit warnings:
+Some predictor variables are on very different scales: consider rescaling. 
+You may also use (g)lmerControl(autoscale = TRUE) to improve numerical stability.
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')</code></pre>
+</div>
+</div>
+<p>Fifth test using HDI as the random effect :</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>fifth_test <span class="ot">&lt;-</span> <span class="fu">lmer</span>(OBS_VALUE_mortality <span class="sc">~</span> mortality_lag1 <span class="sc">+</span> OBS_VALUE_social_expenditure <span class="sc">+</span> socialExp_lag1 <span class="sc">+</span> OBS_VALUE_health_exp <span class="sc">+</span> healthExp_lag1 <span class="sc">+</span> OBS_VALUE_hosp_beds <span class="sc">+</span> hospBeds_lag1 <span class="sc">+</span> OBS_VALUE_gdp <span class="sc">+</span> OBS_VALUE_unemp <span class="sc">+</span> OBS_VALUE_hdi <span class="sc">+</span> OBS_VALUE_life_exp <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> OBS_VALUE_hdi <span class="sc">|</span> REF_AREA), <span class="at">data =</span> data_lagged, <span class="at">REML =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Some predictor variables are on very different scales: consider rescaling. 
+You may also use (g)lmerControl(autoscale = TRUE) to improve numerical stability.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fifth_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: OBS_VALUE_mortality ~ mortality_lag1 + OBS_VALUE_social_expenditure +  
+    socialExp_lag1 + OBS_VALUE_health_exp + healthExp_lag1 +  
+    OBS_VALUE_hosp_beds + hospBeds_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp +  
+    OBS_VALUE_hdi + OBS_VALUE_life_exp + (1 + OBS_VALUE_hdi |      REF_AREA)
+   Data: data_lagged
+
+      AIC       BIC    logLik -2*log(L)  df.resid 
+   6209.1    6283.5   -3088.5    6177.1       756 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.5379 -0.4702 -0.0087  0.3922 12.8280 
+
+Random effects:
+ Groups   Name          Variance Std.Dev. Corr 
+ REF_AREA (Intercept)   153844.1 392.23        
+          OBS_VALUE_hdi 188470.3 434.13   -1.00
+ Residual                  121.1  11.01        
+Number of obs: 772, groups:  REF_AREA, 41
+
+Fixed effects:
+                               Estimate Std. Error t value
+(Intercept)                   2.585e+03  8.870e+01  29.139
+mortality_lag1                9.396e-02  2.092e-02   4.490
+OBS_VALUE_social_expenditure  6.424e-01  4.737e-01   1.356
+socialExp_lag1                6.618e-02  4.764e-01   0.139
+OBS_VALUE_health_exp          2.431e+00  1.518e+00   1.601
+healthExp_lag1               -2.430e+00  1.566e+00  -1.552
+OBS_VALUE_hosp_beds           8.580e-05  1.172e-04   0.732
+hospBeds_lag1                -7.008e-05  1.159e-04  -0.605
+OBS_VALUE_gdp                 2.011e-05  1.676e-04   0.120
+OBS_VALUE_unemp               5.812e-01  2.372e-01   2.450
+OBS_VALUE_hdi                 6.253e+02  9.299e+01   6.725
+OBS_VALUE_life_exp           -3.705e+01  9.379e-01 -39.506
+
+Correlation of Fixed Effects:
+              (Intr) mrtl_1 OBS_VALUE_s_ sclE_1 OBS_VALUE_hl_ hltE_1
+mortlty_lg1   -0.584                                                
+OBS_VALUE_s_   0.014  0.025                                         
+soclExp_lg1   -0.019  0.002 -0.571                                  
+OBS_VALUE_hl_ -0.113  0.199 -0.649        0.453                     
+hlthExp_lg1    0.158 -0.177  0.423       -0.646 -0.757              
+OBS_VALUE_hs_ -0.012  0.034  0.060        0.048 -0.009        -0.023
+hospBds_lg1    0.008 -0.035 -0.054       -0.041  0.005         0.019
+OBS_VALUE_g    0.132  0.062  0.093       -0.030  0.013        -0.069
+OBS_VALUE_n   -0.037  0.021 -0.176       -0.147  0.057        -0.019
+OBS_VALUE_h   -0.578  0.019 -0.069       -0.069 -0.053        -0.034
+OBS_VALUE_l_  -0.512  0.590  0.035        0.082  0.166        -0.145
+              OBS_VALUE_hs_ hspB_1 OBS_VALUE_g OBS_VALUE_n OBS_VALUE_h
+mortlty_lg1                                                           
+OBS_VALUE_s_                                                          
+soclExp_lg1                                                           
+OBS_VALUE_hl_                                                         
+hlthExp_lg1                                                           
+OBS_VALUE_hs_                                                         
+hospBds_lg1   -0.995                                                  
+OBS_VALUE_g    0.032        -0.032                                    
+OBS_VALUE_n    0.004        -0.006  0.228                             
+OBS_VALUE_h   -0.047         0.051 -0.219       0.256                 
+OBS_VALUE_l_   0.051        -0.053  0.006      -0.250      -0.396     
+fit warnings:
+Some predictor variables are on very different scales: consider rescaling. 
+You may also use (g)lmerControl(autoscale = TRUE) to improve numerical stability.</code></pre>
+</div>
+</div>
+<p>Using both GDP and HDI as random effects (sixth test)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>sixth_test <span class="ot">&lt;-</span> <span class="fu">lmer</span>(OBS_VALUE_mortality <span class="sc">~</span> mortality_lag1 <span class="sc">+</span> OBS_VALUE_social_expenditure <span class="sc">+</span> socialExp_lag1 <span class="sc">+</span> OBS_VALUE_health_exp <span class="sc">+</span> healthExp_lag1 <span class="sc">+</span> OBS_VALUE_hosp_beds <span class="sc">+</span> hospBeds_lag1 <span class="sc">+</span> OBS_VALUE_gdp <span class="sc">+</span> OBS_VALUE_unemp <span class="sc">+</span> OBS_VALUE_hdi <span class="sc">+</span> OBS_VALUE_life_exp <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> OBS_VALUE_hdi <span class="sc">+</span> OBS_VALUE_gdp <span class="sc">|</span> REF_AREA), <span class="at">data =</span> data_lagged, <span class="at">REML =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Some predictor variables are on very different scales: consider rescaling. 
+You may also use (g)lmerControl(autoscale = TRUE) to improve numerical stability.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>boundary (singular) fit: see help('isSingular')</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(sixth_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: OBS_VALUE_mortality ~ mortality_lag1 + OBS_VALUE_social_expenditure +  
+    socialExp_lag1 + OBS_VALUE_health_exp + healthExp_lag1 +  
+    OBS_VALUE_hosp_beds + hospBeds_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp +  
+    OBS_VALUE_hdi + OBS_VALUE_life_exp + (1 + OBS_VALUE_hdi +  
+    OBS_VALUE_gdp | REF_AREA)
+   Data: data_lagged
+
+      AIC       BIC    logLik -2*log(L)  df.resid 
+   6399.6    6488.0   -3180.8    6361.6       753 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.7717 -0.4776 -0.0035  0.4003 11.8406 
+
+Random effects:
+ Groups   Name          Variance  Std.Dev.  Corr       
+ REF_AREA (Intercept)   1.332e+03 36.502489            
+          OBS_VALUE_hdi 1.190e+03 34.492524  0.75      
+          OBS_VALUE_gdp 7.664e-06  0.002768 -0.99 -0.71
+ Residual               1.577e+02 12.558547            
+Number of obs: 772, groups:  REF_AREA, 41
+
+Fixed effects:
+                               Estimate Std. Error t value
+(Intercept)                   2.366e+03  6.783e+01  34.882
+mortality_lag1                1.752e-01  2.252e-02   7.779
+OBS_VALUE_social_expenditure  2.133e-01  5.287e-01   0.403
+socialExp_lag1                1.770e-01  5.219e-01   0.339
+OBS_VALUE_health_exp          4.801e+00  1.702e+00   2.820
+healthExp_lag1               -2.913e+00  1.725e+00  -1.689
+OBS_VALUE_hosp_beds           1.207e-04  1.330e-04   0.907
+hospBeds_lag1                -1.153e-04  1.316e-04  -0.876
+OBS_VALUE_gdp                -1.092e-03  5.493e-04  -1.987
+OBS_VALUE_unemp               5.929e-01  2.756e-01   2.151
+OBS_VALUE_hdi                 6.004e+02  5.948e+01  10.094
+OBS_VALUE_life_exp           -3.411e+01  1.008e+00 -33.851
+
+Correlation of Fixed Effects:
+              (Intr) mrtl_1 OBS_VALUE_s_ sclE_1 OBS_VALUE_hl_ hltE_1
+mortlty_lg1   -0.812                                                
+OBS_VALUE_s_   0.015  0.041                                         
+soclExp_lg1   -0.028  0.002 -0.654                                  
+OBS_VALUE_hl_ -0.174  0.181 -0.647        0.505                     
+hlthExp_lg1    0.204 -0.175  0.469       -0.633 -0.814              
+OBS_VALUE_hs_ -0.009  0.038  0.055        0.034 -0.006        -0.006
+hospBds_lg1    0.004 -0.039 -0.051       -0.028  0.006         0.011
+OBS_VALUE_g    0.037  0.080  0.042       -0.052 -0.007        -0.045
+OBS_VALUE_n    0.075  0.007 -0.125       -0.151  0.040        -0.032
+OBS_VALUE_h   -0.010 -0.085 -0.093       -0.102 -0.068         0.032
+OBS_VALUE_l_  -0.797  0.654  0.023        0.080  0.167        -0.183
+              OBS_VALUE_hs_ hspB_1 OBS_VALUE_g OBS_VALUE_n OBS_VALUE_h
+mortlty_lg1                                                           
+OBS_VALUE_s_                                                          
+soclExp_lg1                                                           
+OBS_VALUE_hl_                                                         
+hlthExp_lg1                                                           
+OBS_VALUE_hs_                                                         
+hospBds_lg1   -0.996                                                  
+OBS_VALUE_g    0.017        -0.031                                    
+OBS_VALUE_n    0.005        -0.021  0.289                             
+OBS_VALUE_h   -0.079         0.076 -0.310       0.158                 
+OBS_VALUE_l_   0.041        -0.038  0.023      -0.206      -0.569     
+fit warnings:
+Some predictor variables are on very different scales: consider rescaling. 
+You may also use (g)lmerControl(autoscale = TRUE) to improve numerical stability.
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')</code></pre>
+</div>
+</div>
+<p>Previous tests helped us notice that : - GDP and HDI were not changing enough to be random effects (because we already have a moving intercept and there is not much of a difference between having a moving intercept from one country to another and having a random effect for GDP and HDI per country) - Especially having a random effect for HDI is not great since it has a perfect correlation (-1) with the intercept, meaning that having hdi as a random effect would be useless considering we already have a random intercept - Health expenditure at present time and lag 1 are relevant in the regression - social expenditure not so much (closer to 0 than 1 in t value), might consider removing them from the regression - hosp beds barely relevant (0.8) - control variables are relevant (particularly life expectancy)</p>
+<p>The regression chosen is the third test :</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lmer</span>(OBS_VALUE_mortality <span class="sc">~</span> mortality_lag1 <span class="sc">+</span> OBS_VALUE_social_expenditure <span class="sc">+</span> socialExp_lag1 <span class="sc">+</span> OBS_VALUE_health_exp <span class="sc">+</span> healthExp_lag1 <span class="sc">+</span> OBS_VALUE_hosp_beds <span class="sc">+</span> hospBeds_lag1 <span class="sc">+</span> OBS_VALUE_gdp <span class="sc">+</span> OBS_VALUE_unemp <span class="sc">+</span> OBS_VALUE_hdi <span class="sc">+</span> OBS_VALUE_life_exp <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> REF_AREA), <span class="at">data =</span> data_lagged, <span class="at">REML =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Some predictor variables are on very different scales: consider rescaling. 
+You may also use (g)lmerControl(autoscale = TRUE) to improve numerical stability.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: OBS_VALUE_mortality ~ mortality_lag1 + OBS_VALUE_social_expenditure +  
+    socialExp_lag1 + OBS_VALUE_health_exp + healthExp_lag1 +  
+    OBS_VALUE_hosp_beds + hospBeds_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp +  
+    OBS_VALUE_hdi + OBS_VALUE_life_exp + (1 | REF_AREA)
+   Data: data_lagged
+
+      AIC       BIC    logLik -2*log(L)  df.resid 
+   6495.0    6560.0   -3233.5    6467.0       758 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-5.0433 -0.4683 -0.0107  0.4330 11.7165 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ REF_AREA (Intercept) 438.2    20.93   
+ Residual             209.4    14.47   
+Number of obs: 772, groups:  REF_AREA, 41
+
+Fixed effects:
+                               Estimate Std. Error t value
+(Intercept)                   2.140e+03  7.276e+01  29.407
+mortality_lag1                2.948e-01  2.335e-02  12.627
+OBS_VALUE_social_expenditure -7.100e-02  5.858e-01  -0.121
+socialExp_lag1                1.248e-01  5.755e-01   0.217
+OBS_VALUE_health_exp          6.857e+00  1.903e+00   3.603
+healthExp_lag1               -4.987e+00  1.880e+00  -2.652
+OBS_VALUE_hosp_beds           1.278e-04  1.499e-04   0.853
+hospBeds_lag1                -1.226e-04  1.486e-04  -0.825
+OBS_VALUE_gdp                 2.072e-04  1.426e-04   1.453
+OBS_VALUE_unemp               1.231e+00  2.517e-01   4.890
+OBS_VALUE_hdi                 3.860e+02  5.472e+01   7.053
+OBS_VALUE_life_exp           -2.948e+01  1.057e+00 -27.890
+
+Correlation of Fixed Effects:
+              (Intr) mrtl_1 OBS_VALUE_s_ sclE_1 OBS_VALUE_hl_ hltE_1
+mortlty_lg1   -0.868                                                
+OBS_VALUE_s_   0.003  0.049                                         
+soclExp_lg1   -0.004  0.008 -0.750                                  
+OBS_VALUE_hl_ -0.156  0.164 -0.649        0.542                     
+hlthExp_lg1    0.195 -0.161  0.536       -0.645 -0.878              
+OBS_VALUE_hs_ -0.019  0.035  0.053        0.031 -0.013        -0.017
+hospBds_lg1    0.020 -0.036 -0.051       -0.029  0.010         0.017
+OBS_VALUE_g    0.145  0.030  0.085        0.020  0.013        -0.047
+OBS_VALUE_n    0.057 -0.143 -0.120       -0.102  0.016         0.006
+OBS_VALUE_h    0.031 -0.075 -0.071       -0.106 -0.081         0.035
+OBS_VALUE_l_  -0.839  0.717  0.019        0.051  0.160        -0.181
+              OBS_VALUE_hs_ hspB_1 OBS_VALUE_g OBS_VALUE_n OBS_VALUE_h
+mortlty_lg1                                                           
+OBS_VALUE_s_                                                          
+soclExp_lg1                                                           
+OBS_VALUE_hl_                                                         
+hlthExp_lg1                                                           
+OBS_VALUE_hs_                                                         
+hospBds_lg1   -0.998                                                  
+OBS_VALUE_g    0.038        -0.038                                    
+OBS_VALUE_n    0.005        -0.006  0.186                             
+OBS_VALUE_h   -0.066         0.066 -0.325       0.340                 
+OBS_VALUE_l_   0.042        -0.044 -0.010      -0.244      -0.557     
+fit warnings:
+Some predictor variables are on very different scales: consider rescaling. 
+You may also use (g)lmerControl(autoscale = TRUE) to improve numerical stability.</code></pre>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -497,7 +497,102 @@ Most countries share the same downward sloping trend in avoidable mortality. We 
 Moreover, the high mortality rate in South Africa (1,000 deaths per 100,000 inhabitants around 2005) makes it more difficult to observe the trend and shocks in avoidable mortality in other countries, particularly the most developed ones. 
 
 
+# Test lag operator
+
+```{r}
+data_lagged <- database |>
+  group_by(REF_AREA) |>
+  arrange(TIME_PERIOD) |>
+  mutate(
+    mortality_lag1 = lag(OBS_VALUE_mortality, 1),
+    mortality_lag2 = lag(OBS_VALUE_mortality, 2),
+    healthExp_lag1 = lag(OBS_VALUE_health_exp, 1),
+    healthExp_lag2 = lag(OBS_VALUE_health_exp, 2),
+    hospBeds_lag1 = lag(OBS_VALUE_hosp_beds, 1),
+    hospBeds_lag2 = lag(OBS_VALUE_hosp_beds, 2),
+    socialExp_lag1 = lag(OBS_VALUE_social_expenditure, 1),
+    socialExp_lag2 = lag(OBS_VALUE_social_expenditure, 2)
+  ) |>
+  ungroup()
+```
+
+
+# Test models
+
+The model I want to try is : 
+
+Mortality_{y,t} = health expenditure (normal + lag) + social expenditure (normal + lag) + number of hospital beds (normal + lag)
++ GDP per capita (random effect) + Unemployment rate (random effect) + HDI (random effect) + Life expectancy (random effect)
+
+```{r}
+library(lme4)
+
+first_test <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + mortality_lag2 + healthExp_lag1 + healthExp_lag2 + hospBeds_lag1 + hospBeds_lag2 + OBS_VALUE_gdp + OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp + (OBS_VALUE_gdp + OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp | REF_AREA),
+              data = data_lagged, REML = FALSE)
+summary(first_test)
+```
+
+We can see two things : 
+
+- Firstly, the second lag's value for each of the explanatory variables are not impacting the explained variable as we could have thought. They always evolve in the "opposite direction" (positive when the first lag is negative and negative when the first lag is positive). 
+
+What we can assume is that there is not really a direct effect of the second lag on the explained variable and that they only affect the explained variable through their relation with the first lag. Therefore we can probably remove them from our regressions.
+
+
+- Secondly, when assuming this many variables have random effects (here, gdp, hdi, unemployment and life expectancy), we notice there is a lot of correlation between the variables with random effects. Especially, there is a lot of correlation between each of these variables and the intercept. Therefore it is probably not relevant to have these variables as random effects.  
+
+
+After this first test, what I am going to try is to largely reduce the number of random effects, and only use one lag, as the second one is negative meaning it does not seem to directly affect mortality but rather have a strong link with the first lag  : 
+```{r}
+second_test <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + healthExp_lag1 + hospBeds_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp + (1 | REF_AREA), data = data_lagged, REML = FALSE)
+summary(second_test)
+```
 
 
 
+Third test model not forgetting the current values for our explanatory variables (variables at lag = 0) and adding social expenditures because i forgot : 
+```{r}
+third_test <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + OBS_VALUE_social_expenditure + socialExp_lag1 + OBS_VALUE_health_exp + healthExp_lag1 + OBS_VALUE_hosp_beds + hospBeds_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp + (1 | REF_AREA), data = data_lagged, REML = FALSE)
+summary(third_test)
+```
+
+
+
+4th test with a new random effect : gdp (taking into account countries' richness level)
+```{r}
+fourth_test <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + OBS_VALUE_social_expenditure + socialExp_lag1 + OBS_VALUE_health_exp + healthExp_lag1 + OBS_VALUE_hosp_beds + hospBeds_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp + (1 + OBS_VALUE_gdp | REF_AREA), data = data_lagged, REML = FALSE)
+summary(fourth_test)
+```
+
+
+
+Fifth test using HDI as the random effect : 
+```{r}
+fifth_test <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + OBS_VALUE_social_expenditure + socialExp_lag1 + OBS_VALUE_health_exp + healthExp_lag1 + OBS_VALUE_hosp_beds + hospBeds_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp + (1 + OBS_VALUE_hdi | REF_AREA), data = data_lagged, REML = FALSE)
+summary(fifth_test)
+```
+
+
+Using both GDP and HDI as random effects (sixth test)
+```{r}
+sixth_test <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + OBS_VALUE_social_expenditure + socialExp_lag1 + OBS_VALUE_health_exp + healthExp_lag1 + OBS_VALUE_hosp_beds + hospBeds_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp + (1 + OBS_VALUE_hdi + OBS_VALUE_gdp | REF_AREA), data = data_lagged, REML = FALSE)
+summary(sixth_test)
+```
+
+
+
+Previous tests helped us notice that : 
+- GDP and HDI were not changing enough to be random effects (because we already have a moving intercept and there is not much of a difference between having a moving intercept from one country to another and having a random effect for GDP and HDI per country)
+- Especially having a random effect for HDI is not great since it has a perfect correlation (-1) with the intercept, meaning that having hdi as a random effect would be useless considering we already have a random intercept
+- Health expenditure at present time and lag 1 are relevant in the regression
+- social expenditure not so much (closer to 0 than 1 in t value), might consider removing them from the regression 
+- hosp beds barely relevant (0.8)
+- control variables are relevant (particularly life expectancy)
+
+
+The regression chosen is the third test : 
+```{r}
+model <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + OBS_VALUE_social_expenditure + socialExp_lag1 + OBS_VALUE_health_exp + healthExp_lag1 + OBS_VALUE_hosp_beds + hospBeds_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp + (1 | REF_AREA), data = data_lagged, REML = FALSE)
+summary(model)
+```
 
