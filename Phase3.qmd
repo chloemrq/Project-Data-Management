@@ -1,9 +1,12 @@
 ---
 title: "Phase3"
 author: "Karla Otoude and Chloé Marquis"
-format: pdf
+format:
+  pdf: default
 execute:
   echo: false
+  warning: false
+  message: false
 ---
 
 # Link to our github project 
@@ -42,6 +45,8 @@ It will be used to estimate the population’s general health.
 
  
 ```{r}
+#| message: false
+#| warning: false
 # Loading the packages
 #| message: false
 library(here)
@@ -51,6 +56,7 @@ here::i_am("Project-Data-Management.Rproj")
 
 ```{r}
 #| message: false
+#| warning: false
 library(ggplot2)
 library(dplyr)
 library(tidyr)
