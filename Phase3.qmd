@@ -282,9 +282,13 @@ data_lagged <- database |>
   ) |>
   ungroup()
 ```
+
 Before making any regression, we created lagged version of our variables. We believe that past investments in health sector and social protection have an impact on mortality and we want this to appear in our model. 
 
-We will be creating lagged versions of 4 variables : mortality, health expenditure, social expenditure and hospital beds. Consequently we have : 
+We will be creating lagged versions of 4 variables : mortality, health expenditure, social expenditure and hospital beds. 
+
+Consequently we have : 
+
 - `mortality_lag1` : first lag of the mortality variable (at time t-1)
 - `mortality_lag2` : second lag of the mortality variable (at time t-2)
 - `healthExp_lag1` : first lag of the health expenditure variable (at time t-1)
@@ -302,18 +306,37 @@ We will be creating lagged versions of 4 variables : mortality, health expenditu
 
 The model we first want to test is : 
 
-$$ Mortality_{i,t} = \gamma_{0,i} + \beta_{i,1} * mortality_{i,t-1} + \beta_{i,2} * mortality_{i,t-2} + \beta_{i,3} * health.expenditure_{i,t-1} + \beta_{i,4} * health.expenditure_{i,t-2} + \beta_{i,5} * Hospital.Beds_{i,t-1} + \beta_{i,6} * Hospital.Beds_{i,t-2} + \gamma_{i,7} * GDP.per.capita_{i,t} + \gamma_{i,8} * Unemployment_{i,t} + \gamma_{i,9} * HDI_{i,t} + \gamma_{i,10} * Life.expectancy_{i,t} $$
+\begin{equation*}
+\begin{aligned}
+Mortality_{i,t} =\;& \gamma_{0,i}
++ \beta_{1} \, mortality_{i,t-1}
++ \beta_{2} \, mortality_{i,t-2}
++ \beta_{3} \, health.expenditure_{i,t-1} \\[0.4em]
+&+ \beta_{4} \, health.expenditure_{i,t-2}
++ \beta_{5} \, Hospital.Beds_{i,t-1} 
++ \beta_{6} \, Hospital.Beds_{i,t-2} \\[0.4em]
+&+ \gamma_{7} \, GDP.per.capita_{i,t}
++ \gamma_{8} \, Unemployment_{i,t} 
++ \gamma_{9} \, HDI_{i,t} \\[0.4em]
+&+ \gamma_{10} \, Life.expectancy_{i,t}
+\end{aligned}
+\end{equation*}
 
-With 
+
+
+With
+
 - i = index for country i 
 - t = index for period t (here our periods are years)
 
-We also assume that 
-- mortality (at time t-1), social expenditure and hospital beds, our explanatory variables, are fixed effects 
-- GDP per capita, Unemployment, Life expectancy and HDI, our control variables, are random effects (meaning that we take into account in this model the fact that they will be different for each country)
 
-- Fixed effects have their coefficient represented by the symbol $$ \beta $$ 
-- Random effects have their coefficient represented by the symbol $$ \gamma $$ 
+
+We also assume that mortality (at time t-1), social expenditure and hospital beds, our explanatory variables, are fixed effects.
+GDP per capita, Unemployment, Life expectancy and HDI, our control variables, are random effects (meaning that we take into account in this model the fact that they will be different for each country).
+
+
+- Fixed effects have their coefficient represented by the symbol beta
+- Random effects have their coefficient represented by the symbol gamma
 
 ```{r}
 #| message: false
@@ -341,7 +364,19 @@ We can conclude it is probably not relevant to have these variables as random ef
 
 After this first test, what we are going to try is to largely reduce the number of random effects, and only use one lag. The model we will use for our regression is now : 
 
-$$ Mortality_{i,t} = \gamma_{0,i} + \beta_{i,1} * mortality_{i,t-1} + \beta_{i,2} * health.expenditure_{i,t-1} + \beta_{i,3} * Hospital.Beds_{i,t-1} + \beta_{i,4} * GDP.per.capita_{i,t} + \beta_{i,5} * Unemployment_{i,t} + \beta_{i,6} * HDI_{i,t} + \beta_{i,7} * Life.expectancy_{i,t} $$
+\begin{equation*}
+\begin{aligned}
+Mortality_{i,t} =\;& \gamma_{0,i}
++ \beta_{1} \, mortality_{i,t-1}
++ \beta_{2} \, health.expenditure_{i,t-1} \\[0.4em]
+&+ \beta_{3} \, Hospital.Beds_{i,t-1} 
++ \beta_{4} \, GDP.per.capita_{i,t}
++ \beta_{5} \, Unemployment_{i,t} \\[0.4em]
+&+ \beta_{6} \, HDI_{i,t}
++ \beta_{7} \, Life.expectancy_{i,t}
+\end{aligned}
+\end{equation*}
+
 
 ```{r}
 #| message: false
@@ -361,12 +396,29 @@ For our third test model we add non lagged explanatory variables (variables at l
 
 Our model becomes :
 
-$$ Mortality_{i,t} = \gamma_{0,i} + \beta_{i,1} * mortality_{i,t-1} + \beta_{i,2} * social.expenditure_{i,t} + \beta_{i,3} * social.expenditure_{i,t-1} + \beta_{i,4} * health.expenditure_{i,t} + \beta_{i,5} * health.expenditure_{i,t-1} + \beta_{i,6} * Hospital.Beds_{i,t} + \beta_{i,7} * Hospital.Beds_{i,t-1} + \beta_{i,8} * GDP.per.capita_{i,t} + \beta_{i,9} * Unemployment_{i,t} + \beta_{i,10} * HDI_{i,t} + \beta_{i,11} * Life.expectancy_{i,t} $$
+\begin{equation*}
+\begin{aligned}
+Mortality_{i,t} =\;& \gamma_{0,i}
++ \beta_{1} \, mortality_{i,t-1}
++ \beta_{2} \, social.expenditure_{i,t}
++ \beta_{3} \, social.expenditure_{i,t-1} \\[0.4em]
+&+ \beta_{4} \, health.expenditure_{i,t}
++ \beta_{5} \, health.expenditure_{i,t-1}
++ \beta_{6} \, Hospital.Beds_{i,t} \\[0.4em]
+&+ \beta_{7} \, Hospital.Beds_{i,t-1} 
++ \beta_{8} \, GDP.per.capita_{i,t}
++ \beta_{9} \, Unemployment_{i,t} \\[0.4em]
+&+ \beta_{10} \, HDI_{i,t}
++ \beta_{11} \, Life.expectancy_{i,t}
+\end{aligned}
+\end{equation*}
+
 
 ```{r}
 #| message: false
 #| warning: false
 third_test <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + OBS_VALUE_social_expenditure + socialExp_lag1 + OBS_VALUE_health_exp + healthExp_lag1 + OBS_VALUE_hosp_beds + hospBeds_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp + (1 | REF_AREA), data = data_lagged, REML = FALSE)
+
 summary(third_test)
 ```
 
@@ -374,11 +426,26 @@ The AIC is lower in this model than it was in the second test (6495.0 vs 6657.8)
 
 
 
-### Fourth to sixth tests
+### Fourth test
 
 Fourth test with an additional random effect : GDP per capita (in order to try taking into account countries' richness level)
 
-$$ Mortality_{i,t} = \gamma_{0,i} + \beta_{i,1} * mortality_{i,t-1} + \beta_{i,2} * social.expenditure_{i,t} + \beta_{i,3} * social.expenditure_{i,t-1} + \beta_{i,4} * health.expenditure_{i,t} + \beta_{i,5} * health.expenditure_{i,t-1} + \beta_{i,6} * Hospital.Beds_{i,t} + \beta_{i,7} * Hospital.Beds_{i,t-1} + \gamma_{i,8} * GDP.per.capita_{i,t} + \beta_{i,9} * Unemployment_{i,t} + \beta_{i,10} * HDI_{i,t} + \beta_{i,11} * Life.expectancy_{i,t} $$
+\begin{equation*}
+\begin{aligned}
+Mortality_{i,t} =\;& \gamma_{0,i}
++ \beta_{1} \, mortality_{i,t-1}
++ \beta_{2} \, social.expenditure_{i,t}
++ \beta_{3} \, social.expenditure_{i,t-1} \\[0.4em]
+&+ \beta_{4} \, health.expenditure_{i,t}
++ \beta_{5} \, health.expenditure_{i,t-1}
++ \beta_{6} \, Hospital.Beds_{i,t} \\[0.4em]
+&+ \beta_{7} \, Hospital.Beds_{i,t-1} 
++ \gamma_{8} \, GDP.per.capita_{i,t}
++ \beta_{9} \, Unemployment_{i,t} \\[0.4em]
+&+ \beta_{10} \, HDI_{i,t}
++ \beta_{11} \, Life.expectancy_{i,t}
+\end{aligned}
+\end{equation*}
 
 ```{r}
 #| message: false
@@ -387,11 +454,27 @@ fourth_test <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + OBS_VALUE_social_expe
 summary(fourth_test)
 ```
 
-
+### Fifth test
 
 Fifth test using HDI as the additional random effect (and no longer GDP per capita) : 
 
-$$ Mortality_{i,t} = \gamma_{0,i} + \beta_{i,1} * mortality_{i,t-1} + \beta_{i,2} * social.expenditure_{i,t} + \beta_{i,3} * social.expenditure_{i,t-1} + \beta_{i,4} * health.expenditure_{i,t} + \beta_{i,5} * health.expenditure_{i,t-1} + \beta_{i,6} * Hospital.Beds_{i,t} + \beta_{i,7} * Hospital.Beds_{i,t-1} + \beta_{i,8} * GDP.per.capita_{i,t} + \beta_{i,9} * Unemployment_{i,t} + \gamma_{i,10} * HDI_{i,t} + \beta_{i,11} * Life.expectancy_{i,t} $$
+\begin{equation*}
+\begin{aligned}
+Mortality_{i,t} =\;& \gamma_{0,i}
++ \beta_{1} \, mortality_{i,t-1}
++ \beta_{2} \, social.expenditure_{i,t}
++ \beta_{3} \, social.expenditure_{i,t-1} \\[0.4em]
+&+ \beta_{4} \, health.expenditure_{i,t}
++ \beta_{5} \, health.expenditure_{i,t-1}
++ \beta_{6} \, Hospital.Beds_{i,t} \\[0.4em]
+&+ \beta_{7} \, Hospital.Beds_{i,t-1} 
++ \beta_{8} \, GDP.per.capita_{i,t}
++ \beta_{9} \, Unemployment_{i,t} \\[0.4em]
+&+ \gamma_{10} \, HDI_{i,t}
++ \beta_{11} \, Life.expectancy_{i,t}
+\end{aligned}
+\end{equation*}
+
 ```{r}
 #| message: false
 #| warning: false
@@ -400,10 +483,26 @@ summary(fifth_test)
 ```
 
 
+### Sixth
 
 Sixth test using both GDP and HDI as additional random effects : 
 
-$$ Mortality_{i,t} = \gamma_{0,i} + \beta_{i,1} * mortality_{i,t-1} + \beta_{i,2} * social.expenditure_{i,t} + \beta_{i,3} * social.expenditure_{i,t-1} + \beta_{i,4} * health.expenditure_{i,t} + \beta_{i,5} * health.expenditure_{i,t-1} + \beta_{i,6} * Hospital.Beds_{i,t} + \beta_{i,7} * Hospital.Beds_{i,t-1} + \gamma_{i,8} * GDP.per.capita_{i,t} + \beta_{i,9} * Unemployment_{i,t} + \gamma_{i,10} * HDI_{i,t} + \beta_{i,11} * Life.expectancy_{i,t} $$
+\begin{equation*}
+\begin{aligned}
+Mortality_{i,t} =\;& \gamma_{0,i}
++ \beta_{1} \, mortality_{i,t-1}
++ \beta_{2} \, social.expenditure_{i,t}
++ \beta_{3} \, social.expenditure_{i,t-1} \\[0.4em]
+&+ \beta_{4} \, health.expenditure_{i,t}
++ \beta_{5} \, health.expenditure_{i,t-1}
++ \beta_{6} \, Hospital.Beds_{i,t} \\[0.4em]
+&+ \beta_{7} \, Hospital.Beds_{i,t-1} 
++ \gamma_{8} \, GDP.per.capita_{i,t}
++ \beta_{9} \, Unemployment_{i,t} \\[0.4em]
+&+ \gamma_{10} \, HDI_{i,t}
++ \beta_{11} \, Life.expectancy_{i,t}
+\end{aligned}
+\end{equation*}
 
 
 ```{r}
@@ -414,6 +513,7 @@ summary(sixth_test)
 ```
 
 Tests four to six helped us notice that : 
+
 - GDP and HDI were not varying enough to be random effects. Since we already have a moving intercept and there is not much of a difference between having a moving intercept from one country to another and having a random effect for GDP and HDI per country)
 Particularly having a random effect for HDI is not great since it has a perfect correlation (-1) with the intercept, meaning that having HDI as a random effect would be useless. We see the same thing with GDP but at a lower level since the correlation is slightly less high.  
 - Health expenditure at present time and t-1 are relevant in the regression
@@ -432,7 +532,23 @@ The best model we were able to find ended up being our third test.
 
 So our chosen model is : 
 
-$$ Mortality_{i,t} = \gamma_{0,i} + \beta_{i,1} * mortality_{i,t-1} + \beta_{i,2} * social.expenditure_{i,t} + \beta_{i,3} * social.expenditure_{i,t-1} + \beta_{i,4} * health.expenditure_{i,t} + \beta_{i,5} * health.expenditure_{i,t-1} + \beta_{i,6} * Hospital.Beds_{i,t} + \beta_{i,7} * Hospital.Beds_{i,t-1} + \beta_{i,8} * GDP.per.capita_{i,t} + \beta_{i,9} * Unemployment_{i,t} + \beta_{i,10} * HDI_{i,t} + \beta_{i,11} * Life.expectancy_{i,t} $$
+\begin{equation*}
+\begin{aligned}
+Mortality_{i,t} =\;& \gamma_{0,i}
++ \beta_{1} \, mortality_{i,t-1}
++ \beta_{2} \, social.expenditure_{i,t}
++ \beta_{3} \, social.expenditure_{i,t-1} \\[0.4em]
+&+ \beta_{4} \, health.expenditure_{i,t}
++ \beta_{5} \, health.expenditure_{i,t-1}
++ \beta_{6} \, Hospital.Beds_{i,t} \\[0.4em]
+&+ \beta_{7} \, Hospital.Beds_{i,t-1} 
++ \beta_{8} \, GDP.per.capita_{i,t}
++ \beta_{9} \, Unemployment_{i,t} \\[0.4em]
+&+ \beta_{10} \, HDI_{i,t}
++ \beta_{11} \, Life.expectancy_{i,t}
+\end{aligned}
+\end{equation*}
+
 
 ```{r}
 model <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + OBS_VALUE_social_expenditure + socialExp_lag1 + OBS_VALUE_health_exp + healthExp_lag1 + OBS_VALUE_hosp_beds + hospBeds_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp + (1 | REF_AREA), data = data_lagged, REML = FALSE)
