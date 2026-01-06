@@ -295,3 +295,148 @@ We will be creating lagged versions of 4 variables : mortality, health expenditu
 - `socialExp_lag2` : second lag of the social expenditure variable (at time t-2)
 
 
+## Model testing
+
+
+### First test
+
+The model we first want to test is : 
+
+$$ Mortality_{i,t} = \gamma_{0,i} + \beta_{i,1} * mortality_{i,t-1} + \beta_{i,2} * mortality_{i,t-2} + \beta_{i,3} * health.expenditure_{i,t-1} + \beta_{i,4} * health.expenditure_{i,t-2} + \beta_{i,5} * Hospital.Beds_{i,t-1} + \beta_{i,6} * Hospital.Beds_{i,t-2} + \gamma_{i,7} * GDP.per.capita_{i,t} + \gamma_{i,8} * Unemployment_{i,t} + \gamma_{i,9} * HDI_{i,t} + \gamma_{i,10} * Life.expectancy_{i,t} $$
+
+With 
+- i = index for country i 
+- t = index for period t (here our periods are years)
+
+We also assume that 
+- mortality (at time t-1), social expenditure and hospital beds, our explanatory variables, are fixed effects 
+- GDP per capita, Unemployment, Life expectancy and HDI, our control variables, are random effects (meaning that we take into account in this model the fact that they will be different for each country)
+
+- Fixed effects have their coefficient represented by the symbol $$ \beta $$ 
+- Random effects have their coefficient represented by the symbol $$ \gamma $$ 
+
+```{r}
+#| message: false
+#| warning: false
+
+library(lme4)
+
+first_test <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + mortality_lag2 + healthExp_lag1 + healthExp_lag2 + hospBeds_lag1 + hospBeds_lag2 + OBS_VALUE_gdp + OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp + (OBS_VALUE_gdp + OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp | REF_AREA),
+              data = data_lagged, REML = FALSE)
+summary(first_test)
+```
+
+After the first test, respecting our first model, we can see two things : 
+
+- Firstly, having a second lag for each of the explanatory variables is not as useful to our model as we could have thought. Their coefficient are not coherent compared to variables lagged only once (`healthExp_lag1` compared to `healthExp_lag2` for example). This can be explained by the fact that there is not really a direct effect of the second lag on the explained variable and that they only affect the explained variable through their relation with the first lag. 
+Moreover the coefficients between explanatory variables lagged twice and lagged once are too high, having both is unnecessary. 
+Therefore we can remove second lags from our regressions.
+
+- Secondly, when assuming this many variables have random effects (here, gdp, hdi, unemployment and life expectancy), we notice there is a lot of correlation between the variables with random effects. Especially, there is a lot of correlation between each of these variables and the intercept which is random too (to take in account structural differences between countries). 
+We can conclude it is probably not relevant to have these variables as random effects.  
+
+
+
+### Second test
+
+After this first test, what we are going to try is to largely reduce the number of random effects, and only use one lag. The model we will use for our regression is now : 
+
+$$ Mortality_{i,t} = \gamma_{0,i} + \beta_{i,1} * mortality_{i,t-1} + \beta_{i,2} * health.expenditure_{i,t-1} + \beta_{i,3} * Hospital.Beds_{i,t-1} + \beta_{i,4} * GDP.per.capita_{i,t} + \beta_{i,5} * Unemployment_{i,t} + \beta_{i,6} * HDI_{i,t} + \beta_{i,7} * Life.expectancy_{i,t} $$
+
+```{r}
+#| message: false
+#| warning: false
+second_test <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + healthExp_lag1 + hospBeds_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp + (1 | REF_AREA), data = data_lagged, REML = FALSE)
+summary(second_test)
+```
+
+The results seem better and more coherent than in the first model. However we do notice that the AIC - Akaike information criterion, which is a measure for how well fitted a model is - is higher than it was in the previous model (6657.8 versus 6325.4). The AIC checks both if explanatory variables explain the observed variable correctly and for whether or not the number of parameters in the model is too high. Generally the lower the AIC is, the better the model is.
+The AIC is not absolute, for example here we do see that our second model is more coherent but it encourages us to make more tests.
+
+
+
+### Third test
+
+For our third test model we add non lagged explanatory variables (variables at lag = 0). We will also add social expenditures which was not in the previous regression to see if it is relevant in our model (OBS_VALUE_social_expenditure and socialExp_lag1)
+
+Our model becomes :
+
+$$ Mortality_{i,t} = \gamma_{0,i} + \beta_{i,1} * mortality_{i,t-1} + \beta_{i,2} * social.expenditure_{i,t} + \beta_{i,3} * social.expenditure_{i,t-1} + \beta_{i,4} * health.expenditure_{i,t} + \beta_{i,5} * health.expenditure_{i,t-1} + \beta_{i,6} * Hospital.Beds_{i,t} + \beta_{i,7} * Hospital.Beds_{i,t-1} + \beta_{i,8} * GDP.per.capita_{i,t} + \beta_{i,9} * Unemployment_{i,t} + \beta_{i,10} * HDI_{i,t} + \beta_{i,11} * Life.expectancy_{i,t} $$
+
+```{r}
+#| message: false
+#| warning: false
+third_test <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + OBS_VALUE_social_expenditure + socialExp_lag1 + OBS_VALUE_health_exp + healthExp_lag1 + OBS_VALUE_hosp_beds + hospBeds_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp + (1 | REF_AREA), data = data_lagged, REML = FALSE)
+summary(third_test)
+```
+
+The AIC is lower in this model than it was in the second test (6495.0 vs 6657.8). However, contrary to what we could believe theoretically, social expenditures at time t and time t-1 do not have a significant impact on mortality at time t (we see that their t-value are close to 0 and not 1 in absolute value)
+
+
+
+### Fourth to sixth tests
+
+Fourth test with an additional random effect : GDP per capita (in order to try taking into account countries' richness level)
+
+$$ Mortality_{i,t} = \gamma_{0,i} + \beta_{i,1} * mortality_{i,t-1} + \beta_{i,2} * social.expenditure_{i,t} + \beta_{i,3} * social.expenditure_{i,t-1} + \beta_{i,4} * health.expenditure_{i,t} + \beta_{i,5} * health.expenditure_{i,t-1} + \beta_{i,6} * Hospital.Beds_{i,t} + \beta_{i,7} * Hospital.Beds_{i,t-1} + \gamma_{i,8} * GDP.per.capita_{i,t} + \beta_{i,9} * Unemployment_{i,t} + \beta_{i,10} * HDI_{i,t} + \beta_{i,11} * Life.expectancy_{i,t} $$
+
+```{r}
+#| message: false
+#| warning: false
+fourth_test <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + OBS_VALUE_social_expenditure + socialExp_lag1 + OBS_VALUE_health_exp + healthExp_lag1 + OBS_VALUE_hosp_beds + hospBeds_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp + (1 + OBS_VALUE_gdp | REF_AREA), data = data_lagged, REML = FALSE)
+summary(fourth_test)
+```
+
+
+
+Fifth test using HDI as the additional random effect (and no longer GDP per capita) : 
+
+$$ Mortality_{i,t} = \gamma_{0,i} + \beta_{i,1} * mortality_{i,t-1} + \beta_{i,2} * social.expenditure_{i,t} + \beta_{i,3} * social.expenditure_{i,t-1} + \beta_{i,4} * health.expenditure_{i,t} + \beta_{i,5} * health.expenditure_{i,t-1} + \beta_{i,6} * Hospital.Beds_{i,t} + \beta_{i,7} * Hospital.Beds_{i,t-1} + \beta_{i,8} * GDP.per.capita_{i,t} + \beta_{i,9} * Unemployment_{i,t} + \gamma_{i,10} * HDI_{i,t} + \beta_{i,11} * Life.expectancy_{i,t} $$
+```{r}
+#| message: false
+#| warning: false
+fifth_test <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + OBS_VALUE_social_expenditure + socialExp_lag1 + OBS_VALUE_health_exp + healthExp_lag1 + OBS_VALUE_hosp_beds + hospBeds_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp + (1 + OBS_VALUE_hdi | REF_AREA), data = data_lagged, REML = FALSE)
+summary(fifth_test)
+```
+
+
+
+Sixth test using both GDP and HDI as additional random effects : 
+
+$$ Mortality_{i,t} = \gamma_{0,i} + \beta_{i,1} * mortality_{i,t-1} + \beta_{i,2} * social.expenditure_{i,t} + \beta_{i,3} * social.expenditure_{i,t-1} + \beta_{i,4} * health.expenditure_{i,t} + \beta_{i,5} * health.expenditure_{i,t-1} + \beta_{i,6} * Hospital.Beds_{i,t} + \beta_{i,7} * Hospital.Beds_{i,t-1} + \gamma_{i,8} * GDP.per.capita_{i,t} + \beta_{i,9} * Unemployment_{i,t} + \gamma_{i,10} * HDI_{i,t} + \beta_{i,11} * Life.expectancy_{i,t} $$
+
+
+```{r}
+#| message: false
+#| warning: false
+sixth_test <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + OBS_VALUE_social_expenditure + socialExp_lag1 + OBS_VALUE_health_exp + healthExp_lag1 + OBS_VALUE_hosp_beds + hospBeds_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp + (1 + OBS_VALUE_hdi + OBS_VALUE_gdp | REF_AREA), data = data_lagged, REML = FALSE)
+summary(sixth_test)
+```
+
+Tests four to six helped us notice that : 
+- GDP and HDI were not varying enough to be random effects. Since we already have a moving intercept and there is not much of a difference between having a moving intercept from one country to another and having a random effect for GDP and HDI per country)
+Particularly having a random effect for HDI is not great since it has a perfect correlation (-1) with the intercept, meaning that having HDI as a random effect would be useless. We see the same thing with GDP but at a lower level since the correlation is slightly less high.  
+- Health expenditure at present time and t-1 are relevant in the regression
+- Social expenditure not so much (they still have a t value closer to 0 than 1 in absolute value). However it is interesting to keep this variable in our model since it is different from what we were expecting
+- The Hospital beds variable is barely relevant (0.8)
+- Control variables are really relevant (especially life expectancy)
+
+
+We also notice that the fifth test (which is not that great since it has correlation problems) has the lowest AIC. We were able to find a lower AIC but it ended up not being a coherent model. 
+Consequently we will have to compromise by choosing a more coherent model with a slightly higher AIC. 
+
+
+### Chosen model
+
+The best model we were able to find ended up being our third test. 
+
+So our chosen model is : 
+
+$$ Mortality_{i,t} = \gamma_{0,i} + \beta_{i,1} * mortality_{i,t-1} + \beta_{i,2} * social.expenditure_{i,t} + \beta_{i,3} * social.expenditure_{i,t-1} + \beta_{i,4} * health.expenditure_{i,t} + \beta_{i,5} * health.expenditure_{i,t-1} + \beta_{i,6} * Hospital.Beds_{i,t} + \beta_{i,7} * Hospital.Beds_{i,t-1} + \beta_{i,8} * GDP.per.capita_{i,t} + \beta_{i,9} * Unemployment_{i,t} + \beta_{i,10} * HDI_{i,t} + \beta_{i,11} * Life.expectancy_{i,t} $$
+
+```{r}
+model <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + OBS_VALUE_social_expenditure + socialExp_lag1 + OBS_VALUE_health_exp + healthExp_lag1 + OBS_VALUE_hosp_beds + hospBeds_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp + (1 | REF_AREA), data = data_lagged, REML = FALSE)
+
+summary(model)
+```
+
