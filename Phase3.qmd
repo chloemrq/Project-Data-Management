@@ -45,18 +45,13 @@ It will be used to estimate the population’s general health.
 
  
 ```{r}
-#| message: false
-#| warning: false
 # Loading the packages
-#| message: false
 library(here)
 here::i_am("Project-Data-Management.Rproj")
 ```
 
 
 ```{r}
-#| message: false
-#| warning: false
 library(ggplot2)
 library(dplyr)
 library(tidyr)
@@ -97,16 +92,12 @@ This dataset describes the human development index, per country (195), annually 
 
 ```{r}
 # Loading the cleaned dataset from phase 2
-#| message: false
-#| warning: false
 database <- vroom(here("data", "cleaned_database.csv"))
 ```
 
 
 ```{r}
 # Loading the raw datasets to create a brief description table
-#| message: false
-#| warning: false
 health_expenditure <- vroom(here("data", "OECD.ELS.HD,DSD_SHA@DF_SHA,1.0+.A.EXP_HEALTH.PT_B1GQ._T.._T.._T....csv"))
 
 avoidable_mortality <- vroom(here("data", "OECD.ELS.HD,DSD_HEALTH_STAT@DF_AM,1.1+.A.AVM.DT_10P5HB.._T........csv"))
@@ -136,8 +127,6 @@ hdi <- read_excel("data/hdr-data.xlsx")
 
 ```{r}
 # Description table 
-#| message: false
-#| warning: false
 data_sets <- list(
   list(name = "Health Expenditure", data = health_expenditure),
   list(name = "Avoidable Mortality", data = avoidable_mortality),
@@ -205,13 +194,24 @@ This graph reveals a downward trend in avoidable mortality from 2000 to 2019 cut
 ### Avoidable mortality per country
 We also check the `avoidable_mortality` variable per country. 
 ```{r}
+average_trend <- database |>
+  group_by(TIME_PERIOD) |>
+  summarise(mean_mortality = mean(OBS_VALUE_mortality, na.rm = TRUE))
+
 database |>
   ggplot(aes(x = TIME_PERIOD, y = OBS_VALUE_mortality, color=REF_AREA)) +
   geom_line() +
+  geom_line(
+    data = average_trend,
+    aes(x = TIME_PERIOD, y = mean_mortality, color="OECD average"),
+    color = "red",
+    linewidth = 1.3
+  ) +
   scale_x_continuous(breaks = c(2000, 2010, 2020)) +
   labs(
     x = "Year",
     y = "Number of avoidable deaths",
+    caption = "Red line: OECD average",
     title = "Avoidable mortality per country (2000-2023), per 100,000 inhabitants annually")
 ```
 Most countries share the same downward sloping trend in avoidable mortality. A distinct increase appears in 2019, with a peak in 2020 and a decrease to previous trend values from 2021 in all countries. 
