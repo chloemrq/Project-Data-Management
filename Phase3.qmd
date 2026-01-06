@@ -264,3 +264,34 @@ The correlation between avoidable mortality and life expectancy seems strong in 
 # 4. Econometric Analysis : Linear Mixed Model (LMM)
 
 
+## Creating lag operators/ lagged variables
+
+```{r}
+data_lagged <- database |>
+  group_by(REF_AREA) |>
+  arrange(TIME_PERIOD) |>
+  mutate(
+    mortality_lag1 = lag(OBS_VALUE_mortality, 1),
+    mortality_lag2 = lag(OBS_VALUE_mortality, 2),
+    healthExp_lag1 = lag(OBS_VALUE_health_exp, 1),
+    healthExp_lag2 = lag(OBS_VALUE_health_exp, 2),
+    hospBeds_lag1 = lag(OBS_VALUE_hosp_beds, 1),
+    hospBeds_lag2 = lag(OBS_VALUE_hosp_beds, 2),
+    socialExp_lag1 = lag(OBS_VALUE_social_expenditure, 1),
+    socialExp_lag2 = lag(OBS_VALUE_social_expenditure, 2)
+  ) |>
+  ungroup()
+```
+Before making any regression, we created lagged version of our variables. We believe that past investments in health sector and social protection have an impact on mortality and we want this to appear in our model. 
+
+We will be creating lagged versions of 4 variables : mortality, health expenditure, social expenditure and hospital beds. Consequently we have : 
+- `mortality_lag1` : first lag of the mortality variable (at time t-1)
+- `mortality_lag2` : second lag of the mortality variable (at time t-2)
+- `healthExp_lag1` : first lag of the health expenditure variable (at time t-1)
+- `healthExp_lag2` : second lag of the health expenditure variable (at time t-2)
+- `hospBeds_lag1` : first lag of the hospital Beds variable (at time t-1)
+- `hospBeds_lag2` : second lag of the hospital Beds variable (at time t-2)
+- `socialExp_lag1` : first lag of the social expenditure variable (at time t-1)
+- `socialExp_lag2` : second lag of the social expenditure variable (at time t-2)
+
+
