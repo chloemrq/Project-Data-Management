@@ -273,6 +273,22 @@ The correlation matrix reveals strong linear relationships among several control
 
 In order to avoid multicollinearity issues in our regression, we choose to exclude HDI and life expectancy from our control variables. We retain GDP per capita and unemployment, which can adjust for differences in economic development between countries and remain sufficiently distinct from avoidable mortality. 
 
+## Creating pandemic dummies
+To account for the Covid-19 shock, we introduce a pandemic dummy variable equal to 1 for the years 2019 to 2021 and 0 otherwise. We also add 2 interaction terms with Health expenditure and Social expenditure to assess the impact of these factors on avoidable mortality during this period.
+```{r}
+database <- database |>
+  mutate(
+    pandemic = ifelse(TIME_PERIOD %in% c(2019:2021), 1, 0)
+  )
+
+database <- database |>
+  mutate(
+    healthexp_pandemic = OBS_VALUE_health_exp * pandemic,
+    socialexp_pandemic = OBS_VALUE_social_expenditure * pandemic
+  )
+```
+
+
 ## Creating lag operators/ lagged variables
 
 ```{r}
@@ -350,8 +366,6 @@ GDP per capita, Unemployment, Life expectancy and HDI, our control variables, ar
 ```{r}
 #| message: false
 #| warning: false
-
-library(lme4)
 
 first_test <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + mortality_lag2 + healthExp_lag1 + healthExp_lag2 + hospBeds_lag1 + hospBeds_lag2 + OBS_VALUE_gdp + OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp + (OBS_VALUE_gdp + OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp | REF_AREA),
               data = data_lagged, REML = FALSE)
