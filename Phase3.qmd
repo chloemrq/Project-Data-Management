@@ -258,6 +258,21 @@ This graph suggests that as GDP per capita increases, the rate of avoidable mort
 
 # 4. Econometric Analysis : Linear Mixed Model (LMM)
 
+## Correlation matrix for control variables 
+```{r}
+control_vars <- database |>
+  select(OBS_VALUE_mortality, OBS_VALUE_gdp, OBS_VALUE_hdi, OBS_VALUE_life_exp, OBS_VALUE_unemp)
+
+cor(control_vars) |>
+  knitr::kable()
+```
+The correlation matrix reveals strong linear relationships among several control variables. 
+
+* Avoidable mortality is highly negatively correlated with life expectancy (-0.96), reflecting the fact that both variables capture very similar aspects of general population health. 
+* Life expectancy is also strongly correlated with HDI (0.76) and GDP per capita (0.65), meaning there is an overlap between these variables. 
+
+In order to avoid multicollinearity issues in our regression, we choose to exclude HDI and life expectancy from our control variables. We retain GDP per capita and unemployment, which can adjust for differences in economic development between countries and remain sufficiently distinct from avoidable mortality. 
+
 ## Creating lag operators/ lagged variables
 
 ```{r}
