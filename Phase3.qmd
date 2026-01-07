@@ -273,9 +273,76 @@ The correlation matrix reveals strong linear relationships among several control
 
 In order to avoid multicollinearity issues in our regression, we choose to exclude HDI and life expectancy from our control variables. We retain GDP per capita and unemployment, which can adjust for differences in economic development between countries and remain sufficiently distinct from avoidable mortality. 
 
-## Creating pandemic dummies
-To account for the Covid-19 shock, we introduce a pandemic dummy variable equal to 1 for the years 2019 to 2021 and 0 otherwise. We also add 2 interaction terms with Health expenditure and Social expenditure to assess the impact of these factors on avoidable mortality during this period.
+
+## Creating lag operators/ lagged variables
+
 ```{r}
+data_lagged <- database |>
+  group_by(REF_AREA) |>
+  arrange(TIME_PERIOD) |>
+  mutate(
+    mortality_lag1 = lag(OBS_VALUE_mortality, 1),
+    
+    healthExp_lag1 = lag(OBS_VALUE_health_exp, 1),
+    
+    healthExp_ma3 = (lag(OBS_VALUE_health_exp, 1) +
+                     lag(OBS_VALUE_health_exp, 2) +
+                     lag(OBS_VALUE_health_exp, 3)) / 3,
+    
+    healthExp_ma5 = (lag(OBS_VALUE_health_exp, 1) +
+                     lag(OBS_VALUE_health_exp, 2) +
+                     lag(OBS_VALUE_health_exp, 3) +
+                     lag(OBS_VALUE_health_exp, 4) +
+                     lag(OBS_VALUE_health_exp, 5)) / 5,
+    
+    hospBeds_lag1 = lag(OBS_VALUE_hosp_beds, 1),
+    
+    hospBeds_ma3 = (lag(OBS_VALUE_hosp_beds, 1) +
+                     lag(OBS_VALUE_hosp_beds, 2) +
+                     lag(OBS_VALUE_hosp_beds, 3)) / 3,
+    
+    hospBeds_ma5 = (lag(OBS_VALUE_hosp_beds, 1) +
+                     lag(OBS_VALUE_hosp_beds, 2) +
+                     lag(OBS_VALUE_hosp_beds, 3) +
+                     lag(OBS_VALUE_hosp_beds, 4) +
+                     lag(OBS_VALUE_hosp_beds, 5)) / 5,
+    
+    socialExp_lag1 = lag(OBS_VALUE_social_expenditure, 1),
+
+    socialExp_ma3 = (lag(OBS_VALUE_social_expenditure, 1) +
+                     lag(OBS_VALUE_social_expenditure, 2) +
+                     lag(OBS_VALUE_social_expenditure, 3)) / 3, 
+    
+    socialExp_ma5 = (lag(OBS_VALUE_social_expenditure, 1) +
+                     lag(OBS_VALUE_social_expenditure, 2) +
+                     lag(OBS_VALUE_social_expenditure, 3) +
+                     lag(OBS_VALUE_social_expenditure, 4) +
+                     lag(OBS_VALUE_social_expenditure, 5)) / 5
+  ) |>
+  ungroup()
+```
+
+Before further modelling, we create lagged version of our variables. We believe that past investments in health sector and social protection have an impact on mortality. Using one-year lags will allow us to study short term effects such as changes in government budgets from one year to the next. 3-year and 5-year moving averages will also be used to capture long-term investment impacts. Indeed, we assume increased hospital capacities or training staff takes a few years before benefiting the health system. 
+
+We will create lagged versions of 4 variables : mortality, health expenditure, social expenditure and hospital beds. 
+
+Consequently we have : 
+
+- `mortality_lag1` : 1-year lag of avoidable mortality 
+- `healthExp_lag1` : 1-year lag of health expenditure (short-run)
+- `healthExp_ma3` : 3-year average lag of health expenditure (medium-run)
+- `healthExp_ma5` : 5-year average lag of health expenditure (long-run)
+- `hospBeds_lag1` : 1-year lag of hospital beds 
+- `hospBeds_ma3` : 3-year average lag of hospital beds
+- `hospBeds_ma5` : 5-year average lag of hospital beds
+- `socialExp_lag1` : 1-year lag of social expenditure
+- `socialExp_ma3` : 3-year average lag of social expenditure
+- `socialExp_ma5` : 5-year average lag of social expenditure
+
+
+Additionally, to account for the Covid-19 shock, we introduce a pandemic dummy variable equal to 1 for the years 2019 to 2021 and 0 otherwise. We also add 2 interaction terms with Health expenditure and Social expenditure to assess the impact of these factors on avoidable mortality during this period.
+```{r}
+## Adding pandemic dummies
 database <- database |>
   mutate(
     pandemic = ifelse(TIME_PERIOD %in% c(2019:2021), 1, 0)
@@ -289,41 +356,7 @@ database <- database |>
 ```
 
 
-## Creating lag operators/ lagged variables
-
-```{r}
-data_lagged <- database |>
-  group_by(REF_AREA) |>
-  arrange(TIME_PERIOD) |>
-  mutate(
-    mortality_lag1 = lag(OBS_VALUE_mortality, 1),
-    mortality_lag2 = lag(OBS_VALUE_mortality, 2),
-    healthExp_lag1 = lag(OBS_VALUE_health_exp, 1),
-    healthExp_lag2 = lag(OBS_VALUE_health_exp, 2),
-    hospBeds_lag1 = lag(OBS_VALUE_hosp_beds, 1),
-    hospBeds_lag2 = lag(OBS_VALUE_hosp_beds, 2),
-    socialExp_lag1 = lag(OBS_VALUE_social_expenditure, 1),
-    socialExp_lag2 = lag(OBS_VALUE_social_expenditure, 2)
-  ) |>
-  ungroup()
-```
-
-Before making any regression, we created lagged version of our variables. We believe that past investments in health sector and social protection have an impact on mortality and we want this to appear in our model. 
-
-We will be creating lagged versions of 4 variables : mortality, health expenditure, social expenditure and hospital beds. 
-
-Consequently we have : 
-
-- `mortality_lag1` : first lag of the mortality variable (at time t-1)
-- `mortality_lag2` : second lag of the mortality variable (at time t-2)
-- `healthExp_lag1` : first lag of the health expenditure variable (at time t-1)
-- `healthExp_lag2` : second lag of the health expenditure variable (at time t-2)
-- `hospBeds_lag1` : first lag of the hospital Beds variable (at time t-1)
-- `hospBeds_lag2` : second lag of the hospital Beds variable (at time t-2)
-- `socialExp_lag1` : first lag of the social expenditure variable (at time t-1)
-- `socialExp_lag2` : second lag of the social expenditure variable (at time t-2)
-
-
+####### MODIF #########
 ## Model testing
 
 
@@ -364,11 +397,10 @@ GDP per capita, Unemployment, Life expectancy and HDI, our control variables, ar
 - Random effects have their coefficient represented by the symbol gamma
 
 ```{r}
-#| message: false
-#| warning: false
-
-first_test <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + mortality_lag2 + healthExp_lag1 + healthExp_lag2 + hospBeds_lag1 + hospBeds_lag2 + OBS_VALUE_gdp + OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp + (OBS_VALUE_gdp + OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp | REF_AREA),
-              data = data_lagged, REML = FALSE)
+first_test <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + mortality_lag2 + healthExp_lag1 + healthExp_lag2 + hospBeds_lag1 + hospBeds_lag2 + OBS_VALUE_gdp + OBS_VALUE_unemp + (OBS_VALUE_gdp + OBS_VALUE_unemp | REF_AREA), 
+                   control = lmerControl(autoscale = TRUE), # added after R warned some variables are on very different scales 
+                   data = data_lagged, 
+                   REML = FALSE)
 summary(first_test)
 ```
 
@@ -402,8 +434,6 @@ Mortality_{i,t} =\;& \gamma_{0,i}
 
 
 ```{r}
-#| message: false
-#| warning: false
 second_test <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + healthExp_lag1 + hospBeds_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp + (1 | REF_AREA), data = data_lagged, REML = FALSE)
 summary(second_test)
 ```
@@ -438,8 +468,6 @@ Mortality_{i,t} =\;& \gamma_{0,i}
 
 
 ```{r}
-#| message: false
-#| warning: false
 third_test <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + OBS_VALUE_social_expenditure + socialExp_lag1 + OBS_VALUE_health_exp + healthExp_lag1 + OBS_VALUE_hosp_beds + hospBeds_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp + (1 | REF_AREA), data = data_lagged, REML = FALSE)
 
 summary(third_test)
@@ -471,8 +499,6 @@ Mortality_{i,t} =\;& \gamma_{0,i}
 \end{equation*}
 
 ```{r}
-#| message: false
-#| warning: false
 fourth_test <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + OBS_VALUE_social_expenditure + socialExp_lag1 + OBS_VALUE_health_exp + healthExp_lag1 + OBS_VALUE_hosp_beds + hospBeds_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp + (1 + OBS_VALUE_gdp | REF_AREA), data = data_lagged, REML = FALSE)
 summary(fourth_test)
 ```
@@ -499,8 +525,6 @@ Mortality_{i,t} =\;& \gamma_{0,i}
 \end{equation*}
 
 ```{r}
-#| message: false
-#| warning: false
 fifth_test <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + OBS_VALUE_social_expenditure + socialExp_lag1 + OBS_VALUE_health_exp + healthExp_lag1 + OBS_VALUE_hosp_beds + hospBeds_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp + (1 + OBS_VALUE_hdi | REF_AREA), data = data_lagged, REML = FALSE)
 summary(fifth_test)
 ```
@@ -529,8 +553,6 @@ Mortality_{i,t} =\;& \gamma_{0,i}
 
 
 ```{r}
-#| message: false
-#| warning: false
 sixth_test <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + OBS_VALUE_social_expenditure + socialExp_lag1 + OBS_VALUE_health_exp + healthExp_lag1 + OBS_VALUE_hosp_beds + hospBeds_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + OBS_VALUE_hdi + OBS_VALUE_life_exp + (1 + OBS_VALUE_hdi + OBS_VALUE_gdp | REF_AREA), data = data_lagged, REML = FALSE)
 summary(sixth_test)
 ```
