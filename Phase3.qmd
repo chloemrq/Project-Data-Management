@@ -73,14 +73,13 @@ This dataset describes the number of "avoidable deaths" per 100,000 inhabitants 
 The GDP per Capita dataset presents the GDP per capita (constant 2015 US$) from 1960 to 2024 for 70 countries. This indicator is expressed in constant prices, meaning the series has been adjusted to account for price changes over time. The reference year for this adjustment is 2015. This indicator is expressed in United States dollars. 
 
 ### Hospital beds - OECD (2025)
-This dataset provides data on the number of total hospitals beds by function of healthcare and by type of care (ie. somatic or psychiatric care) for the period 2000-2024 for 48 different countries. Total hospital beds are the sum of the following categories:
-Curative care (acute care) beds in hospitals, Rehabilitative care beds in hospitals, Long-term care beds in hospitals, All other beds in hospitals not elsewhere classified. 
+This dataset provides data on the number of total hospitals beds by function of healthcare and by type of care (ie. somatic or psychiatric care) for the period 2000-2024 for 48 different countries. Total hospital beds are the sum of the following categories: Curative care (acute care) beds in hospitals, Rehabilitative care beds in hospitals, Long-term care beds in hospitals, All other beds in hospitals not elsewhere classified. 
 
 ### Life expectancy - World Bank (2023)
 This dataset provides the life expectancy in years for women and men for a period ranging from 1960 to 2023, for 69 different countries or economies. 
 
 ### Social Expenditure Aggregate - OECD (2025)
-This dataset includes internationally comparable statistics on public and mandatory and voluntary private social expenditure at programme level (e.g. Old age, Survivors, Incapacity-related benefits, Health, etc) It covers 38 OECD countries and some accession countries for the period 1980-2021/23 and estimates for aggregates for 2022-24.
+This dataset includes statistics on public and private social expenditure at program level (e.g. Old age, Survivors, Incapacity-related benefits, Health, etc) as a percentage of GDP. It covers 38 OECD countries for the period 1980-2021/23 and estimates for aggregates for 2022-24.
 
 ### Unemployement Rate - IMF (2025)
 This IMF dataset describes the percentage of the labor force that is unemployed and actively seeking employment. It is available from 1980 to 2025 and features 120 geographic regions. 
@@ -174,24 +173,6 @@ database |>
 # 3. Data Analysis 
 We first start by a visual exploration of our main variable : avoidable mortality (*OBS_VALUE_mortality*) and its link to explanatory variables.
 
-
-### Global avoidable mortality
-First we can take a look at the number of avoidable deaths globally
-```{r}
-database |>
-  group_by(TIME_PERIOD) |>
-  summarise(mean_mortality = mean(OBS_VALUE_mortality, na.rm = TRUE)) |>
-  ggplot(aes(x = TIME_PERIOD, y = mean_mortality)) +
-  geom_line() +
-  geom_point() +
-  labs(
-    title = "Average avoidable mortality in the world (2000-2023), per 100,000 inhabitants annually",
-    y = "Number of avoidable deaths",
-    x = "Year")
-```
-This graph reveals a downward trend in avoidable mortality from 2000 to 2019 cut by a sudden increase in 2020 and 2021 during Covid-19. However it seems that, afterward, the variable will go back to its previous trend.
-
-
 ### Evolution of avoidable mortality per country
 ```{r}
 average_trend <- database |>
@@ -226,17 +207,37 @@ The goal of our analysis is to determine if the evolution of health and social e
 ggplot(database, aes(x = OBS_VALUE_health_exp, y = OBS_VALUE_mortality)) +
   geom_point(aes(color = REF_AREA)) +
   theme(legend.position = "right") +
-  labs(title = "Avoidable mortality against Health Expenditure") +
+  labs(
+    x = "Health expenditure (as % of GDP)", 
+    y = "Avoidable mortality",
+    title = "Avoidable mortality against Health expenditure") +
   geom_smooth(method = "lm", se = FALSE) 
 ```
 
 As expected, as the level of health expenditure increases, avoidable mortality tends to decrease. Australia (AUS) detaches itself from other countries by having a particularly high level of health expenditure, but still a moderately high level of avoidable mortality. Most countries are situated on the left side of the graph (with low health expenditure) showcasing countries with high and low rates of avoidable mortality for the same level of health expenditure. 
 
 ```{r}
+ggplot(database, aes(x = OBS_VALUE_social_expenditure, y = OBS_VALUE_mortality)) +
+  geom_point(aes(color = REF_AREA)) +
+  theme(legend.position = "none") +
+  labs(
+    x = "Social expenditure (as % of GDP)", 
+    y = "Avoidable mortality",
+    title = "Avoidable mortality against Social Expenditure") +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+As social expenditure increases, the avoidable mortality rate decreases. Most countries' social expenditure is within 10% and 25% of their GDP. However, for these countries similar in social expenditure levels, avoidable mortality goes from 100 to almost 700 per 100,000 deaths, suggesting an important variability. This observation is consistent with the trend observed using the health expenditure variable. Fro similar levels of health or social expenditure, avoidable mortality seems to vary significantly between countries.
+
+
+```{r}
 ggplot(database, aes(x = OBS_VALUE_unemp, y = OBS_VALUE_mortality)) +
   geom_point(aes(color = REF_AREA)) +
   theme(legend.position = "none") +
-  labs(title = "Avoidable mortality against Unemployment") +
+  labs(    
+    x = "Unemployement", 
+    y = "Avoidable mortality",
+    title = "Avoidable mortality against Unemployment") +
   geom_smooth(method = "lm", se = FALSE)
 ```
 Here, the trend indicates that as unemployment increases, avoidable mortality does too. Most countries have low levels of unemployment and low rates of avoidable mortality. 
@@ -246,23 +247,16 @@ In the bottom right, Spain (ESP) and Greece (GRC) display very high rates of une
 ggplot(database, aes(x = OBS_VALUE_gdp, y = OBS_VALUE_mortality)) +
   geom_point(aes(color = REF_AREA)) +
   theme(legend.position = "none") +
-  labs(title = "Avoidable mortality against GDP per Capita") +
+  labs(
+    x = "GDP per Capita", 
+    y = "Avoidable mortality",
+    title = "Avoidable mortality against GDP per Capita") +
   geom_smooth(method = "lm", se = FALSE)
 ```
 This graph suggests that as GDP per capita increases, the rate of avoidable mortality decreases. The avoidable mortality rate doesn't seem to go below 100 deaths per 100,000 inhabitants. Thus, as GDP per capita increases, avoidable mortality remains between 100 and 300 deaths per 100,000 inhabitants suggesting marginal change in mortality as a country's population becomes richer.
 
 
-```{r}
-ggplot(database, aes(x = OBS_VALUE_life_exp, y = OBS_VALUE_mortality)) +
-  geom_point(aes(color = REF_AREA)) +
-  theme(legend.position = "none") +
-  labs(title = "Avoidable mortality against Life Expectancy") +
-  geom_smooth(method = "lm", se = FALSE)
-```
-The correlation between avoidable mortality and life expectancy seems strong in this graph. Indeed, as life expectancy increases, avoidable mortality decreases linearly for all countries. Two countries (Türkiye (TUR) in pink and Colombia (COL) in brown) find themselves slightly below the trend line, with lower mortality than the trend would suggest for their level of life expectancy. 
-
 # 4. Econometric Analysis : Linear Mixed Model (LMM)
-
 
 ## Creating lag operators/ lagged variables
 
