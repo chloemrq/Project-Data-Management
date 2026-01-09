@@ -429,7 +429,6 @@ summary(model_medium_run)
 ```
 
 
-
 ```{r}
 model_long_run <- lmer(OBS_VALUE_mortality ~ healthExp_ma5 + hospBeds_ma5 + socialExp_ma5 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
                    control = lmerControl(autoscale = TRUE), 
@@ -437,3 +436,73 @@ model_long_run <- lmer(OBS_VALUE_mortality ~ healthExp_ma5 + hospBeds_ma5 + soci
                    REML = FALSE)
 summary(model_long_run)
 ```
+
+
+
+### Testing for the Covid-19 period
+
+Regressions using our dummy variable for the Covid-19 and interaction terms, to see the impact of investment in health on mortality during the pandemic.
+
+First, even if it is not the most essential in our analysis, checking the results for time = t
+```{r}
+model_covid_time_t <- lmer(OBS_VALUE_mortality ~ OBS_VALUE_hosp_beds + OBS_VALUE_health_exp + OBS_VALUE_social_expenditure + pandemic + healthexp_pandemic + socialexp_pandemic + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
+                   control = lmerControl(autoscale = TRUE), 
+                   data = database, 
+                   REML = FALSE)
+summary(model_covid_time_t)
+```
+
+Then we want to see the impact of previous investments using our lags 
+```{r}
+data_lagged <- data_lagged |>
+  mutate(
+    pandemic = ifelse(TIME_PERIOD %in% c(2019:2021), 1, 0)
+  )
+
+data_lagged <- data_lagged |>
+  mutate(
+    healthexp_pandemic_lag1 = healthExp_lag1 * pandemic,
+    healthexp_pandemic_ma3 = healthExp_ma3 * pandemic,
+    healthexp_pandemic_ma5 = healthExp_ma5 * pandemic,
+    socialexp_pandemic_lag1 = socialExp_lag1 * pandemic,
+    socialexp_pandemic_ma3 = socialExp_ma3 * pandemic,
+    socialexp_pandemic_ma5 = socialExp_ma5 * pandemic
+  )
+```
+
+
+In the short-run
+
+```{r}
+model_covid_short_run <- lmer(OBS_VALUE_mortality ~ hospBeds_lag1 + healthExp_lag1 + socialExp_lag1 + pandemic + healthexp_pandemic_lag1 + socialexp_pandemic_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
+                   control = lmerControl(autoscale = TRUE), 
+                   data = data_lagged, 
+                   REML = FALSE)
+summary(model_covid_short_run)
+```
+
+
+
+In the medium-run 
+
+```{r}
+model_covid_medium_run <- lmer(OBS_VALUE_mortality ~ hospBeds_ma3 + healthExp_ma3 + socialExp_ma3 + pandemic + healthexp_pandemic_ma3 + socialexp_pandemic_ma3 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
+                   control = lmerControl(autoscale = TRUE), 
+                   data = data_lagged, 
+                   REML = FALSE)
+summary(model_covid_medium_run)
+```
+
+
+In the long-run
+
+```{r}
+model_covid_long_run <- lmer(OBS_VALUE_mortality ~ hospBeds_ma5 + healthExp_ma5 + socialExp_ma5 + pandemic + healthexp_pandemic_ma5 + socialexp_pandemic_ma5 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
+                   control = lmerControl(autoscale = TRUE), 
+                   data = data_lagged, 
+                   REML = FALSE)
+summary(model_covid_long_run)
+```
+
+
+
