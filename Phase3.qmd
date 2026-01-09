@@ -359,8 +359,9 @@ database <- database |>
 ####### MODIF #########
 ## Model testing
 
+### Testing for the short, medium and long-run
 
-### First test
+We do a first test to see how our variables interact with each other, especially lags
 
 The model we first want to test is : 
 
@@ -368,15 +369,14 @@ The model we first want to test is :
 \begin{aligned}
 Mortality_{i,t} =\;& \gamma_{0,i}
 + \beta_{1} \, mortality_{i,t-1}
-+ \beta_{2} \, health.expenditure_{i,t}
-+ \beta_{3} \, health.expenditure_{i,t-1} \\[0.4em]
-&+ \beta_{4} \, health.expenditure_{i,t-[1,3]}
-+ \beta_{5} \, health.expenditure_{i,t-[1,5]} 
-+ \beta_{6} \, Hospital.Beds_{i,t-2} \\[0.4em]
-&+ \gamma_{7} \, GDP.per.capita_{i,t}
-+ \gamma_{8} \, Unemployment_{i,t} 
-+ \gamma_{9} \, HDI_{i,t} \\[0.4em]
-&+ \gamma_{10} \, Life.expectancy_{i,t}
++ \beta_{2} \, health.expenditure_{i,t-1}
++ \beta_{3} \, health.expenditure_{i,t-[1,5]} \\[0.4em]
+&+ \beta_{4} \, hospital.beds_{i,t-1}
++ \beta_{5} \, hospital.beds_{i,t-[1,5]} 
++ \beta_{6} \, social.expenditure_{i,t-1} \\[0.4em]
+&+ \beta_{7} \, social.expenditure_{i,t-[1,5]}
++\gamma_{8} \, GDP.per.capita_{i,t}
++ \gamma_{9} \, Unemployment_{i,t} \\[0.4em]
 \end{aligned}
 \end{equation*}
 
@@ -390,12 +390,11 @@ With
 
 
 We also assume that mortality (at time t-1), social expenditure and hospital beds, our explanatory variables, are fixed effects.
-GDP per capita, Unemployment, Life expectancy and HDI, our control variables, are random effects (meaning that we take into account in this model the fact that they will be different for each country).
+GDP per capita and Unemployment, our control variables, are random effects (meaning that we take into account in this model the fact that they will be different for each country).
 
 
 - Fixed effects have their coefficient represented by the symbol beta
 - Random effects have their coefficient represented by the symbol gamma
-
 
 
 ```{r}
@@ -414,7 +413,7 @@ After this first test, we notice multiple problems :
 Therefore we will compare short-run, medium-run and long-run in 3 different models 
 ```{r}
 model_short_run <- lmer(OBS_VALUE_mortality ~ healthExp_lag1 + hospBeds_lag1 + socialExp_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
-                   control = lmerControl(autoscale = TRUE), # added after R warned some variables are on very different scales 
+                   control = lmerControl(autoscale = TRUE),
                    data = data_lagged, 
                    REML = FALSE)
 summary(model_short_run)
@@ -423,7 +422,7 @@ summary(model_short_run)
 
 ```{r}
 model_medium_run <- lmer(OBS_VALUE_mortality ~ healthExp_ma3 + hospBeds_ma3 + socialExp_ma3 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
-                   control = lmerControl(autoscale = TRUE), # added after R warned some variables are on very different scales 
+                   control = lmerControl(autoscale = TRUE),
                    data = data_lagged, 
                    REML = FALSE)
 summary(model_medium_run)
@@ -433,7 +432,7 @@ summary(model_medium_run)
 
 ```{r}
 model_long_run <- lmer(OBS_VALUE_mortality ~ healthExp_ma5 + hospBeds_ma5 + socialExp_ma5 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
-                   control = lmerControl(autoscale = TRUE), # added after R warned some variables are on very different scales 
+                   control = lmerControl(autoscale = TRUE), 
                    data = data_lagged, 
                    REML = FALSE)
 summary(model_long_run)
