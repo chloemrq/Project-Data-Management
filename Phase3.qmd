@@ -412,6 +412,33 @@ After this first test, we notice multiple problems :
 - Using both the first lag and the long-run moving average of variables in the same model is not possible. The correlation between the two makes it hard to distinguish which has an effect on mortality and the long-run moving average of explanatory variables end up having incoherent coefficients. 
 
 
+
+Tests using lm instead of lmer to keep mortality_lag1 and remove the random intercept 
+```{r}
+second_test <- lm(OBS_VALUE_mortality ~ mortality_lag1 + healthExp_lag1 + healthExp_ma5 + hospBeds_lag1 + hospBeds_ma5 + socialExp_lag1 + socialExp_ma5 + OBS_VALUE_gdp + OBS_VALUE_unemp, 
+                  data = data_lagged)
+summary(second_test)
+```
+
+
+
+```{r}
+third_test <- lm(
+  OBS_VALUE_mortality ~ mortality_lag1 +
+    healthExp_ma5 + hospBeds_ma5 + socialExp_ma5 +
+    OBS_VALUE_gdp + OBS_VALUE_unemp,
+  data = data_lagged
+)
+summary(third_test)
+```
+
+Problems when using lm instead of lmer to keep mortality_lag1 : mortality_lag1 explains most of mortality (Since the mortality rate is a flux, it is logical that most of its current value is explained by its past value). As a result it is difficult to identify the effect of previous investment in health and social protection which have really small coefficients in comparison.   
+
+It seems better to keep using lmer and remove mortality_lag1 in order to highlight the effects of health expenditure and social expenditure on mortality.
+
+
+
+
 Therefore we will compare short-run, medium-run and long-run in 3 different models 
 ```{r}
 model_short_run <- lmer(OBS_VALUE_mortality ~ healthExp_lag1 + hospBeds_lag1 + socialExp_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
@@ -439,6 +466,18 @@ model_long_run <- lmer(OBS_VALUE_mortality ~ healthExp_ma5 + hospBeds_ma5 + soci
 summary(model_long_run)
 ```
 
+All three models seem interesting to analyse as they show the different impacts social expenditure and health expenditure can have on mortality. 
+The first thing we notice is that in all 3 models health expenditure, social expenditure and the number of hospital beds are significant, they have a t value superior to 1 in absolute value. It means that whether it is in the short, medium or long-run they can impact the level of mortality. 
+
+In the short-run (represented by variables with the suffix `_lag1`) we can interpret the impact of health and social expenditure on avoidable mortality as an immediate budgetary effect. Having a new monetary flow each year in the health sector, or for households in general is important to face urgent needs or crisis.
+In the medium-run (represented by variables with the suffix `_ma3`), health expenditure, social expenditure and hospital beds are no longer there to cover an urgent need but are an investment. Government invest with certain policies in mind in order to reduce mortality and to improve welfare in the country in general. There is a cumulative effect, meaning that thanks to the money invested throughout the years, policies were able to show their efficiency afterwards.
+In the long-run (represented by variables with the suffix `_ma5`), the impact of health expenditure, social expenditure and the number of hospital beds can be interpreted as a structural effect. Some countries have an history of public intervention, especially through health and social expenditure. These structural differences can sometimes make a difference in how easy or hard it will be for a country to reduce their avoidable mortality. It can influence the efficiency of policies pursued through health and social expenditure. 
+
+
+Considering our question, the most interesting results for us to look at are the medium-run results. Indeed what we are trying to grasp is how adopting a health or social policy (and therefore investing in health) can help a country reduce their avoidable mortality. 
+The medium run model will be our main model. 
+
+In spite of this choice it is still interesting to check how the results vary from one model to another to compare the different effects. 
 
 
 ### Testing for the Covid-19 period
