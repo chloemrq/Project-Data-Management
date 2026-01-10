@@ -341,7 +341,7 @@ Consequently we have :
 - `socialExp_ma5` : 5-year average lag of social expenditure
 
 
-Additionally, to account for the Covid-19 shock, we introduce a pandemic dummy variable equal to 1 for the years 2019 to 2021 and 0 otherwise. We also add 2 interaction terms with Health expenditure and Social expenditure to assess the impact of these factors on avoidable mortality during this period.
+Additionally, to account for the Covid-19 shock, we introduce a `pandemic` dummy variable equal to 1 for the years 2020 to 2021 and 0 otherwise. We also add 2 interaction terms with Health expenditure and Social expenditure to assess the impact of these factors on avoidable mortality during this period.
 ```{r}
 ## Adding pandemic dummies
 database <- database |>
@@ -494,26 +494,6 @@ In the short-run (represented by variables with the suffix `_lag1`) we can inter
 In the medium-run (represented by variables with the suffix `_ma3`), health expenditure, social expenditure and hospital beds are no longer there to cover an urgent need but are an investment. Government invest with certain policies in mind in order to reduce mortality and to improve welfare in the country in general. There is a cumulative effect, meaning that thanks to the money invested throughout the years, policies were able to show their efficiency afterwards.
 In the long-run (represented by variables with the suffix `_ma5`), the impact of health expenditure, social expenditure and the number of hospital beds can be interpreted as a structural effect. Some countries have an history of public intervention, especially through health and social expenditure. These structural differences can sometimes make a difference in how easy or hard it will be for a country to reduce their avoidable mortality. It can influence the efficiency of policies pursued through health and social expenditure. 
 
- 
-
-### Chosen main model 
-
-
-Considering our question, the most interesting results for us to look at are the medium-run results. Indeed what we are trying to grasp is how adopting a health or social policy (and therefore investing in health) can help a country reduce their avoidable mortality. 
-The medium run model will be our main model.
-
-\begin{equation*}
-\begin{aligned}
-Mortality_{i,t} =\;& \gamma_{0,i}
-+ \beta_{1} \, health.expenditure_{i,t-[1,3]}
-+ \beta_{2} \, hospital.beds_{i,t-[1,3]}
-+ \beta_{3} \, social.expenditure_{i,t-[1,3]} \\[0.4em]
-&+\beta_{4} \, GDP.per.capita_{i,t}
-+ \beta_{5} \, Unemployment_{i,t}
-\end{aligned}
-\end{equation*}
-
-In spite of this choice it is still interesting to check how the results vary from one model to another to compare the different effects. 
 
 
 
@@ -579,11 +559,33 @@ data_lagged <- data_lagged |>
   )
 ```
 
+- `healthexp_pandemic_lag1` = interaction term between the `pandemic` dummy variable and `healthExp_lag1`
+- `healthexp_pandemic_ma3` = interaction term between the `pandemic` dummy variable and `healthExp_ma3`
+- `healthexp_pandemic_ma5` = interaction term between the `pandemic` dummy variable and `healthExp_ma5`
+- `socialexp_pandemic_lag1` = interaction term between the `pandemic` dummy variable and `socialExp_lag1`
+- `socialexp_pandemic_ma3` = interaction term between the `pandemic` dummy variable and `socialExp_ma3`
+- `socialexp_pandemic_ma5` = interaction term between the `pandemic` dummy variable and `socialExp_ma5`
+
+
 The interaction coefficient measures whether the association between pre-existing investment and mortality differed during the pandemic period relative to normal years.
 
 
 
-In the short-run
+*In the short-run :* 
+
+\begin{equation*}
+\begin{aligned}
+Mortality_{i,t} =\;& \gamma_{0,i}
++ \beta_{1} \, health.expenditure_{i,t-1}
++ \beta_{2} \, hospital.beds_{i,t-1}
++ \beta_{3} \, social.expenditure_{i,t-1} \\[0.4em]
+&+ \beta_{4} \, pandemic
++ \beta_{5} \, hospital.beds_{i,t-1} * pandemic
++ \beta_{6} \, social.expenditure_{i,t-1} * pandemic \\[0.4em]
+&+ \beta_{7} \, GDP.per.capita_{i,t} 
++ \beta_{8} \, Unemployment_{i,t}
+\end{aligned}
+\end{equation*}
 
 ```{r}
 model_covid_short_run <- lmer(OBS_VALUE_mortality ~ hospBeds_lag1 + healthExp_lag1 + socialExp_lag1 + pandemic + healthexp_pandemic_lag1 + socialexp_pandemic_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
@@ -593,9 +595,39 @@ model_covid_short_run <- lmer(OBS_VALUE_mortality ~ hospBeds_lag1 + healthExp_la
 summary(model_covid_short_run)
 ```
 
+In order to interpret our results we need to sum the coefficient obtained for the health expenditure variable (`healthExp_lag1`) and the interaction term `healthexp_pandemic_lag1`. Same thing for the social expenditure variable. This will tell us how the pandemic impacts the effect of health expenditure and social expenditure on avoidable mortality. 
+
+```{r}
+s <- fixef(model_covid_short_run)
+
+# Health expenditure during Covid
+s["healthExp_lag1"] + s["healthexp_pandemic_lag1"]
+
+# Social expenditure during Covid
+s["socialExp_lag1"] + s["socialexp_pandemic_lag1"]
+```
+For health expenditure, we notice that the coefficient goes from a value of -12.46 outside of the pandemic compared to -6.67 during Covid. While health expenditure continues to lower avoidable mortality, its effect during the pandemic is halved. Such a result is logical considering the needs of the health sector during this period and the high number of deaths. 
+
+Then for social expenditure, it seems like its effect is doubled during the pandemic since we go from -4.237 to -8.767. We can interpret this as the idea that social protection was even more essential during this crisis since households faced many difficulties. For example, social protection helped counter the risk of diseases and poverty.
 
 
-In the medium-run 
+
+*In the medium-run :*
+
+\begin{equation*}
+\begin{aligned}
+Mortality_{i,t} =\;& \gamma_{0,i}
++ \beta_{1} \, health.expenditure_{i,t-[1,3]}
++ \beta_{2} \, hospital.beds_{i,t-[1,3]}
++ \beta_{3} \, social.expenditure_{i,t-[1,3]} \\[0.4em]
+&+ \beta_{4} \, pandemic
++ \beta_{5} \, hospital.beds_{i,t-[1,3]} * pandemic
++ \beta_{6} \, social.expenditure_{i,t-[1,3]} * pandemic \\[0.4em]
+&+ \beta_{7} \, GDP.per.capita_{i,t} 
++ \beta_{8} \, Unemployment_{i,t}
+\end{aligned}
+\end{equation*}
+
 
 ```{r}
 model_covid_medium_run <- lmer(OBS_VALUE_mortality ~ hospBeds_ma3 + healthExp_ma3 + socialExp_ma3 + pandemic + healthexp_pandemic_ma3 + socialexp_pandemic_ma3 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
@@ -604,9 +636,38 @@ model_covid_medium_run <- lmer(OBS_VALUE_mortality ~ hospBeds_ma3 + healthExp_ma
                    REML = FALSE)
 summary(model_covid_medium_run)
 ```
+Here, if we sum coefficients and interaction terms we have : 
+```{r}
+m <- fixef(model_covid_medium_run)
+
+# Health expenditure
+m["healthExp_ma3"] + m["healthexp_pandemic_ma3"]
+
+# Social expenditure
+m["socialExp_ma3"] + m["socialexp_pandemic_ma3"]
+```
+We notice that this model seems to have the same trends as the short-run model.
+
+Health expenditure has a lower impact during covid (-7.146) than outside of this period (-10.87)  Despite these results it is worth mentioning that the decrease is lower than what was observed in the previous model. We can infer that it is because long term investments and policies offer a better protection during crisis. A country with stronger health policies would have suffered less of the effects of Covid-19. 
+
+Social expenditure has a higher impact during Covid (-11.435 against -6.074). Just like in the short-run model, the effect of social expenditure almost doubles during the pandemic.
 
 
-In the long-run
+*In the long-run : *
+
+\begin{equation*}
+\begin{aligned}
+Mortality_{i,t} =\;& \gamma_{0,i}
++ \beta_{1} \, health.expenditure_{i,t-[1,5]}
++ \beta_{2} \, hospital.beds_{i,t-[1,5]}
++ \beta_{3} \, social.expenditure_{i,t-[1,5]} \\[0.4em]
+&+ \beta_{4} \, pandemic
++ \beta_{5} \, hospital.beds_{i,t-[1,5]} * pandemic
++ \beta_{6} \, social.expenditure_{i,t-[1,5]} * pandemic \\[0.4em]
+&+ \beta_{7} \, GDP.per.capita_{i,t} 
++ \beta_{8} \, Unemployment_{i,t}
+\end{aligned}
+\end{equation*}
 
 ```{r}
 model_covid_long_run <- lmer(OBS_VALUE_mortality ~ hospBeds_ma5 + healthExp_ma5 + socialExp_ma5 + pandemic + healthexp_pandemic_ma5 + socialexp_pandemic_ma5 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
@@ -616,5 +677,35 @@ model_covid_long_run <- lmer(OBS_VALUE_mortality ~ hospBeds_ma5 + healthExp_ma5 
 summary(model_covid_long_run)
 ```
 
+Then, if we sum coefficients and interaction terms we have : 
+```{r}
+l <- fixef(model_covid_long_run)
+
+# Health expenditure
+l["healthExp_ma5"] + l["healthexp_pandemic_ma5"]
+
+# Social expenditure
+l["socialExp_ma5"] + l["socialexp_pandemic_ma5"]
+```
+The same trend as before is noticed here. 
+
+For health expenditure the value of the combined coefficients (-7.134) is lower than when outside of the pandemic (-10.15). Similarly to the medium-run model, the decrease of the impact of health expenditure during Covid is less strong than it was in the short-run model. This, once again, indicates the benefits of a strong long term investment in health.
+
+For social expenditure the value of the combined coefficients is higher (-11.35) than the coefficient alone, outside of the pandemic (-6.366). The same logic as in previous models can be applied.
 
 
+
+### Chosen main model 
+
+Considering our question, the most interesting results for us to analyse are the medium-run results. It is the most appropriate choice since we are trying to grasp how adopting a health or social policy (and therefore investing in health) can help a country reduce their avoidable mortality. 
+
+\begin{equation*}
+\begin{aligned}
+Mortality_{i,t} =\;& \gamma_{0,i}
++ \beta_{1} \, health.expenditure_{i,t-[1,3]}
++ \beta_{2} \, hospital.beds_{i,t-[1,3]}
++ \beta_{3} \, social.expenditure_{i,t-[1,3]} \\[0.4em]
+&+\beta_{4} \, GDP.per.capita_{i,t}
++ \beta_{5} \, Unemployment_{i,t}
+\end{aligned}
+\end{equation*}
