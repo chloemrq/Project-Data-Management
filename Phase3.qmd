@@ -345,7 +345,7 @@ Additionally, to account for the Covid-19 shock, we introduce a pandemic dummy v
 ## Adding pandemic dummies
 database <- database |>
   mutate(
-    pandemic = ifelse(TIME_PERIOD %in% c(2019:2021), 1, 0)
+    pandemic = ifelse(TIME_PERIOD %in% c(2020:2021), 1, 0)
   )
 
 database <- database |>
@@ -396,10 +396,12 @@ GDP per capita and Unemployment, our control variables, are random effects (mean
 - Fixed effects have their coefficient represented by the symbol beta
 - Random effects have their coefficient represented by the symbol gamma
 
+All explanatory variables enter the model as fixed effects, while country-specific heterogeneity is captured through a random intercept.
+
 
 ```{r}
 first_test <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + healthExp_lag1 + healthExp_ma5 + hospBeds_lag1 + hospBeds_ma5 + socialExp_lag1 + socialExp_ma5 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
-                   control = lmerControl(autoscale = TRUE), # added after R warned some variables are on very different scales 
+                   control = lmerControl(autoscale = TRUE), # added after R warned some variables are on different scales 
                    data = data_lagged, 
                    REML = FALSE)
 print(summary(first_test), correlation = TRUE)
@@ -444,6 +446,8 @@ summary(model_long_run)
 Regressions using our dummy variable for the Covid-19 and interaction terms, to see the impact of investment in health on mortality during the pandemic.
 
 First, even if it is not the most essential in our analysis, checking the results for time = t
+
+ - reverse causality is likely, don't add into main results 
 ```{r}
 model_covid_time_t <- lmer(OBS_VALUE_mortality ~ OBS_VALUE_hosp_beds + OBS_VALUE_health_exp + OBS_VALUE_social_expenditure + pandemic + healthexp_pandemic + socialexp_pandemic + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
                    control = lmerControl(autoscale = TRUE), 
@@ -456,7 +460,7 @@ Then we want to see the impact of previous investments using our lags
 ```{r}
 data_lagged <- data_lagged |>
   mutate(
-    pandemic = ifelse(TIME_PERIOD %in% c(2019:2021), 1, 0)
+    pandemic = ifelse(TIME_PERIOD %in% c(2020:2021), 1, 0)
   )
 
 data_lagged <- data_lagged |>
@@ -470,6 +474,7 @@ data_lagged <- data_lagged |>
   )
 ```
 
+The interaction coefficient measures whether the association between pre-existing investment and mortality differed during the pandemic period relative to normal years.
 
 In the short-run
 
