@@ -412,7 +412,11 @@ After this first test, we notice 2 problems :
 1. The correlation between `mortality_lag1` and the intercept is very high (-0.729), nullifying the effect of the random intercept which ends up having a variance and a standard deviation of 0. Indeed, when lagged mortality is included, the country-level random intercept disappears, showing that past mortality already explains most differences between countries. We will remove mortality_lag1 from the next regressions to avoid such a result.
 2. Using both the first lag and the long-run moving average of variables in the same model is not possible. The correlation between the two makes it hard to distinguish which has an effect on mortality and the long-run moving average of explanatory variables end up having incoherent coefficients. 
 
-Therefore we will compare short-run, medium-run and long-run in 3 different models 
+In addition to the previous problems we solved, we also decided to add 2 variables as random effects : social expenditure and health expenditure. This will allow us to better perceive the differences between countries when it comes to social and health policies. There are a lot of differences between countries known for having social protection for example and countries which refuse to give such a help to their citizens. 
+The last explanatory variable, the number of hospital beds will not be added as a random effect since we noticed through testing that it does not have a causal effect on avoidable mortality. Moreover we fear it would clash with the health expenditure variable as they are heavily linked.  
+
+
+We will compare short-run, medium-run and long-run in 3 different models 
 
 ### Models for the short-run, medium-run and long-run
 
