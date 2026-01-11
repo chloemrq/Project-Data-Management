@@ -63,7 +63,7 @@ library(lme4)
 # II. Description of the datasets
 This report relies on 8 datasets. More details on the datasets and their descriptive statistics can be found in Phase 2.
 
-#### Health expenditure - OECD (2025)
+### Health expenditure - OECD (2025)
 This dataset details the annual health expenditure and financing as a percentage of GDP for 52 countries (2000-2023). It includes consumption of healthcare goods and services from different health providers.
 
 ### Avoidable mortality - OECD (2025)
@@ -136,6 +136,7 @@ data_sets <- list(
   list(name = "HDI", data = hdi)
 )
 
+# creating a summary function
 get_summary <- function(dataset) {
   data <- dataset$data
   dataset_name <- dataset$name
@@ -168,15 +169,17 @@ database |>
 ```
 
 
-# 3. Data Analysis 
+# III. Data Analysis 
 We first start by a visual exploration of our main variable : avoidable mortality (*OBS_VALUE_mortality*) and its link to explanatory variables.
 
 ### Evolution of avoidable mortality per country
 ```{r}
+# creating an average trend for avoidable mortality for all countries 
 average_trend <- database |>
   group_by(TIME_PERIOD) |>
   summarise(mean_mortality = mean(OBS_VALUE_mortality, na.rm = TRUE))
 
+# graph with mortality split by countries + adding average trend 
 database |>
   ggplot(aes(x = TIME_PERIOD, y = OBS_VALUE_mortality, color=REF_AREA)) +
   geom_line() +
@@ -207,7 +210,7 @@ ggplot(database, aes(x = OBS_VALUE_health_exp, y = OBS_VALUE_mortality)) +
     x = "Health expenditure (as % of GDP)", 
     y = "Avoidable mortality",
     title = "Avoidable mortality against Health expenditure") +
-  geom_smooth(method = "lm", se = FALSE) 
+  geom_smooth(method = "lm", se = FALSE) # trend line
 ```
 
 As expected, as the level of health expenditure increases, avoidable mortality tends to decrease. Australia (AUS) detaches itself from other countries by having a particularly high level of health expenditure, but still a moderately high level of avoidable mortality. Most countries are situated on the left side of the graph (with low health expenditure) showcasing countries with high and low rates of avoidable mortality for the same level of health expenditure. 
@@ -215,7 +218,7 @@ As expected, as the level of health expenditure increases, avoidable mortality t
 ```{r}
 ggplot(database, aes(x = OBS_VALUE_social_expenditure, y = OBS_VALUE_mortality)) +
   geom_point(aes(color = REF_AREA)) +
-  theme(legend.position = "none") +
+  theme(legend.position = "none") + # deleting the legend as it the same for the 4 graphs
   labs(
     x = "Social expenditure (as % of GDP)", 
     y = "Avoidable mortality",
@@ -252,7 +255,7 @@ ggplot(database, aes(x = OBS_VALUE_gdp, y = OBS_VALUE_mortality)) +
 This graph suggests that as GDP per capita increases, the rate of avoidable mortality decreases. The avoidable mortality rate doesn't go below 100 deaths per 100,000 inhabitants. Thus, as GDP per capita increases, avoidable mortality remains between 100 and 300 deaths per 100,000 inhabitants suggesting marginal change in mortality as a country's population becomes richer.
 
 
-# 4. Econometric Analysis : Linear Mixed Model (LMM)
+# IV. Econometric Analysis : Linear Mixed Model (LMM)
 
 ## Correlation matrix for control variables 
 ```{r}
@@ -273,7 +276,8 @@ To avoid multicollinearity issues in regression models, we choose to exclude HDI
 ## Creating lag operators/ lagged variables
 
 ```{r}
-data_lagged <- database |>
+# creating a database with lagged variables 
+data_lagged <- database |> 
   group_by(REF_AREA) |>
   arrange(TIME_PERIOD) |>
   mutate(
@@ -318,7 +322,7 @@ data_lagged <- database |>
   ungroup()
 ```
 
-Before further modelling, we create lagged version of our variables. We believe that past investments in the health sector and social protection have an impact on mortality. We use 1-year lads to study short-term effects. 3-year and 5-year moving averages will be used to capture long-term investments. Indeed, we assume increased hospital capacities or training staff takes a few years before benefiting the health system. 
+Before further modelling, we create lagged version of our variables. We believe that past investments in the health sector and social protection have an impact on mortality. We use 1-year lags to study short-term effects. 3-year and 5-year moving averages will be used to capture long-term investments. Indeed, we assume increased hospital capacities or training staff takes a few years before benefiting the health system. 
 
 - `mortality_lag1` : 1-year lag of avoidable mortality 
 - `healthExp_lag1` : 1-year lag of health expenditure (short-run)
@@ -342,7 +346,7 @@ After trying a first model, we notice 3 main problems and modify the following m
 3. There is an issue with the large difference in scale between the variables and `OBS_VALUE_gdp`. Indeed, it is expressed in constant 2015 US$ while other variables are expressed in % of GDP or unit per 1,000 or 100,000. We choose to rescale it in further regressions as `OBS_VALUE_gdp = OBS_VALUE_gdp / 1000`
 
 ```{r}
-# rescaling the GDP per capita variable 
+# rescaling the GDP per capita variable to unit per 1,000 USD
 data_lagged$OBS_VALUE_gdp <- data_lagged$OBS_VALUE_gdp / 1000
 ```
 
@@ -375,16 +379,20 @@ Mortality_{i,t} =\;&
 
 **Summary of the short-run regression :**
 ```{r}
-model_short_run <- lmer(OBS_VALUE_mortality ~ healthExp_lag1 + hospBeds_lag1 + socialExp_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA) +
-    (0 + healthExp_lag1 | REF_AREA) +
-    (0 + socialExp_lag1 | REF_AREA), 
-                   control = lmerControl(autoscale = TRUE),
-                   data = data_lagged, 
-                   REML = FALSE)
+model_short_run <- lmer(OBS_VALUE_mortality ~ healthExp_lag1 + 
+                          hospBeds_lag1 + 
+                          socialExp_lag1 + 
+                          OBS_VALUE_gdp + 
+                          OBS_VALUE_unemp + 
+                          (1 | REF_AREA) + # random intercept by country 
+                          (0 + healthExp_lag1 | REF_AREA) + # adding random slopes
+                          (0 + socialExp_lag1 | REF_AREA), 
+                        data = data_lagged, 
+                        REML = FALSE) # used to get AIC and compare models
 print(summary(model_short_run), correlation = TRUE)
 ```
 
-*Interpretation of the results* 
+**Interpretation of the results**
 
 Firstly, the variance of the random intercept `REF_AREA (Intercept)` is 35369.29, which is much higher than the residual variance (`Residual`) at 808.14. The large random intercept variance indicates substantial between-country differences in baseline avoidable mortality.
 The standard deviation is 188.07, suggesting a deviation of about 188 deaths per 100,000 between countries. 
@@ -429,12 +437,13 @@ Mortality_{i,t} =\;&
 model_medium_run <- lmer(OBS_VALUE_mortality ~ healthExp_ma3 + hospBeds_ma3 + socialExp_ma3 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA) +
     (0 + healthExp_ma3 | REF_AREA) +
     (0 + socialExp_ma3 | REF_AREA), 
-                   control = lmerControl(autoscale = TRUE),
                    data = data_lagged, 
                    REML = FALSE)
 summary(model_medium_run)
 ```
-*Interpretation of the results* 
+
+**Interpretation of the results** 
+
 First, the variance of the random intercept is still much higher than the residual variance (34118.23 against 785.21). The standard deviation is 184.71, suggesting a deviation of about 184 deaths per 100,000 between countries. This is similar to the short-run results.
 
 Second, all coefficients are all statistically significant except for `OBS_VALUE_unemp` (t = 0.810) and `socialExp_ma3` (t = 0.889). 
@@ -475,12 +484,13 @@ Mortality_{i,t} =\;&
 **Summary of the long-run regression :**
 ```{r} 
 model_long_run <- lmer(OBS_VALUE_mortality ~ healthExp_ma5 + hospBeds_ma5 + socialExp_ma5 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA) + (0 + healthExp_ma5 | REF_AREA) + (0 + socialExp_ma5 | REF_AREA),
-    control = lmerControl(autoscale = TRUE), 
                    data = data_lagged, 
                    REML = FALSE)
 summary(model_long_run)
 ```
-*Interpretation of the results*
+
+**Interpretation of the results**
+
 First, the variance of the random intercept is still higher than the residual variance (33616.43 against 776.99). There is deviation of about 183 deaths per 100,000 between countries. It is smaller than it was in the medium-run model even though the standard deviation remains more or less the same in the 3 models.
 
 Second, all coefficients are all statistically significant except for `OBS_VALUE_unemp` (t = 0.408) and `socialExp_ma5` (t = 0.183)
@@ -528,11 +538,13 @@ We perform regressions using lags and the Covid-19 dummy variable. Moreover, in 
 
 We note that using interaction terms for time t could lead to reverse causality problems. We might be unable to identify whether health expenditure, social expenditure and hospital beds impacted avoidable mortality or if because mortality increased suddenly during the pandemic, health expenditure, social expenditure and hospital beds were increased afterwards. 
 ```{r}
+# adding a pandemic dummy 
 data_lagged <- data_lagged |>
   mutate(
-    pandemic = ifelse(TIME_PERIOD %in% c(2020:2021), 1, 0)
+    pandemic = ifelse(TIME_PERIOD %in% c(2020:2021), 1, 0) # 1 if data in 2020-2021, 0 otherwise 
   )
 
+# creating interaction terms 
 data_lagged <- data_lagged |>
   mutate(
     healthexp_pandemic_lag1 = healthExp_lag1 * pandemic,
@@ -583,7 +595,6 @@ Mortality_{i,t} =\;&
 **Summary of the short-run regression :**
 ```{r}
 model_covid_short_run <- lmer(OBS_VALUE_mortality ~ hospBeds_lag1 + healthExp_lag1 + socialExp_lag1 + pandemic + healthexp_pandemic_lag1 + socialexp_pandemic_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA) + (0 + healthExp_lag1 | REF_AREA) + (0 + socialExp_lag1 | REF_AREA),
-                   control = lmerControl(autoscale = TRUE), 
                    data = data_lagged, 
                    REML = FALSE)
 summary(model_covid_short_run)
@@ -591,6 +602,7 @@ summary(model_covid_short_run)
 In order to interpret our results we need to sum the coefficient obtained for the health expenditure variable (`healthExp_lag1`) and the interaction term `healthexp_pandemic_lag1`. Same thing for the social expenditure variable. This will tell us how the pandemic impacts the effect of health expenditure and social expenditure on avoidable mortality. 
 
 ```{r}
+# extracting the values from the summary and summing the effects
 s <- fixef(model_covid_short_run)
 
 # Health expenditure during Covid
@@ -600,6 +612,7 @@ s["healthExp_lag1"] + s["healthexp_pandemic_lag1"]
 s["socialExp_lag1"] + s["socialexp_pandemic_lag1"]
 ```
 **Interpretation of the results**
+
 First, we analyse the random effects. 
 
 - `REF_AREA (Intercept)` has a variance of 36840.87, meaning there are large differences between countries in baseline avoidable mortality (around 191 deaths per 100,000)
@@ -646,11 +659,11 @@ Mortality_{i,t} =\;&
 **Summary of the medium-run regression :**
 ```{r}
 model_covid_medium_run <- lmer(OBS_VALUE_mortality ~ hospBeds_ma3 + healthExp_ma3 + socialExp_ma3 + pandemic + healthexp_pandemic_ma3 + socialexp_pandemic_ma3 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA) + (0 + healthExp_ma3 | REF_AREA) + (0 + socialExp_ma5 | REF_AREA), 
-                   control = lmerControl(autoscale = TRUE), 
                    data = data_lagged, 
                    REML = FALSE)
 summary(model_covid_medium_run)
 ```
+
 Here, if we sum coefficients and interaction terms we have : 
 ```{r}
 m <- fixef(model_covid_medium_run)
@@ -662,9 +675,10 @@ m["healthExp_ma3"] + m["healthexp_pandemic_ma3"]
 m["socialExp_ma3"] + m["socialexp_pandemic_ma3"]
 ```
 **Interpretation of the results**
+
 We notice that this model seems to have the same trends as the short-run model.
 
-First, we analyse the random effects. 
+First, we analyse the random effects : 
 
 - `REF_AREA (Intercept)` has a variance of 44455.95, meaning there are large differences between countries in baseline avoidable mortality, more than in the short-run (around 210 deaths per 100,000)
 - `REF_AREA.1 healthExp_lag1` has a variance of 753.23. The effect of health expenditure varies between countries by approximately 27 deaths (given by the standard deviation) which is slightly less than in the short-run (about 31 deaths).
@@ -707,7 +721,6 @@ Mortality_{i,t} =\;&
 **Summary of the long-run regression :**
 ```{r}
 model_covid_long_run <- lmer(OBS_VALUE_mortality ~ hospBeds_ma5 + healthExp_ma5 + socialExp_ma5 + pandemic + healthexp_pandemic_ma5 + socialexp_pandemic_ma5 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA) + (0 + healthExp_ma3 | REF_AREA) + (0 + socialExp_ma5 | REF_AREA), 
-                   control = lmerControl(autoscale = TRUE), 
                    data = data_lagged, 
                    REML = FALSE)
 summary(model_covid_long_run)
@@ -753,7 +766,7 @@ As in the previous section, the long-run model best fits the data.
 
 In conclusion, in the long-run, health expenditure remains the most important factor in reducing avoidable mortality. Social expenditure, which showed positive correlations with avoidable mortality in the short- and medium-run now shows a slight negative effect. This might suggest, social expenditure might take longer to have a concrete impact. Random effects indicate that country-level differences remain important, though slightly smaller than in shorter-term models. Overall, one key finding of our analysis is that sustained health investment is important for reducing avoidable deaths, while social spending contributes more gradually, with long-term benefits appearing later.
 
-# 5. Conclusion 
+# V. Conclusion 
 
 Our research stemmed from wondering whether having a strong health and social policy proved useful in order to have a healthy population. The results seem to confirm our intuition. 
 
