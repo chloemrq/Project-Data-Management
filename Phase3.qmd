@@ -64,28 +64,28 @@ library(lme4)
 This report relies on 8 datasets. Here is a short description of each of them. More details on the datasets and their descriptive statistics can be found in Phase 2.
 
 #### Health expenditure - OECD (2025)
-This dataset details the annual health expenditure and financing as a percentage of GDP for 52 countries. The data is available for a period ranging from 2000 to 2024. It was computed using financial flows related to the consumption of healthcare goods and services from different health providers such as Hospitals or Residential long-term care facilities.  
+This dataset details the annual health expenditure and financing as a percentage of GDP for 52 countries (2000-2023). It includes consumption of healthcare goods and services from different health providers.
 
 ### Avoidable mortality - OECD (2025)
-This dataset describes the number of "avoidable deaths" per 100,000 inhabitants annually for the period 2000-2024 for 46 countries. It contains contains both “preventable mortality” and “treatable (or amenable) mortality”. The first refers to deaths that can be avoided through effective public health and primary prevention interventions. The second refers to timely and effective health care interventions, including prevention and treatment.Both indicators refer to premature mortality (under age 75).
+This dataset describes the number of "avoidable deaths" per 100,000 inhabitants annually for the period 2000-2023 for 46 countries. It contains 2 indicators referring to premature mortality (under age 75) : “preventable mortality” and “treatable mortality”. 
 
 ### GDP per Capita - World Bank (2024)
-The GDP per Capita dataset presents the GDP per capita (constant 2015 US$) from 1960 to 2024 for 70 countries. This indicator is expressed in constant prices, meaning the series has been adjusted to account for price changes over time. The reference year for this adjustment is 2015. This indicator is expressed in United States dollars. 
+The GDP per capita dataset presents the GDP per capita (constant 2015 US$) from 1960 to 2023 for 70 countries.
 
 ### Hospital beds - OECD (2025)
-This dataset provides data on the number of total hospitals beds by function of healthcare and by type of care (ie. somatic or psychiatric care) for the period 2000-2024 for 48 different countries. Total hospital beds are the sum of the following categories: Curative care (acute care) beds in hospitals, Rehabilitative care beds in hospitals, Long-term care beds in hospitals, All other beds in hospitals not elsewhere classified. 
+This dataset provides data on the number of total hospitals beds by function of healthcare and by type of care (ie. somatic or psychiatric care) for the period 2000-2023 for 48 different countries.
 
 ### Life expectancy - World Bank (2023)
 This dataset provides the life expectancy in years for women and men for a period ranging from 1960 to 2023, for 69 different countries or economies. 
 
 ### Social Expenditure Aggregate - OECD (2025)
-This dataset includes statistics on public and private social expenditure at program level (e.g. Old age, Survivors, Incapacity-related benefits, Health, etc) as a percentage of GDP. It covers 38 OECD countries for the period 1980-2021/23 and estimates for aggregates for 2022-24.
+This dataset includes statistics on public and private social expenditure at program level (e.g. Old age, Survivors, Incapacity-related benefits, Health, etc) as a percentage of GDP. It covers 38 OECD countries for the period 1980-2021/23.
 
 ### Unemployement Rate - IMF (2025)
 This IMF dataset describes the percentage of the labor force that is unemployed and actively seeking employment. It is available from 1980 to 2025 and features 120 geographic regions. 
 
 ### HDI (Human Development Index) - UNDP (2025)
-This dataset describes the human development index, per country (195), annually (1990-2023). It is a summary measure of average achievement in key dimensions of human development: a long and healthy life, being knowledgeable and having a decent standard of living. The HDI is between 0 (low human development) and 1 (very high human development).
+This dataset describes the human development index, per country (195), annually (1990-2023). It is a summary measure of average achievement in 3 dimensions of human development: a long and healthy life, being knowledgeable and having a decent standard of living.
 
 
 
@@ -447,7 +447,7 @@ Regressions using our dummy variable for the Covid-19 and interaction terms, to 
 
 First, even if it is not the most essential in our analysis, checking the results for time = t
 
- - reverse causality is likely, don't add into main results 
+ - reverse causality is likely
 ```{r}
 model_covid_time_t <- lmer(OBS_VALUE_mortality ~ OBS_VALUE_hosp_beds + OBS_VALUE_health_exp + OBS_VALUE_social_expenditure + pandemic + healthexp_pandemic + socialexp_pandemic + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
                    control = lmerControl(autoscale = TRUE), 

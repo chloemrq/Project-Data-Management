@@ -48,15 +48,23 @@ The Organisation for Economic Co-operation and Development (OECD) is an internat
 ### Health expenditure (OECD)
 [Health expenditure (OECD)](https://data-explorer.oecd.org/vis?fs[0]=Topic%2C1%7CHealth%23HEA%23%7CHealth%20expenditure%20and%20financing%23HEA_EXP%23&pg=0&fc=Topic&bp=true&snb=4&vw=tb&df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_SHA%40DF_SHA&df[ag]=OECD.ELS.HD&df[vs]=1.0&dq=AUS%2BAUT%2BBEL%2BCAN%2BCHL%2BCOL%2BCRI%2BCZE%2BDNK%2BEST%2BFIN%2BFRA%2BDEU%2BGRC%2BHUN%2BISL%2BIRL%2BISR%2BITA%2BJPN%2BKOR%2BLVA%2BLTU%2BLUX%2BMEX%2BNLD%2BNZL%2BNOR%2BPOL%2BPRT%2BSVK%2BSVN%2BESP%2BSWE%2BCHE%2BTUR%2BGBR%2BUSA%2BARG%2BBRA%2BBGR%2BCHN%2BHRV%2BCYP%2BIND%2BIDN%2BMLT%2BPER%2BROU%2BZAF%2BTHA%2BUKR.A.EXP_HEALTH.PT_B1GQ._T.._T.._T...&pd=2000%2C2024&to[TIME_PERIOD]=false)
 
+This dataset details the annual health expenditure and financing as a percentage of GDP for 52 countries. The data is available for a period ranging from 2000 to 2023. It was computed using financial flows related to the consumption of healthcare goods and services from different health providers such as Hospitals or Residential long-term care facilities. 
+
 ### Social expenditure aggregate (OECD)
 [Social expenditure aggregate (OECD)](https://data-explorer.oecd.org/vis?fs[0]=Topic%2C1%7CSociety%23SOC%23%7CSocial%20policy%23SOC_PRO%23&pg=0&fc=Topic&bp=true&snb=12&df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_SOCX_AGG%40DF_SOCX_AGG&df[ag]=OECD.ELS.SPD&df[vs]=1.0&dq=AUS%2BAUT%2BBEL%2BCAN%2BCHL%2BCOL%2BCRI%2BCZE%2BDNK%2BEST%2BFIN%2BFRA%2BDEU%2BGRC%2BHUN%2BISL%2BIRL%2BISR%2BITA%2BJPN%2BKOR%2BLVA%2BLTU%2BLUX%2BMEX%2BNLD%2BNZL%2BNOR%2BPOL%2BPRT%2BSVK%2BSVN%2BESP%2BSWE%2BCHE%2BTUR%2BGBR%2BUSA%2BBGR%2BHRV%2BPER%2BROU.A..PT_B1GQ.ES10._T._T.&pd=2000%2C&to[TIME_PERIOD]=false&vw=tb)
+
+This dataset includes statistics on public and private social expenditure at program level (e.g. Old age, Survivors, Incapacity-related benefits, Health, etc) as a percentage of GDP. It covers 38 OECD countries for the period 1980-2021/23 and estimates for aggregates for 2022-24.
 
 
 ### Avoidable mortality (OECD)
 [Avoidable mortality (OECD)](https://data-explorer.oecd.org/vis?tm=Mortality%20rate&pg=0&snb=22&vw=tb&df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_HEALTH_STAT%40DF_AM&df[ag]=OECD.ELS.HD&df[vs]=1.1&dq=.A.AVM.DT_10P5HB.._T.......&pd=2000%2C2023&to[TIME_PERIOD]=false)
 
+This dataset describes the number of "avoidable deaths" per 100,000 inhabitants annually for the period 2000-2024 for 46 countries. It contains both “preventable mortality” and “treatable (or amenable) mortality”. The first refers to deaths that can be avoided through effective public health and primary prevention interventions. The second refers to timely and effective health care interventions, including prevention and treatment.Both indicators refer to premature mortality (under age 75).
+
 ### Number of hospital beds (OECD)
 [Hospital beds (OECD)](https://data-explorer.oecd.org/vis?pg=0&bp=true&snb=6&df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_HEALTH_REAC_HOSP%40DF_BEDS_FUNC&df[ag]=OECD.ELS.HD&df[vs]=1.0&dq=..BD..._T._T..&pd=2000%2C2024&to[TIME_PERIOD]=false&vw=tb&lc=en)
+
+This dataset provides data on the number of total hospitals beds by function of healthcare and by type of care (ie. somatic or psychiatric care) for the period 2000-2023 for 48 different countries. Total hospital beds are the sum of the following categories: Curative care (acute care) beds in hospitals, Rehabilitative care beds in hospitals, Long-term care beds in hospitals, All other beds in hospitals not elsewhere classified.
 
 
 ## World bank 
@@ -64,6 +72,8 @@ The world bank group, is a family of five international organizations created in
 
 ### GDP per capita in 2015 $US (World Bank)
 [GDP per capita (World Bank)](https://data.worldbank.org/indicator/NY.GDP.PCAP.KD)
+
+The GDP per Capita dataset presents the GDP per capita (constant 2015 US$) from 1960 to 2023 for 70 countries. This indicator is expressed in constant prices, meaning the series has been adjusted to account for price changes over time. The reference year for this adjustment is 2015. This indicator is expressed in United States dollars. 
 
 ### Life expectancy (World Bank)
 [Life expectancy (World Bank)](https://donnees.banquemondiale.org/indicator/SP.DYN.LE00.IN?most_recent_year_desc=true)
@@ -80,6 +90,8 @@ The International Monetary Fund (IMF) is an international financial institution 
 Instructions for the data : In the Data Explorer : 
 - Time period : Custom : 01/01/2000 to 12/31/2024
 
+This IMF dataset describes the percentage of the labor force that is unemployed and actively seeking employment. It is available from 1980 to 2025 and features 120 geographic regions. 
+
 
 ## UNDP
 The United Nations Development Programme is a United Nations agency tasked, since 1965, with helping countries eliminate poverty and achieve sustainable economic growth and human development. They intervene by helping countries develop policies, leadership skills, partnerships and institutional capabilities. 
@@ -92,6 +104,8 @@ Instructions for the data :
 - Filter by indicator : Human development index (value)
 - Filter by year : 2000 - 2023
 - Filter by group/region/country/territory : Select all countries 
+
+This dataset describes the human development index, per country (195), annually (1990-2023). It is a summary measure of average achievement in 3 dimensions of human development: a long and healthy life, being knowledgeable and having a decent standard of living. The HDI is between 0 (low human development) and 1 (very high human development).
 
 # Loading the packages 
 ```{r}
