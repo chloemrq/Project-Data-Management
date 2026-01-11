@@ -58,7 +58,6 @@ library(tidyr)
 library(vroom)
 library(readxl)
 library(lme4)
-library(performance)
 ```
 
 # II. Description of the datasets
@@ -196,8 +195,6 @@ database |>
 ```
 Most countries share the same downward sloping trend in avoidable mortality. A distinct increase appears in 2019, with a peak in 2020 and a decrease to previous trend values from 2021 in all countries. 
 The country with the lowest avoidable death rate is Switzerland (CHE) and the highest is Latvia at the beginning of the 2000s, then surpassed by Lithuania (LTU) around 2007. Additionally, there is a strong increase in avoidable deaths from around 400 to almost 650 per 100,000 inhabitants in Mexico in 2019. 
-
-It is important to note that this report primarily studies developed countries with the most available data from 2000 to 2023. We chose to exclude the following countries : South Africa (ZAF), Argentina (ARG), Peru (PER), Thailand (THA) and Brazil (BRA) as the data was not sufficient to proceed with proper data analysis. Thus, our conclusions will be biased due to the fact that we study more developed countries with more similar institutional structures.
 
 ### Visualising *avoidable_mortality* against independent variables
 We can start the data analysis by simply plotting some independent variables against *avoidable_mortality* and observe the general trend. 
