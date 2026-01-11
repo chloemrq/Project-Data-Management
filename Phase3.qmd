@@ -134,7 +134,7 @@ data_sets <- list(
   list(name = "Social Expenditure", data = social_expenditure),
   list(name = "Unemployement", data = unemployment),
   list(name = "HDI", data = hdi)
-)
+) 
 
 # creating a summary function
 get_summary <- function(dataset) {
