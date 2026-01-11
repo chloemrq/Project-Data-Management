@@ -58,6 +58,7 @@ library(tidyr)
 library(vroom)
 library(readxl)
 library(lme4)
+library(performance)
 ```
 
 # II. Description of the datasets
@@ -340,7 +341,7 @@ Consequently we have :
 - `socialExp_ma5` : 5-year average lag of social expenditure
 
 
-Additionally, to account for the Covid-19 shock, we introduce a pandemic dummy variable equal to 1 for the years 2019 to 2021 and 0 otherwise. We also add 2 interaction terms with Health expenditure and Social expenditure to assess the impact of these factors on avoidable mortality during this period.
+Additionally, to account for the Covid-19 shock, we introduce a `pandemic` dummy variable equal to 1 for the years 2020 to 2021 and 0 otherwise. We also add 2 interaction terms with Health expenditure and Social expenditure to assess the impact of these factors on avoidable mortality during this period.
 ```{r}
 ## Adding pandemic dummies
 database <- database |>
@@ -356,10 +357,9 @@ database <- database |>
 ```
 
 
-####### MODIF #########
 ## Model testing
 
-### Testing for the short, medium and long-run
+### First test using multiple lags
 
 We do a first test to see how our variables interact with each other, especially lags
 
@@ -375,8 +375,8 @@ Mortality_{i,t} =\;& \gamma_{0,i}
 + \beta_{5} \, hospital.beds_{i,t-[1,5]} 
 + \beta_{6} \, social.expenditure_{i,t-1} \\[0.4em]
 &+ \beta_{7} \, social.expenditure_{i,t-[1,5]}
-+\gamma_{8} \, GDP.per.capita_{i,t}
-+ \gamma_{9} \, Unemployment_{i,t} \\[0.4em]
++\beta_{8} \, GDP.per.capita_{i,t}
++ \beta_{9} \, Unemployment_{i,t} \\[0.4em]
 \end{aligned}
 \end{equation*}
 
@@ -408,11 +408,31 @@ print(summary(first_test), correlation = TRUE)
 ```
 After this first test, we notice multiple problems : 
 
-- The correlation between mortality_lag1 and the intercept is too high, nullifying the effect of the random intercept which ends up having a variance and a standard deviation of 0. We will remove mortality_lag1 from the next regressions to avoid such a result.
+- The correlation between `mortality_lag1` and the intercept is too high, nullifying the effect of the random intercept which ends up having a variance and a standard deviation of 0. We will remove mortality_lag1 from the next regressions to avoid such a result.
 - Using both the first lag and the long-run moving average of variables in the same model is not possible. The correlation between the two makes it hard to distinguish which has an effect on mortality and the long-run moving average of explanatory variables end up having incoherent coefficients. 
 
-
 Therefore we will compare short-run, medium-run and long-run in 3 different models 
+
+
+
+### Models for the short-run, medium-run and long-run
+
+
+*Short-run model :* 
+
+\begin{equation*}
+\begin{aligned}
+Mortality_{i,t} =\;& \gamma_{0,i}
++ \beta_{1} \, health.expenditure_{i,t-1}
++ \beta_{2} \, hospital.beds_{i,t-1}
++ \beta_{3} \, social.expenditure_{i,t-1} \\[0.4em]
+&+\beta_{4} \, GDP.per.capita_{i,t}
++ \beta_{5} \, Unemployment_{i,t}
+\end{aligned}
+\end{equation*}
+
+
+
 ```{r}
 model_short_run <- lmer(OBS_VALUE_mortality ~ healthExp_lag1 + hospBeds_lag1 + socialExp_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
                    control = lmerControl(autoscale = TRUE),
@@ -421,6 +441,20 @@ model_short_run <- lmer(OBS_VALUE_mortality ~ healthExp_lag1 + hospBeds_lag1 + s
 summary(model_short_run)
 ```
 
+
+
+*Medium-run model : *
+
+\begin{equation*}
+\begin{aligned}
+Mortality_{i,t} =\;& \gamma_{0,i}
++ \beta_{1} \, health.expenditure_{i,t-[1,3]}
++ \beta_{2} \, hospital.beds_{i,t-[1,3]}
++ \beta_{3} \, social.expenditure_{i,t-[1,3]} \\[0.4em]
+&+\beta_{4} \, GDP.per.capita_{i,t}
++ \beta_{5} \, Unemployment_{i,t}
+\end{aligned}
+\end{equation*}
 
 ```{r}
 model_medium_run <- lmer(OBS_VALUE_mortality ~ healthExp_ma3 + hospBeds_ma3 + socialExp_ma3 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
@@ -431,6 +465,20 @@ summary(model_medium_run)
 ```
 
 
+
+*Long-run model : *
+
+\begin{equation*}
+\begin{aligned}
+Mortality_{i,t} =\;& \gamma_{0,i}
++ \beta_{1} \, health.expenditure_{i,t-[1,5]}
++ \beta_{2} \, hospital.beds_{i,t-[1,5]}
++ \beta_{3} \, social.expenditure_{i,t-[1,5]} \\[0.4em]
+&+\beta_{4} \, GDP.per.capita_{i,t}
++ \beta_{5} \, Unemployment_{i,t}
+\end{aligned}
+\end{equation*}
+
 ```{r}
 model_long_run <- lmer(OBS_VALUE_mortality ~ healthExp_ma5 + hospBeds_ma5 + socialExp_ma5 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
                    control = lmerControl(autoscale = TRUE), 
@@ -439,15 +487,60 @@ model_long_run <- lmer(OBS_VALUE_mortality ~ healthExp_ma5 + hospBeds_ma5 + soci
 summary(model_long_run)
 ```
 
+All three models seem interesting to analyse as they show the different impacts social expenditure and health expenditure can have on mortality. 
+The first thing we notice is that in all 3 models health expenditure, social expenditure and the number of hospital beds are significant, they have a t value superior to 1 in absolute value. It means that whether it is in the short, medium or long-run they can impact the level of mortality. 
+
+In the short-run (represented by variables with the suffix `_lag1`) we can interpret the impact of health and social expenditure on avoidable mortality as an immediate budgetary effect. Having a new monetary flow each year in the health sector, or for households in general is important to face urgent needs or crisis.
+In the medium-run (represented by variables with the suffix `_ma3`), health expenditure, social expenditure and hospital beds are no longer there to cover an urgent need but are an investment. Government invest with certain policies in mind in order to reduce mortality and to improve welfare in the country in general. There is a cumulative effect, meaning that thanks to the money invested throughout the years, policies were able to show their efficiency afterwards.
+In the long-run (represented by variables with the suffix `_ma5`), the impact of health expenditure, social expenditure and the number of hospital beds can be interpreted as a structural effect. Some countries have an history of public intervention, especially through health and social expenditure. These structural differences can sometimes make a difference in how easy or hard it will be for a country to reduce their avoidable mortality. It can influence the efficiency of policies pursued through health and social expenditure. 
+
+
+
+
+### Comparing short-run, medium run and long-run
+
+*Looking at the R² :*
+
+The first results are for the short-run model, the second for the medium-run, and the third for the short-run
+```{r}
+r2(model_short_run)
+r2(model_medium_run)
+r2(model_long_run)
+
+```
+
+R² - also called the coefficient of determination - is a measure of how well the explanatory variables of a model explain the observed variable. In a linear mixed model R² is divided in two parts : the conditional R² for random effect which shows how structural differences explain the observed variable, and the marginal R² for fixed effect which shows how other fixed variables explain the observed variable. 
+When R² is close to one it means that the observed variable is well explained by the chosen explanatory variables, otherwise not so much. 
+
+Here we can see that no matter the model (short, medium or long-run), R² has more or less the same value meaning that none of the model is strictly "better than the other", they simply explain different notions. 
+Moreover while conditional R² always have a high value (~0.8) it is not the case for marginal R². This can be explained by the fact that avoidable mortality highly varies from a country to another and that there are a lot of structural differences (the country's history and specific aspects). For example in a country the amount of avoidable deaths for a certain year is highly linked to that of the previous year. 
+
+
+
+
+
+
+*Looking at the AIC : *
+
+- For the short-run model : 8065.7
+- For the medium-run model : 7086.9
+- For the long-run model : 6185.0
+
+The AIC - Akaike information criterion - is a measure for how well fitted a model is. The AIC verifies both if explanatory variables explain the observed variable correctly and if the number of parameters in the model is too high. Having a high number of parameters to make the model "fit better" is a negative thing as it lowers chances of the model working well outside the sample.  
+
+Generally the lower the AIC is, the better the model is.
+We notice that the short-run model has the highest while the long-run model has the lowest AIC.
+Considering all 3 models have the same number of parameters, a lower AIC means avoidable mortality is better explained by the long-run model and then medium-run one. 
+More specifically it means that avoidable mortality is better explained by long-term investments than short-term influx of expenditures. This conclusion matches our initial intuition :  Avoidable mortality can be impacted by sustained investments. 
+
 
 
 ### Testing for the Covid-19 period
 
-Regressions using our dummy variable for the Covid-19 and interaction terms, to see the impact of investment in health on mortality during the pandemic.
+Regressions using our dummy variable for the Covid-19 and interaction terms, to see the impact of investment in health on avoidable mortality during the pandemic.
 
-First, even if it is not the most essential in our analysis, checking the results for time = t
+Using interaction terms for time t (current period) could lead to reverse causality problems. We might be unable to identify whether health expenditure, social expenditure and hospital beds impacted avoidable mortality or if because mortality increased suddenly during the pandemic, health expenditure, social expenditure and hospital beds were increased afterwards. 
 
- - reverse causality is likely
 ```{r}
 model_covid_time_t <- lmer(OBS_VALUE_mortality ~ OBS_VALUE_hosp_beds + OBS_VALUE_health_exp + OBS_VALUE_social_expenditure + pandemic + healthexp_pandemic + socialexp_pandemic + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
                    control = lmerControl(autoscale = TRUE), 
@@ -457,6 +550,9 @@ summary(model_covid_time_t)
 ```
 
 Then we want to see the impact of previous investments using our lags 
+
+As a result, in order to clearly see the impact of previous investment on avoidable mortality during the Covid-19 crisis, we create interaction variables using our lags. 
+>>>>>>> 62add355af978f3335dbdf442fd77d09516a8df6
 ```{r}
 data_lagged <- data_lagged |>
   mutate(
@@ -474,9 +570,33 @@ data_lagged <- data_lagged |>
   )
 ```
 
+- `healthexp_pandemic_lag1` = interaction term between the `pandemic` dummy variable and `healthExp_lag1`
+- `healthexp_pandemic_ma3` = interaction term between the `pandemic` dummy variable and `healthExp_ma3`
+- `healthexp_pandemic_ma5` = interaction term between the `pandemic` dummy variable and `healthExp_ma5`
+- `socialexp_pandemic_lag1` = interaction term between the `pandemic` dummy variable and `socialExp_lag1`
+- `socialexp_pandemic_ma3` = interaction term between the `pandemic` dummy variable and `socialExp_ma3`
+- `socialexp_pandemic_ma5` = interaction term between the `pandemic` dummy variable and `socialExp_ma5`
+
+
 The interaction coefficient measures whether the association between pre-existing investment and mortality differed during the pandemic period relative to normal years.
 
-In the short-run
+
+
+*In the short-run :* 
+
+\begin{equation*}
+\begin{aligned}
+Mortality_{i,t} =\;& \gamma_{0,i}
++ \beta_{1} \, health.expenditure_{i,t-1}
++ \beta_{2} \, hospital.beds_{i,t-1}
++ \beta_{3} \, social.expenditure_{i,t-1} \\[0.4em]
+&+ \beta_{4} \, pandemic
++ \beta_{5} \, hospital.beds_{i,t-1} * pandemic
++ \beta_{6} \, social.expenditure_{i,t-1} * pandemic \\[0.4em]
+&+ \beta_{7} \, GDP.per.capita_{i,t} 
++ \beta_{8} \, Unemployment_{i,t}
+\end{aligned}
+\end{equation*}
 
 ```{r}
 model_covid_short_run <- lmer(OBS_VALUE_mortality ~ hospBeds_lag1 + healthExp_lag1 + socialExp_lag1 + pandemic + healthexp_pandemic_lag1 + socialexp_pandemic_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
@@ -486,9 +606,39 @@ model_covid_short_run <- lmer(OBS_VALUE_mortality ~ hospBeds_lag1 + healthExp_la
 summary(model_covid_short_run)
 ```
 
+In order to interpret our results we need to sum the coefficient obtained for the health expenditure variable (`healthExp_lag1`) and the interaction term `healthexp_pandemic_lag1`. Same thing for the social expenditure variable. This will tell us how the pandemic impacts the effect of health expenditure and social expenditure on avoidable mortality. 
+
+```{r}
+s <- fixef(model_covid_short_run)
+
+# Health expenditure during Covid
+s["healthExp_lag1"] + s["healthexp_pandemic_lag1"]
+
+# Social expenditure during Covid
+s["socialExp_lag1"] + s["socialexp_pandemic_lag1"]
+```
+For health expenditure, we notice that the coefficient goes from a value of -12.46 outside of the pandemic compared to -6.67 during Covid. While health expenditure continues to lower avoidable mortality, its effect during the pandemic is halved. Such a result is logical considering the needs of the health sector during this period and the high number of deaths. 
+
+Then for social expenditure, it seems like its effect is doubled during the pandemic since we go from -4.237 to -8.767. We can interpret this as the idea that social protection was even more essential during this crisis since households faced many difficulties. For example, social protection helped counter the risk of diseases and poverty.
 
 
-In the medium-run 
+
+*In the medium-run :*
+
+\begin{equation*}
+\begin{aligned}
+Mortality_{i,t} =\;& \gamma_{0,i}
++ \beta_{1} \, health.expenditure_{i,t-[1,3]}
++ \beta_{2} \, hospital.beds_{i,t-[1,3]}
++ \beta_{3} \, social.expenditure_{i,t-[1,3]} \\[0.4em]
+&+ \beta_{4} \, pandemic
++ \beta_{5} \, hospital.beds_{i,t-[1,3]} * pandemic
++ \beta_{6} \, social.expenditure_{i,t-[1,3]} * pandemic \\[0.4em]
+&+ \beta_{7} \, GDP.per.capita_{i,t} 
++ \beta_{8} \, Unemployment_{i,t}
+\end{aligned}
+\end{equation*}
+
 
 ```{r}
 model_covid_medium_run <- lmer(OBS_VALUE_mortality ~ hospBeds_ma3 + healthExp_ma3 + socialExp_ma3 + pandemic + healthexp_pandemic_ma3 + socialexp_pandemic_ma3 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
@@ -497,9 +647,38 @@ model_covid_medium_run <- lmer(OBS_VALUE_mortality ~ hospBeds_ma3 + healthExp_ma
                    REML = FALSE)
 summary(model_covid_medium_run)
 ```
+Here, if we sum coefficients and interaction terms we have : 
+```{r}
+m <- fixef(model_covid_medium_run)
+
+# Health expenditure
+m["healthExp_ma3"] + m["healthexp_pandemic_ma3"]
+
+# Social expenditure
+m["socialExp_ma3"] + m["socialexp_pandemic_ma3"]
+```
+We notice that this model seems to have the same trends as the short-run model.
+
+Health expenditure has a lower impact during covid (-7.146) than outside of this period (-10.87)  Despite these results it is worth mentioning that the decrease is lower than what was observed in the previous model. We can infer that it is because long term investments and policies offer a better protection during crisis. A country with stronger health policies would have suffered less of the effects of Covid-19. 
+
+Social expenditure has a higher impact during Covid (-11.435 against -6.074). Just like in the short-run model, the effect of social expenditure almost doubles during the pandemic.
 
 
-In the long-run
+*In the long-run : *
+
+\begin{equation*}
+\begin{aligned}
+Mortality_{i,t} =\;& \gamma_{0,i}
++ \beta_{1} \, health.expenditure_{i,t-[1,5]}
++ \beta_{2} \, hospital.beds_{i,t-[1,5]}
++ \beta_{3} \, social.expenditure_{i,t-[1,5]} \\[0.4em]
+&+ \beta_{4} \, pandemic
++ \beta_{5} \, hospital.beds_{i,t-[1,5]} * pandemic
++ \beta_{6} \, social.expenditure_{i,t-[1,5]} * pandemic \\[0.4em]
+&+ \beta_{7} \, GDP.per.capita_{i,t} 
++ \beta_{8} \, Unemployment_{i,t}
+\end{aligned}
+\end{equation*}
 
 ```{r}
 model_covid_long_run <- lmer(OBS_VALUE_mortality ~ hospBeds_ma5 + healthExp_ma5 + socialExp_ma5 + pandemic + healthexp_pandemic_ma5 + socialexp_pandemic_ma5 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
@@ -509,5 +688,45 @@ model_covid_long_run <- lmer(OBS_VALUE_mortality ~ hospBeds_ma5 + healthExp_ma5 
 summary(model_covid_long_run)
 ```
 
+Then, if we sum coefficients and interaction terms we have : 
+```{r}
+l <- fixef(model_covid_long_run)
+
+# Health expenditure
+l["healthExp_ma5"] + l["healthexp_pandemic_ma5"]
+
+# Social expenditure
+l["socialExp_ma5"] + l["socialexp_pandemic_ma5"]
+```
+The same trend as before is noticed here. 
+
+For health expenditure the value of the combined coefficients (-7.134) is lower than when outside of the pandemic (-10.15). Similarly to the medium-run model, the decrease of the impact of health expenditure during Covid is less strong than it was in the short-run model. This, once again, indicates the benefits of a strong long term investment in health.
+
+For social expenditure the value of the combined coefficients is higher (-11.35) than the coefficient alone, outside of the pandemic (-6.366). The same logic as in previous models can be applied.
 
 
+
+### Chosen main model 
+
+Considering our question, the most interesting results for us to analyse are the medium-run results. It is the most appropriate choice since we are trying to grasp how adopting a health or social policy (and therefore investing in health) can help a country reduce their avoidable mortality. 
+
+\begin{equation*}
+\begin{aligned}
+Mortality_{i,t} =\;& \gamma_{0,i}
++ \beta_{1} \, health.expenditure_{i,t-[1,3]}
++ \beta_{2} \, hospital.beds_{i,t-[1,3]}
++ \beta_{3} \, social.expenditure_{i,t-[1,3]} \\[0.4em]
+&+\beta_{4} \, GDP.per.capita_{i,t}
++ \beta_{5} \, Unemployment_{i,t}
+\end{aligned}
+\end{equation*}
+
+
+
+## Main model analysis
+
+
+
+
+
+# 5. Conclusion 
