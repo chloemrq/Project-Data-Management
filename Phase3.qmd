@@ -74,7 +74,7 @@ This dataset describes the number of "avoidable deaths" per 100,000 inhabitants 
 The GDP per capita dataset presents the GDP per capita (constant 2015 US$) from 1960 to 2023 for 70 countries.
 
 ### Hospital beds - OECD (2025)
-This dataset provides data on the number of total hospitals beds by function of healthcare and by type of care (ie. somatic or psychiatric care) for the period 2000-2023 for 48 different countries.
+This dataset provides data on the number of total hospitals beds per 1,000 inhabitants by function of healthcare and by type of care (ie. somatic or psychiatric care) for the period 2000-2023 for 48 different countries.
 
 ### Life expectancy - World Bank (2023)
 This dataset provides the life expectancy in years for women and men for a period ranging from 1960 to 2023, for 69 different countries or economies. 
@@ -409,7 +409,7 @@ In the regression summary, `REF_AREA (Intercept)`denotes the country-level rando
 
 After this first test, we notice 2 problems : 
 
-1. The correlation between `mortality_lag1` and the intercept is very high (-0.780), nullifying the effect of the random intercept which ends up having a variance and a standard deviation of 0. Indeed, when lagged mortality is included, the country-level random intercept disappears, showing that past mortality already explains most differences between countries. We will remove mortality_lag1 from the next regressions to avoid such a result.
+1. The correlation between `mortality_lag1` and the intercept is very high (-0.729), nullifying the effect of the random intercept which ends up having a variance and a standard deviation of 0. Indeed, when lagged mortality is included, the country-level random intercept disappears, showing that past mortality already explains most differences between countries. We will remove mortality_lag1 from the next regressions to avoid such a result.
 2. Using both the first lag and the long-run moving average of variables in the same model is not possible. The correlation between the two makes it hard to distinguish which has an effect on mortality and the long-run moving average of explanatory variables end up having incoherent coefficients. 
 
 Therefore we will compare short-run, medium-run and long-run in 3 different models 
@@ -441,7 +441,33 @@ model_short_run <- lmer(OBS_VALUE_mortality ~ healthExp_lag1 + hospBeds_lag1 + s
                    REML = FALSE)
 summary(model_short_run)
 ```
+*Interpretation of the results* 
 
+Firstly, the variance of the random intercept `REF_AREA (Intercept)` is 7790, which is much higher than the residual variance (`Residual`) at 1371. This suggests important differences between baseline avoidable mortality within countries. The standard deviation is 88.26, suggesting a deviation of about 88 deaths per 100,000 between countries. 
+
+Second, we will interpret each coefficient : 
+( if |t| > 1.96 (for \alpha = 5%), the coefficient is statistically significant)
+
+All coefficients are all statistically significant.
+
+- Intercept : The baseline number of avoidable deaths per 100,000 when all other predictors are 0 is 485.7.
+- `healthExp_lag1` : An increase in health expenditure by 1% of GDP last year is associated with 10 fewer deaths per 100,000. 
+- `hospBeds_lag1` : The addition of 1 bed per 1,000 inhabitants last year is associated with  fewer 10.2 deaths per 100,000.
+- `socialExp_lag1`: The increase in social expenditure by 1% of GDP last year is associated with 3.17 fewer deaths per 100,000 this year.
+- `OBS_VALUE_gdp` : An increase in GDP by 1 dollar (constant in 2015$US) reduces avoidable mortality by 0.004084 deaths per 100,000.
+- `OBS_VALUE_unemp` : increase in unemployment by 1% of GDP is associated with 1.085 more deaths per 100,000. 
+
+There is an issue with the large difference in scale between the variables and `OBS_VALUE_gdp`. Indeed, it is expressed in constant 2015 US$ while other variables are expressed in % of GDP or unit per 1,000 or 100,000. We choose to rescale it in further regressions as `OBS_VALUE_gdp = OBS_VALUE_gdp / 1000`
+
+Third, the AIC is 8034.7. The residuals are centered around 0 (median : -0.1280). Looking at Q1 and Q3, the residuals seem mostly symmetric and close to the median. Max : 7.3821 indicates the presence of at least one outlier. 
+
+In conclusion, increases in social and particularly health expenditure reduce the avoidable mortality rate in the short-term. As expected, GDP reduces mortality while unemployment increases it. 
+
+
+```{r}
+# rescaling the GDP per capita variable 
+data_lagged$OBS_VALUE_gdp <- data_lagged$OBS_VALUE_gdp / 1000
+```
 
 
 *Medium-run model : *
