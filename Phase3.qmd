@@ -552,7 +552,6 @@ summary(model_covid_time_t)
 Then we want to see the impact of previous investments using our lags 
 
 As a result, in order to clearly see the impact of previous investment on avoidable mortality during the Covid-19 crisis, we create interaction variables using our lags. 
->>>>>>> 62add355af978f3335dbdf442fd77d09516a8df6
 ```{r}
 data_lagged <- data_lagged |>
   mutate(
