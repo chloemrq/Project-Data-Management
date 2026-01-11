@@ -64,7 +64,7 @@ This dataset describes the number of "avoidable deaths" per 100,000 inhabitants 
 ### Number of hospital beds (OECD)
 [Hospital beds (OECD)](https://data-explorer.oecd.org/vis?pg=0&bp=true&snb=6&df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_HEALTH_REAC_HOSP%40DF_BEDS_FUNC&df[ag]=OECD.ELS.HD&df[vs]=1.0&dq=..BD..._T._T..&pd=2000%2C2024&to[TIME_PERIOD]=false&vw=tb&lc=en)
 
-This dataset provides data on the number of total hospitals beds by function of healthcare and by type of care (ie. somatic or psychiatric care) for the period 2000-2023 for 48 different countries. Total hospital beds are the sum of the following categories: Curative care (acute care) beds in hospitals, Rehabilitative care beds in hospitals, Long-term care beds in hospitals, All other beds in hospitals not elsewhere classified.
+This dataset provides data on the number of total hospitals beds by 1,000 inhabitants by function of healthcare and by type of care (ie. somatic or psychiatric care) for the period 2000-2023 for 48 different countries. Total hospital beds are the sum of the following categories: Curative care (acute care) beds in hospitals, Rehabilitative care beds in hospitals, Long-term care beds in hospitals, All other beds in hospitals not elsewhere classified.
 
 
 ## World bank 
@@ -179,7 +179,7 @@ gdp_per_capita |>
 ### Hospital beds 
 ```{r}
 #| message: false
-hospital_beds <- vroom(here("data", "OECD.ELS.HD,DSD_HEALTH_REAC_HOSP@DF_BEDS_FUNC,1.0+..BD..._T._T...csv"))
+hospital_beds <- vroom(here("data", "OECD.ELS.HD,DSD_HEALTH_REAC_HOSP@DF_BEDS_FUNC,1.0+..10P3HB..._T._T...csv"))
 
 hospital_beds |> 
   summarise("Number of rows" = n(), 
