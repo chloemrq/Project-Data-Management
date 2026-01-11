@@ -423,9 +423,9 @@ Therefore we will compare short-run, medium-run and long-run in 3 different mode
 \begin{aligned}
 Mortality_{i,t} =\;& \gamma_{0,i}
 + u_{i}
-+ \beta_{1} \, health.expenditure_{i,t-1}
++ \gamma_{1} \, health.expenditure_{i,t-1}
 + \beta_{2} \, hospital.beds_{i,t-1}
-+ \beta_{3} \, social.expenditure_{i,t-1} \\[0.4em]
++ \gamma_{3} \, social.expenditure_{i,t-1} \\[0.4em]
 &+\beta_{4} \, GDP.per.capita_{i,t}
 + \beta_{5} \, Unemployment_{i,t}
 &+ \epsilon_{i,t}
@@ -435,7 +435,9 @@ Mortality_{i,t} =\;& \gamma_{0,i}
 
 **Summary of the short-run regression :**
 ```{r}
-model_short_run <- lmer(OBS_VALUE_mortality ~ healthExp_lag1 + hospBeds_lag1 + socialExp_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 + healthExp_lag1 + socialExp_lag1 + hospBeds_lag1 | REF_AREA),
+model_short_run <- lmer(OBS_VALUE_mortality ~ healthExp_lag1 + hospBeds_lag1 + socialExp_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA) +
+    (0 + healthExp_lag1 | REF_AREA) +
+    (0 + socialExp_lag1 | REF_AREA), 
                    control = lmerControl(autoscale = TRUE),
                    data = data_lagged, 
                    REML = FALSE)
@@ -443,10 +445,6 @@ print(summary(model_short_run), correlation = TRUE)
 ```
 
 *Interpretation of the results* 
-
-(1 | REF_AREA) +
-    (0 + healthExp_lag1 | REF_AREA) +
-    (0 + socialExp_lag1 | REF_AREA), 
 
 Firstly, the variance of the random intercept `REF_AREA (Intercept)` is 35369.29, which is much higher than the residual variance (`Residual`) at 808.14. This suggests important differences between baseline avoidable mortality within countries even after taking into account the fact that health expenditure and social expenditure have varying effects depending on the country. This reveals how strong structural differences and different history are important to consider when looking at the difference in mortality between two countries.  
 The standard deviation is 188.07, suggesting a deviation of about 188 deaths per 100,000 between countries. 
@@ -482,9 +480,9 @@ data_lagged$OBS_VALUE_gdp <- data_lagged$OBS_VALUE_gdp / 1000
 \begin{aligned}
 Mortality_{i,t} =\;& \gamma_{0,i}
 + u_{i}
-+ \beta_{1} \, health.expenditure_{i,t-[1,3]}
++ \gamma_{1} \, health.expenditure_{i,t-[1,3]}
 + \beta_{2} \, hospital.beds_{i,t-[1,3]}
-+ \beta_{3} \, social.expenditure_{i,t-[1,3]} \\[0.4em]
++ \gamma_{3} \, social.expenditure_{i,t-[1,3]} \\[0.4em]
 &+\beta_{4} \, GDP.per.capita_{i,t}
 + \beta_{5} \, Unemployment_{i,t}
 &+ \epsilon_{i,t}
@@ -527,9 +525,9 @@ GDP continues to reduce mortality (medium-run effects are slightly smaller than 
 \begin{aligned}
 Mortality_{i,t} =\;& \gamma_{0,i}
 + u_{i}
-+ \beta_{1} \, health.expenditure_{i,t-[1,5]}
++ \gamma_{1} \, health.expenditure_{i,t-[1,5]}
 + \beta_{2} \, hospital.beds_{i,t-[1,5]}
-+ \beta_{3} \, social.expenditure_{i,t-[1,5]} \\[0.4em]
++ \gamma_{3} \, social.expenditure_{i,t-[1,5]} \\[0.4em]
 &+\beta_{4} \, GDP.per.capita_{i,t}
 + \beta_{5} \, Unemployment_{i,t}
 &+ \epsilon_{i,t}
