@@ -323,7 +323,7 @@ data_lagged <- database |>
   ungroup()
 ```
 
-Before further modelling, we create lagged version of our variables. We believe that past investments in health sector and social protection have an impact on mortality. Using one-year lags will allow us to study short term effects such as changes in government budgets from one year to the next. 3-year and 5-year moving averages will also be used to capture long-term investment impacts. Indeed, we assume increased hospital capacities or training staff takes a few years before benefiting the health system. 
+Before further modelling, we create lagged version of our variables. We believe that past investments in the health sector and social protection have an impact on mortality. Using one-year lags will allow us to study short term effects such as changes in government budgets from one year to the next. 3-year and 5-year moving averages will also be used to capture long-term investment impacts. Indeed, we assume increased hospital capacities or training staff takes a few years before benefiting the health system. 
 
 We will create lagged versions of 4 variables : mortality, health expenditure, social expenditure and hospital beds. 
 
@@ -341,7 +341,7 @@ Consequently we have :
 - `socialExp_ma5` : 5-year average lag of social expenditure
 
 
-Additionally, to account for the Covid-19 shock, we introduce a `pandemic` dummy variable equal to 1 for the years 2020 to 2021 and 0 otherwise. We also add 2 interaction terms with Health expenditure and Social expenditure to assess the impact of these factors on avoidable mortality during this period.
+Additionally, to account for the Covid-19 shock, we introduce a `pandemic` dummy variable equal to 1 for the years 2020 to 2021 and 0 otherwise. We also add 2 interaction terms with health expenditure and social expenditure to assess the impact of these factors on avoidable mortality during this period.
 ```{r}
 ## Adding pandemic dummies
 database <- database |>
@@ -368,6 +368,7 @@ The model we first want to test is :
 \begin{equation*}
 \begin{aligned}
 Mortality_{i,t} =\;& \gamma_{0,i}
++ u_{i}
 + \beta_{1} \, mortality_{i,t-1}
 + \beta_{2} \, health.expenditure_{i,t-1}
 + \beta_{3} \, health.expenditure_{i,t-[1,5]} \\[0.4em]
@@ -377,6 +378,7 @@ Mortality_{i,t} =\;& \gamma_{0,i}
 &+ \beta_{7} \, social.expenditure_{i,t-[1,5]}
 +\beta_{8} \, GDP.per.capita_{i,t}
 + \beta_{9} \, Unemployment_{i,t} \\[0.4em]
+&+ \epsilon_{i,t}
 \end{aligned}
 \end{equation*}
 
@@ -384,19 +386,15 @@ Mortality_{i,t} =\;& \gamma_{0,i}
 
 With
 
-- i = index for country i 
-- t = index for period t (here our periods are years)
+\begin{itemize}
+\item $i$, index for country i
+\item $t$, index for period t (here our periods are years)
+\item $\epsilon_{i,t}$, the idiosyncratic error term
+\item $u_i$, a country-specific random intercept
+\item $\gamma_0$ is the overall mean intercept
+\end{itemize}
 
-
-
-We also assume that mortality (at time t-1), social expenditure and hospital beds, our explanatory variables, are fixed effects.
-GDP per capita and Unemployment, our control variables, are random effects (meaning that we take into account in this model the fact that they will be different for each country).
-
-
-- Fixed effects have their coefficient represented by the symbol beta
-- Random effects have their coefficient represented by the symbol gamma
-
-All explanatory variables enter the model as fixed effects, while country-specific heterogeneity is captured through a random intercept.
+All explanatory variables enter the model as fixed effects, while unobserved country-level heterogeneity is captured through a random intercept `\u_{i}`. GDP per capita and unemployment are included as control variables accounting for differences in economic conditions across countries and over time.
 
 
 ```{r}
@@ -406,14 +404,15 @@ first_test <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + healthExp_lag1 + healt
                    REML = FALSE)
 print(summary(first_test), correlation = TRUE)
 ```
-After this first test, we notice multiple problems : 
+In the regression summary, `REF_AREA (Intercept)`denotes the country-level random intercept. 
 
-- The correlation between `mortality_lag1` and the intercept is too high, nullifying the effect of the random intercept which ends up having a variance and a standard deviation of 0. We will remove mortality_lag1 from the next regressions to avoid such a result.
-- Using both the first lag and the long-run moving average of variables in the same model is not possible. The correlation between the two makes it hard to distinguish which has an effect on mortality and the long-run moving average of explanatory variables end up having incoherent coefficients. 
+
+After this first test, we notice 2 problems : 
+
+1. The correlation between `mortality_lag1` and the intercept is very high (-0.780), nullifying the effect of the random intercept which ends up having a variance and a standard deviation of 0. Indeed, when lagged mortality is included, the country-level random intercept disappears, showing that past mortality already explains most differences between countries. We will remove mortality_lag1 from the next regressions to avoid such a result.
+2. Using both the first lag and the long-run moving average of variables in the same model is not possible. The correlation between the two makes it hard to distinguish which has an effect on mortality and the long-run moving average of explanatory variables end up having incoherent coefficients. 
 
 Therefore we will compare short-run, medium-run and long-run in 3 different models 
-
-
 
 ### Models for the short-run, medium-run and long-run
 
