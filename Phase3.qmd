@@ -772,9 +772,11 @@ Moreover, we compare the 3 model's AIC to determine which fits best the data.
 
 As in the previous section, the long-run model best fits the data.
 
+
+
 # 5. Conclusion 
 
-Our research stemmed from wondering whether having a strong health and social policy proved useful in order to have a healthy population. The results confirm our intuition. 
+Our research stemmed from wondering whether having a strong health and social policy proved useful in order to have a healthy population. The results seem to confirm our intuition. 
 
 Using a linear mixed model allowed us to capture the heterogeneity between countries. It was also key when taking into account the nature of avoidable mortality, which has a very slow evolution, meaning that for most countries the current value of avoidable mortality would be really close to its previous values. In addition a mixed model was also essential since we wanted to account for differences in social and health policies.
 We have shown using regression analysis that there is significant variability in avoidable mortality both during and outside of crises between countries. However this aspect would require further modelling to determine which countries/health systems are more impacted by crises and tailor policy responses accordingly. 
