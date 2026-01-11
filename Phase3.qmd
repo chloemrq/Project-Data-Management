@@ -709,3 +709,13 @@ Mortality_{i,t} =\;& \gamma_{0,i}
 + \beta_{5} \, Unemployment_{i,t}
 \end{aligned}
 \end{equation*}
+
+
+
+## Main model analysis
+
+
+
+
+
+# 5. Conclusion 
