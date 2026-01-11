@@ -535,15 +535,34 @@ model_long_run <- lmer(OBS_VALUE_mortality ~ healthExp_ma5 + hospBeds_ma5 + soci
                    REML = FALSE)
 summary(model_long_run)
 ```
+*Interpretation of the results*
+First, the variance of the random intercept is still higher than the residual variance (5991 against 1140), although less so than for the two previous models. The standard deviation is 77.40 , suggesting a deviation of about 77 deaths per 100,000 between countries. We can notice that in the longer-run, the deviation between countries becomes smaller. 
 
-All three models seem interesting to analyse as they show the different impacts social expenditure and health expenditure can have on mortality. 
-The first thing we notice is that in all 3 models health expenditure, social expenditure and the number of hospital beds are significant, they have a t value superior to 1 in absolute value. It means that whether it is in the short, medium or long-run they can impact the level of mortality. 
+Second, we will interpret each coefficient : 
 
-In the short-run (represented by variables with the suffix `_lag1`) we can interpret the impact of health and social expenditure on avoidable mortality as an immediate budgetary effect. Having a new monetary flow each year in the health sector, or for households in general is important to face urgent needs or crisis.
+All coefficients are all statistically significant except for `OBS_VALUE_unemp` (t = 0.408)
+
+- Intercept : The baseline number of avoidable deaths per 100,000 when all other predictors are 0 is 487.
+- `healthExp_ma5` : An increase in health expenditure by 1% of GDP over the past 5 years is associated with 7.97 fewer deaths per 100,000. 
+- `hospBeds_ma5` : The addition of 1 bed per 1,000 inhabitants over the past 5 years is associated with an increase of deaths per 100,000 by 8.89.
+- `socialExp_ma5`: The increase in social expenditure by 1% of GDP over the past 5 years is associated with 5.7 fewer deaths per 100,000 this year.
+- `OBS_VALUE_gdp` : An increase in GDP by 1 dollar (constant in 2015$US) reduces avoidable mortality by  0.003 deaths per 100,000.
+- `OBS_VALUE_unemp` : increase in unemployment by 1% of GDP is associated with 0.26 more deaths per 100,000.
+
+Third, the AIC is 6167.7 (lower than for the short-run and medium-run models), indicating better fit for long-run effects.
+
+# Conclusion comparing short-medium-long run models
+
+All three models are interesting to analyse as they show the different impacts social expenditure and health expenditure can have on mortality. 
+The first thing we notice is that in all 3 models all variables are significant at the alpha = 5% level, except `OBS_VALUE_unemp`, they have a t value superior to 1.96 in absolute value. It means that whether it is in the short, medium or long-run they can impact the level of mortality. 
+
+In the short-run (represented by variables with the suffix `_lag1`) we can interpret the impact of health and social expenditure on avoidable mortality as an immediate budgetary effect. Having a new monetary flow each year in the health sector, or for households in general is important to face urgent needs or crisis. Health expenditure reduces mortality most strongly in the short run (-11.09 deaths per 100,000), followed by the number of hospital beds (-10.2) and social expenditure also has an immediate effect (-3.61). 
+
 In the medium-run (represented by variables with the suffix `_ma3`), health expenditure, social expenditure and hospital beds are no longer there to cover an urgent need but are an investment. Government invest with certain policies in mind in order to reduce mortality and to improve welfare in the country in general. There is a cumulative effect, meaning that thanks to the money invested throughout the years, policies were able to show their efficiency afterwards.
+Over a 3-year horizon, cumulative government spending begins to show efficiency: health expenditure reduces mortality by -9.13, social expenditure by -5.45, and hospital beds now show a positive association with mortality (+9.04). This could reflect important investments in the number of beds per 1,000 inhabitants rather than a causal effect on mortality. This highlights that medium-run effects are partly shaped by policy planning and investment patterns, rather than short-run decisions. 
+
 In the long-run (represented by variables with the suffix `_ma5`), the impact of health expenditure, social expenditure and the number of hospital beds can be interpreted as a structural effect. Some countries have an history of public intervention, especially through health and social expenditure. These structural differences can sometimes make a difference in how easy or hard it will be for a country to reduce their avoidable mortality. It can influence the efficiency of policies pursued through health and social expenditure. 
-
-
+Health expenditure reduces deaths by -7.97 and social expenditure by -5.70 over five years, showing a persistent effect, although slightly smaller than medium-run averages for health expenditure. Hospital beds remain positively associated with mortality (+8.90). Moreover, GDP consistently reduces mortality across all horizons, while unemployment matters primarily in the short run. 
 
 
 ### Comparing short-run, medium run and long-run
@@ -567,9 +586,9 @@ Moreover while conditional R² always have a high value (~0.8) it is not the cas
 
 *Looking at the AIC : *
 
-- For the short-run model : 8065.7
-- For the medium-run model : 7086.9
-- For the long-run model : 6185.0
+- For the short-run model : 8034.7
+- For the medium-run model : 7065.8
+- For the long-run model : 6167.7
 
 The AIC - Akaike information criterion - is a measure for how well fitted a model is. The AIC verifies both if explanatory variables explain the observed variable correctly and if the number of parameters in the model is too high. Having a high number of parameters to make the model "fit better" is a negative thing as it lowers chances of the model working well outside the sample.  
 
