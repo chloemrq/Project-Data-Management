@@ -811,7 +811,7 @@ Mortality_{i,t} =\;& \gamma_{0,i}
 
 **Summary of the long-run regression :**
 ```{r}
-model_covid_long_run <- lmer(OBS_VALUE_mortality ~ hospBeds_ma5 + healthExp_ma5 + socialExp_ma5 + pandemic + healthexp_pandemic_ma5 + socialexp_pandemic_ma5 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
+model_covid_long_run <- lmer(OBS_VALUE_mortality ~ hospBeds_ma5 + healthExp_ma5 + socialExp_ma5 + pandemic + healthexp_pandemic_ma5 + socialexp_pandemic_ma5 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA) + (0 + healthExp_ma3 | REF_AREA) + (0 + socialExp_ma5 | REF_AREA), 
                    control = lmerControl(autoscale = TRUE), 
                    data = data_lagged, 
                    REML = FALSE)
@@ -830,11 +830,32 @@ l["socialExp_ma5"] + l["socialexp_pandemic_ma5"]
 ```
 **Interpretation of the results**
 
-
 First, we analyse the random effects. 
 
+- `REF_AREA (Intercept)` has a variance of 36499.9, meaning there are large differences between countries in baseline avoidable mortality, less than in the short- and medium-run (around 191 deaths per 100,000)
+- `REF_AREA.1 healthExp_lag1` has a variance of 618.3 The effect of health expenditure varies between countries by approximately 25 deaths (given by the standard deviation) which is slightly less than in the short- and medium-run.
+- `REF_AREA.2 socialExp_lag1`has a variance of 62.5 The effect of social expenditure is less important. It varies by around 8 deaths per 100,000. 
 
 
+Second, we analyse the fixed effects. Some variables are not significant : `socialExp_ma5`, `healthexp_pandemic_ma5` and `OBS_VALUE_unemp`. 
+
+- `(Intercept)` : The baseline number of avoidable deaths per 100,000 if all other variables are null, outside of the pandemic, is 347.3.
+- `hospBeds_ma3` : Here, we find similar results as in the previous section and the short-run regression : adding 1 hospital bed per 1,000 increases short-run mortality by 30.1 deaths, more than in the short- and medium-run.
+- `healthExp_ma3` : A 1% of GDP increase in health expenditure last year reduces mortality by 17.6 deaths per 100,000, outside of the pandemic
+- `socialExp_ma3`: A 1% of GDP increase in health expenditure last year increases mortality by 0.21 deaths per 100,000, outside of the pandemic. But this variable is not significant. 
+- `pandemic` : Covid increases baseline mortality by about 124 deaths per 100,000, regardless of spending.
+- `healthexp_pandemic_ma3` : The effect of health expenditure is reduced by 0.24 during Covid, -17.4 deaths in total. The effect is, again, barely impacted by the Covid period. 
+- `socialexp_pandemic_ma3` : The effect of social expenditure is reduced by 4.4 during Covid, decreasing deaths by 4.6 in total. This time, social expenditure is negative, suggesting that its effects are more latent and decrease the avoidable mortality rate in the long-run.
+
+In conclusion, in the long-run, health expenditure remains the mpst important factor in reducing avoidable mortality. Social expenditure, which showed positive correlations with avoidable mortality in the short- and medium-run now shows a slight negative effect. This might suggest, social expenditure might take longer to have a concrete impact. Random effects indicate that country-level differences remain important, though slightly smaller than in shorter-term models. Overall, one key finding of our analysis is that sustained health investment is important for reducing avoidable deaths, while social spending contributes more gradually, with long-term benefits appearing later.
+
+Moreover, we compare the 3 model's AIC to determine which fits best the data. 
+
+- short-run AIC : 7729.8
+- medium-run AIC: 6130.4
+- long-run AIC: 5974.4
+
+As in the previous section, the long-run model best fits the data.
 
 # 5. Conclusion 
 
