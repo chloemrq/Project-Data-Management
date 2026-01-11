@@ -358,14 +358,17 @@ We will compare short-run, medium-run and long-run in 3 different models.
 
 \begin{equation*}
 \begin{aligned}
-Mortality_{i,t} =\;& \gamma_{0,i}
-+ u_{i}
-+ \gamma_{1} \, health.expenditure_{i,t-1}
-+ \beta_{2} \, hospital.beds_{i,t-1}
-+ \gamma_{3} \, social.expenditure_{i,t-1} \\[0.4em]
-&+\beta_{4} \, GDP.per.capita_{i,t}
-+ \beta_{5} \, Unemployment_{i,t}
-&+ \epsilon_{i,t}
+Mortality_{i,t} =\;&
+\beta_{0}
++ \beta_{1}\, HealthExp_{i,t-1}
++ \beta_{2}\, HospBeds_{i,t-1}
++ \beta_{3}\, SocialExp_{i,t-1} \\[0.4em]
+&+ \beta_{4}\, GDP_{i,t}
++ \beta_{5}\, Unemp_{i,t} \\[0.4em]
+&+ u_{0i}
++ u_{1i}\, HealthExp_{i,t-1}
++ u_{2i}\, SocialExp_{i,t-1}
++ \varepsilon_{i,t}
 \end{aligned}
 \end{equation*}
 
@@ -407,14 +410,17 @@ Moreover there are huge differences in health and social investments between cou
 
 \begin{equation*}
 \begin{aligned}
-Mortality_{i,t} =\;& \gamma_{0,i}
-+ u_{i}
-+ \gamma_{1} \, health.expenditure_{i,t-[1,3]}
-+ \beta_{2} \, hospital.beds_{i,t-[1,3]}
-+ \gamma_{3} \, social.expenditure_{i,t-[1,3]} \\[0.4em]
-&+\beta_{4} \, GDP.per.capita_{i,t}
-+ \beta_{5} \, Unemployment_{i,t}
-&+ \epsilon_{i,t}
+Mortality_{i,t} =\;&
+\beta_{0}
++ \beta_{1}\, HealthExp_{i,t-[1,3]}
++ \beta_{2}\, HospBeds_{i,t-[1,3]}
++ \beta_{3}\, SocialExp_{i,t-[1,3]} \\[0.4em]
+&+ \beta_{4}\, GDP_{i,t}
++ \beta_{5}\, Unemp_{i,t} \\[0.4em]
+&+ u_{0i}
++ u_{1i}\, HealthExp_{i,t-[1,3]}
++ u_{2i}\, SocialExp_{i,t-[1,3]}
++ \varepsilon_{i,t}
 \end{aligned}
 \end{equation*}
 
@@ -450,16 +456,21 @@ We still see huge deviations from one country to another in health and social ex
 
 \begin{equation*}
 \begin{aligned}
-Mortality_{i,t} =\;& \gamma_{0,i}
-+ u_{i}
-+ \gamma_{1} \, health.expenditure_{i,t-[1,5]}
-+ \beta_{2} \, hospital.beds_{i,t-[1,5]}
-+ \gamma_{3} \, social.expenditure_{i,t-[1,5]} \\[0.4em]
-&+\beta_{4} \, GDP.per.capita_{i,t}
-+ \beta_{5} \, Unemployment_{i,t}
-&+ \epsilon_{i,t}
+Mortality_{i,t} =\;&
+\beta_{0}
++ \beta_{1}\, HealthExp_{i,t-[1,5]}
++ \beta_{2}\, HospBeds_{i,t-[1,5]}
++ \beta_{3}\, SocialExp_{i,t-[1,5]} \\[0.4em]
+&+ \beta_{4}\, GDP_{i,t}
++ \beta_{5}\, Unemp_{i,t} \\[0.4em]
+&+ u_{0i}
++ u_{1i}\, HealthExp_{i,t-[1,5]}
++ u_{2i}\, SocialExp_{i,t-[1,5]}
++ \varepsilon_{i,t}
 \end{aligned}
 \end{equation*}
+
+
 
 **Summary of the long-run regression :**
 ```{r} 
@@ -551,19 +562,23 @@ The following variables will be interpreted as :
 
 \begin{equation*}
 \begin{aligned}
-Mortality_{i,t} =\;& \gamma_{0,i}
-+ u_{i}
-+ \beta_{1} \, health.expenditure_{i,t-1}
-+ \beta_{2} \, hospital.beds_{i,t-1}
-+ \beta_{3} \, social.expenditure_{i,t-1} \\[0.4em]
-&+ \beta_{4} \, pandemic
-+ \beta_{5} \, hospital.beds_{i,t-1} * pandemic
-+ \beta_{6} \, social.expenditure_{i,t-1} * pandemic \\[0.4em]
-&+ \beta_{7} \, GDP.per.capita_{i,t} 
-+ \beta_{8} \, Unemployment_{i,t}
-&+ \epsilon{i,t}
+Mortality_{i,t} =\;&
+\beta_{0}
++ \beta_{1}\, HospBeds_{i,t-1}
++ \beta_{2}\, HealthExp_{i,t-1}
++ \beta_{3}\, SocialExp_{i,t-1} \\[0.4em]
+&+ \beta_{4}\, Pandemic_{t}
++ \beta_{5}\, (HealthExp_{i,t-1} \times Pandemic_{t})
++ \beta_{6}\, (SocialExp_{i,t-1} \times Pandemic_{t}) \\[0.4em]
+&+ \beta_{7}\, GDP_{i,t}
++ \beta_{8}\, Unemp_{i,t} \\[0.4em]
+&+ u_{0i}
++ u_{1i}\, HealthExp_{i,t-1}
++ u_{2i}\, SocialExp_{i,t-1}
++ \varepsilon_{i,t}
 \end{aligned}
 \end{equation*}
+
 
 **Summary of the short-run regression :**
 ```{r}
@@ -610,19 +625,23 @@ In conclusion, the pandemic increases the number of avoidable deaths sharply. He
 
 \begin{equation*}
 \begin{aligned}
-Mortality_{i,t} =\;& \gamma_{0,i}
-+ u_{i}
-+ \beta_{1} \, health.expenditure_{i,t-[1,3]}
-+ \beta_{2} \, hospital.beds_{i,t-[1,3]}
-+ \beta_{3} \, social.expenditure_{i,t-[1,3]} \\[0.4em]
-&+ \beta_{4} \, pandemic
-+ \beta_{5} \, hospital.beds_{i,t-[1,3]} * pandemic
-+ \beta_{6} \, social.expenditure_{i,t-[1,3]} * pandemic \\[0.4em]
-&+ \beta_{7} \, GDP.per.capita_{i,t} 
-+ \beta_{8} \, Unemployment_{i,t}
-&+ \epsilon_{i,t}
+Mortality_{i,t} =\;&
+\beta_{0}
++ \beta_{1}\, HospBeds_{i,t-[1,3]}
++ \beta_{2}\, HealthExp_{i,t-[1,3]}
++ \beta_{3}\, SocialExp_{i,t-[1,3]} \\[0.4em]
+&+ \beta_{4}\, Pandemic_{t}
++ \beta_{5}\, (HealthExp_{i,t-[1,3]} \times Pandemic_{t})
++ \beta_{6}\, (SocialExp_{i,t-[1,3]} \times Pandemic_{t}) \\[0.4em]
+&+ \beta_{7}\, GDP_{i,t}
++ \beta_{8}\, Unemp_{i,t} \\[0.4em]
+&+ u_{0i}
++ u_{1i}\, HealthExp_{i,t-[1,3]}
++ u_{2i}\, SocialExp_{i,t-[1,3]}
++ \varepsilon_{i,t}
 \end{aligned}
 \end{equation*}
+
 
 **Summary of the medium-run regression :**
 ```{r}
@@ -668,17 +687,20 @@ In conclusion, health expenditure in the medium-term remains strong. This highli
 
 \begin{equation*}
 \begin{aligned}
-Mortality_{i,t} =\;& \gamma_{0,i}
-+ u_{i}
-+ \beta_{1} \, health.expenditure_{i,t-[1,5]}
-+ \beta_{2} \, hospital.beds_{i,t-[1,5]}
-+ \beta_{3} \, social.expenditure_{i,t-[1,5]} \\[0.4em]
-&+ \beta_{4} \, pandemic
-+ \beta_{5} \, hospital.beds_{i,t-[1,5]} * pandemic
-+ \beta_{6} \, social.expenditure_{i,t-[1,5]} * pandemic \\[0.4em]
-&+ \beta_{7} \, GDP.per.capita_{i,t} 
-+ \beta_{8} \, Unemployment_{i,t}
-&+ \epsilon{i,t}
+Mortality_{i,t} =\;&
+\beta_{0}
++ \beta_{1}\, HospBeds_{i,t-[1,5]}
++ \beta_{2}\, HealthExp_{i,t-[1,5]}
++ \beta_{3}\, SocialExp_{i,t-[1,5]} \\[0.4em]
+&+ \beta_{4}\, Pandemic_{t}
++ \beta_{5}\, (HealthExp_{i,t-[1,5]} \times Pandemic_{t})
++ \beta_{6}\, (SocialExp_{i,t-[1,5]} \times Pandemic_{t}) \\[0.4em]
+&+ \beta_{7}\, GDP_{i,t}
++ \beta_{8}\, Unemp_{i,t} \\[0.4em]
+&+ u_{0i}
++ u_{1i}\, HealthExp_{i,t-[1,5]}
++ u_{2i}\, SocialExp_{i,t-[1,5]}
++ \varepsilon_{i,t}
 \end{aligned}
 \end{equation*}
 
@@ -720,9 +742,7 @@ Second, we analyse the fixed effects. Some variables are not significant : `soci
 - `healthexp_pandemic_ma3` : The effect of health expenditure is reduced by 0.24 during Covid, -17.4 deaths in total. The effect is, again, barely impacted by the Covid period. 
 - `socialexp_pandemic_ma3` : The effect of social expenditure is reduced by 4.4 during Covid, decreasing deaths by 4.6 in total. This time, social expenditure is negative, suggesting that its effects are more latent and decrease the avoidable mortality rate in the long-run.
 
-In conclusion, in the long-run, health expenditure remains the most important factor in reducing avoidable mortality. Social expenditure, which showed positive correlations with avoidable mortality in the short- and medium-run now shows a slight negative effect. This might suggest, social expenditure might take longer to have a concrete impact. Random effects indicate that country-level differences remain important, though slightly smaller than in shorter-term models. Overall, one key finding of our analysis is that sustained health investment is important for reducing avoidable deaths, while social spending contributes more gradually, with long-term benefits appearing later.
-
-Moreover, we compare the 3 model's AIC to determine which fits best the data. 
+Third, we compare the 3 model's AIC to determine which fits best the data. 
 
 - short-run AIC : 7729.8
 - medium-run AIC: 6130.4
@@ -731,6 +751,7 @@ Moreover, we compare the 3 model's AIC to determine which fits best the data.
 As in the previous section, the long-run model best fits the data.
 
 
+In conclusion, in the long-run, health expenditure remains the most important factor in reducing avoidable mortality. Social expenditure, which showed positive correlations with avoidable mortality in the short- and medium-run now shows a slight negative effect. This might suggest, social expenditure might take longer to have a concrete impact. Random effects indicate that country-level differences remain important, though slightly smaller than in shorter-term models. Overall, one key finding of our analysis is that sustained health investment is important for reducing avoidable deaths, while social spending contributes more gradually, with long-term benefits appearing later.
 
 # 5. Conclusion 
 
@@ -740,7 +761,7 @@ Using a linear mixed model allowed us to capture the heterogeneity between count
 We have shown using regression analysis that there is significant variability in avoidable mortality both during and outside of crises between countries. However this aspect would require further modelling to determine which countries/health systems are more impacted by crises and tailor policy responses accordingly. 
 
 Our main conclusions are that increases in health spending are by far the most important element of reducing avoidable mortality while social expenditure is not as important as we could have thought at the beginning of the analysis.
-Furthermore according to our model, during the pandemic - which we consider as the years 2020 and 2021 - health expenditure cushioned the increase in avoidable deaths, while social protection was particularly efficient as the population faces difficulties. 
+Furthermore according to our model, during the pandemic, health expenditure cushioned the increase in avoidable deaths, while social protection was particularly efficient as the population faced difficulties. 
 
-It is important to mention that our analysis is limited in many ways. First of all the number of countries studied is still relatively small (41 OECD countries). Then, we could not explore further the structural differences between countries or other potential variables. In spite of these limitations this report can be considered as a first clue in finding how to reduce avoidable mortality.  
+It is important to mention that our analysis is limited in many ways. First of all the number of countries studied is still relatively small (41 OECD countries). Then, we could not explore further the structural differences between countries or other potential variables. In spite of these limitations this report can be considered as a first step in finding how to reduce avoidable mortality.  
 
