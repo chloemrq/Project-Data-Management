@@ -396,7 +396,7 @@ With
 
 All explanatory variables enter the model as fixed effects, while unobserved country-level heterogeneity is captured through a random intercept `\u_{i}`. GDP per capita and unemployment are included as control variables accounting for differences in economic conditions across countries and over time.
 
-
+**Summary of the first regression :**
 ```{r}
 first_test <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + healthExp_lag1 + healthExp_ma5 + hospBeds_lag1 + hospBeds_ma5 + socialExp_lag1 + socialExp_ma5 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
                    control = lmerControl(autoscale = TRUE), # added after R warned some variables are on different scales 
@@ -422,16 +422,18 @@ Therefore we will compare short-run, medium-run and long-run in 3 different mode
 \begin{equation*}
 \begin{aligned}
 Mortality_{i,t} =\;& \gamma_{0,i}
++ u_{i}
 + \beta_{1} \, health.expenditure_{i,t-1}
 + \beta_{2} \, hospital.beds_{i,t-1}
 + \beta_{3} \, social.expenditure_{i,t-1} \\[0.4em]
 &+\beta_{4} \, GDP.per.capita_{i,t}
 + \beta_{5} \, Unemployment_{i,t}
+&+ \epsilon_{i,t}
 \end{aligned}
 \end{equation*}
 
 
-
+**Summary of the short-run regression :**
 ```{r}
 model_short_run <- lmer(OBS_VALUE_mortality ~ healthExp_lag1 + hospBeds_lag1 + socialExp_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
                    control = lmerControl(autoscale = TRUE),
@@ -447,14 +449,17 @@ summary(model_short_run)
 \begin{equation*}
 \begin{aligned}
 Mortality_{i,t} =\;& \gamma_{0,i}
++ u_{i}
 + \beta_{1} \, health.expenditure_{i,t-[1,3]}
 + \beta_{2} \, hospital.beds_{i,t-[1,3]}
 + \beta_{3} \, social.expenditure_{i,t-[1,3]} \\[0.4em]
 &+\beta_{4} \, GDP.per.capita_{i,t}
 + \beta_{5} \, Unemployment_{i,t}
+&+ \epsilon_{i,t}
 \end{aligned}
 \end{equation*}
 
+**Summary of the medium-run regression :**
 ```{r}
 model_medium_run <- lmer(OBS_VALUE_mortality ~ healthExp_ma3 + hospBeds_ma3 + socialExp_ma3 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
                    control = lmerControl(autoscale = TRUE),
@@ -470,14 +475,17 @@ summary(model_medium_run)
 \begin{equation*}
 \begin{aligned}
 Mortality_{i,t} =\;& \gamma_{0,i}
++ u_{i}
 + \beta_{1} \, health.expenditure_{i,t-[1,5]}
 + \beta_{2} \, hospital.beds_{i,t-[1,5]}
 + \beta_{3} \, social.expenditure_{i,t-[1,5]} \\[0.4em]
 &+\beta_{4} \, GDP.per.capita_{i,t}
 + \beta_{5} \, Unemployment_{i,t}
+&+ \epsilon_{i,t}
 \end{aligned}
 \end{equation*}
 
+**Summary of the long-run regression :**
 ```{r}
 model_long_run <- lmer(OBS_VALUE_mortality ~ healthExp_ma5 + hospBeds_ma5 + socialExp_ma5 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
                    control = lmerControl(autoscale = TRUE), 
@@ -515,10 +523,6 @@ Here we can see that no matter the model (short, medium or long-run), R² has mo
 Moreover while conditional R² always have a high value (~0.8) it is not the case for marginal R². This can be explained by the fact that avoidable mortality highly varies from a country to another and that there are a lot of structural differences (the country's history and specific aspects). For example in a country the amount of avoidable deaths for a certain year is highly linked to that of the previous year. 
 
 
-
-
-
-
 *Looking at the AIC : *
 
 - For the short-run model : 8065.7
@@ -540,6 +544,7 @@ Regressions using our dummy variable for the Covid-19 and interaction terms, to 
 
 Using interaction terms for time t (current period) could lead to reverse causality problems. We might be unable to identify whether health expenditure, social expenditure and hospital beds impacted avoidable mortality or if because mortality increased suddenly during the pandemic, health expenditure, social expenditure and hospital beds were increased afterwards. 
 
+**Summary of the regression :**
 ```{r}
 model_covid_time_t <- lmer(OBS_VALUE_mortality ~ OBS_VALUE_hosp_beds + OBS_VALUE_health_exp + OBS_VALUE_social_expenditure + pandemic + healthexp_pandemic + socialexp_pandemic + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
                    control = lmerControl(autoscale = TRUE), 
@@ -585,6 +590,7 @@ The interaction coefficient measures whether the association between pre-existin
 \begin{equation*}
 \begin{aligned}
 Mortality_{i,t} =\;& \gamma_{0,i}
++ u_{i}
 + \beta_{1} \, health.expenditure_{i,t-1}
 + \beta_{2} \, hospital.beds_{i,t-1}
 + \beta_{3} \, social.expenditure_{i,t-1} \\[0.4em]
@@ -593,9 +599,11 @@ Mortality_{i,t} =\;& \gamma_{0,i}
 + \beta_{6} \, social.expenditure_{i,t-1} * pandemic \\[0.4em]
 &+ \beta_{7} \, GDP.per.capita_{i,t} 
 + \beta_{8} \, Unemployment_{i,t}
+&+ \epsilon{i,t}
 \end{aligned}
 \end{equation*}
 
+**Summary of the short-run regression :**
 ```{r}
 model_covid_short_run <- lmer(OBS_VALUE_mortality ~ hospBeds_lag1 + healthExp_lag1 + socialExp_lag1 + pandemic + healthexp_pandemic_lag1 + socialexp_pandemic_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
                    control = lmerControl(autoscale = TRUE), 
@@ -626,6 +634,7 @@ Then for social expenditure, it seems like its effect is doubled during the pand
 \begin{equation*}
 \begin{aligned}
 Mortality_{i,t} =\;& \gamma_{0,i}
++ u_{i}
 + \beta_{1} \, health.expenditure_{i,t-[1,3]}
 + \beta_{2} \, hospital.beds_{i,t-[1,3]}
 + \beta_{3} \, social.expenditure_{i,t-[1,3]} \\[0.4em]
@@ -634,10 +643,11 @@ Mortality_{i,t} =\;& \gamma_{0,i}
 + \beta_{6} \, social.expenditure_{i,t-[1,3]} * pandemic \\[0.4em]
 &+ \beta_{7} \, GDP.per.capita_{i,t} 
 + \beta_{8} \, Unemployment_{i,t}
+&+ \epsilon_{i,t}
 \end{aligned}
 \end{equation*}
 
-
+**Summary of the medium-run regression :**
 ```{r}
 model_covid_medium_run <- lmer(OBS_VALUE_mortality ~ hospBeds_ma3 + healthExp_ma3 + socialExp_ma3 + pandemic + healthexp_pandemic_ma3 + socialexp_pandemic_ma3 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
                    control = lmerControl(autoscale = TRUE), 
@@ -667,6 +677,7 @@ Social expenditure has a higher impact during Covid (-11.435 against -6.074). Ju
 \begin{equation*}
 \begin{aligned}
 Mortality_{i,t} =\;& \gamma_{0,i}
++ u_{i}
 + \beta_{1} \, health.expenditure_{i,t-[1,5]}
 + \beta_{2} \, hospital.beds_{i,t-[1,5]}
 + \beta_{3} \, social.expenditure_{i,t-[1,5]} \\[0.4em]
@@ -675,9 +686,11 @@ Mortality_{i,t} =\;& \gamma_{0,i}
 + \beta_{6} \, social.expenditure_{i,t-[1,5]} * pandemic \\[0.4em]
 &+ \beta_{7} \, GDP.per.capita_{i,t} 
 + \beta_{8} \, Unemployment_{i,t}
+&+ \epsilon{i,t}
 \end{aligned}
 \end{equation*}
 
+**Summary of the long-run regression :**
 ```{r}
 model_covid_long_run <- lmer(OBS_VALUE_mortality ~ hospBeds_ma5 + healthExp_ma5 + socialExp_ma5 + pandemic + healthexp_pandemic_ma5 + socialexp_pandemic_ma5 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
                    control = lmerControl(autoscale = TRUE), 
@@ -711,11 +724,13 @@ Considering our question, the most interesting results for us to analyse are the
 \begin{equation*}
 \begin{aligned}
 Mortality_{i,t} =\;& \gamma_{0,i}
++ u_{i}
 + \beta_{1} \, health.expenditure_{i,t-[1,3]}
 + \beta_{2} \, hospital.beds_{i,t-[1,3]}
 + \beta_{3} \, social.expenditure_{i,t-[1,3]} \\[0.4em]
 &+\beta_{4} \, GDP.per.capita_{i,t}
 + \beta_{5} \, Unemployment_{i,t}
+&+ \epsilon{i,t}
 \end{aligned}
 \end{equation*}
 
@@ -728,3 +743,5 @@ Mortality_{i,t} =\;& \gamma_{0,i}
 
 
 # 5. Conclusion 
+
+
