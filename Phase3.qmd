@@ -333,52 +333,11 @@ Before further modelling, we create lagged version of our variables. We believe 
 
 ## Model testing
 
-### First test using multiple lags
+### Testing a first model
 
-We do a first test to see how our variables interact with each other, especially lags
+After trying a first model, we notice 3 main problems and modify the following models accordingly.
 
-\begin{equation*}
-\begin{aligned}
-Mortality_{i,t} =\;& \gamma_{0,i}
-+ u_{i}
-+ \beta_{1} \, mortality_{i,t-1}
-+ \beta_{2} \, health.expenditure_{i,t-1}
-+ \beta_{3} \, health.expenditure_{i,t-[1,5]} \\[0.4em]
-&+ \beta_{4} \, hospital.beds_{i,t-1}
-+ \beta_{5} \, hospital.beds_{i,t-[1,5]} 
-+ \beta_{6} \, social.expenditure_{i,t-1} \\[0.4em]
-&+ \beta_{7} \, social.expenditure_{i,t-[1,5]}
-+\beta_{8} \, GDP.per.capita_{i,t}
-+ \beta_{9} \, Unemployment_{i,t} \\[0.4em]
-&+ \epsilon_{i,t}
-\end{aligned}
-\end{equation*}
-
-With
-
-\begin{itemize}
-\item $i$, index for country i
-\item $t$, index for period t (here our periods are years)
-\item $\epsilon_{i,t}$, the idiosyncratic error term
-\item $u_i$, a country-specific random intercept
-\item $\gamma_0$ is the overall mean intercept
-\end{itemize}
-
-All explanatory variables enter the model as fixed effects, while unobserved country-level heterogeneity is captured through a random intercept `\u_{i}`. GDP per capita and unemployment are included as control variables accounting for differences in economic conditions across countries and over time.
-
-**Summary of the first regression :**
-```{r}
-first_test <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + healthExp_lag1 + healthExp_ma5 + hospBeds_lag1 + hospBeds_ma5 + socialExp_lag1 + socialExp_ma5 + OBS_VALUE_gdp + OBS_VALUE_unemp + ( 1 | REF_AREA), 
-                   control = lmerControl(autoscale = TRUE), # added after R warned some variables are on different scales 
-                   data = data_lagged, 
-                   REML = FALSE)
-```
-In the regression summary, `REF_AREA (Intercept)`denotes the country-level random intercept. 
-
-
-After this first test, we notice 3 problems : 
-
-1. The correlation between `mortality_lag1` and the intercept is very high (-0.729), nullifying the effect of the random intercept (variance and standard deviation equal to 0). This shows that past mortality already explains most differences between countries. We decide to remove `mortality_lag1` from the next regressions.
+1. The correlation between `mortality_lag1` and the intercept is very high, nullifying the effect of the random intercept (variance and standard deviation equal to 0). This shows that past mortality already explains most differences between countries. We decide to remove `mortality_lag1` from the next regressions.
 2. Using both the first lag and the long-run moving average of variables in the same model is not possible. The correlation between the two makes it hard to distinguish which has an effect on mortality and the long-run moving average of explanatory variables end up having incoherent coefficients. 
 3. There is an issue with the large difference in scale between the variables and `OBS_VALUE_gdp`. Indeed, it is expressed in constant 2015 US$ while other variables are expressed in % of GDP or unit per 1,000 or 100,000. We choose to rescale it in further regressions as `OBS_VALUE_gdp = OBS_VALUE_gdp / 1000`
 
@@ -387,14 +346,13 @@ After this first test, we notice 3 problems :
 data_lagged$OBS_VALUE_gdp <- data_lagged$OBS_VALUE_gdp / 1000
 ```
 
-
-In addition, we decide to add 2 variables as random effects : social expenditure and health expenditure. This will allow us to better perceive the differences between countries when it comes to social and health policies.  
-The last explanatory variable, the number of hospital beds will not be added as a random effect since we noticed through testing that it does not have a causal effect on avoidable mortality. Moreover we fear it would clash with the health expenditure variable as they are heavily linked.  
-
-
-We will compare short-run, medium-run and long-run in 3 different models 
-
 ### Models for the short-run, medium-run and long-run
+
+We will compare short-run, medium-run and long-run in 3 different models. 
+
+- 2 variables as random effects : social expenditure and health expenditure. This will allow us to better perceive the differences between countries when it comes to social and health policies.  
+- The last explanatory variable, the number of hospital beds will not be added as a random effect since we noticed through testing that it does not have a causal effect on avoidable mortality. Moreover we fear it would clash with the health expenditure variable as they are heavily linked.
+- All explanatory variables enter the model as fixed effects, while unobserved country-level heterogeneity is captured through a random intercept `\u_{i}`. GDP per capita and unemployment are included as control variables accounting for differences in economic conditions across countries and over time.
 
 *Short-run model :* 
 
