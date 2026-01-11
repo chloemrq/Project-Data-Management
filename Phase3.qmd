@@ -493,8 +493,24 @@ model_medium_run <- lmer(OBS_VALUE_mortality ~ healthExp_ma3 + hospBeds_ma3 + so
                    REML = FALSE)
 summary(model_medium_run)
 ```
+*Interpretation of the results* 
+First, the variance of the random intercept is still much higher than the residual variance (6699 against 1209). The standard deviation is 81.85, suggestinf a deviation of about 81 deaths per 100,000 between countries. This analysis is similar to the short-run regression results. 
 
+Second, we will interpret each coefficient : 
 
+All coefficients are all statistically significant except for `OBS_VALUE_unemp` (t = 1.51)
+
+- Intercept : The baseline number of avoidable deaths per 100,000 when all other predictors are 0 is 500.6.
+- `healthExp_ma3` : An increase in health expenditure by 1% of GDP over the past 3 years is associated with 9.13 fewer deaths per 100,000. 
+- `hospBeds_ma3` : The addition of 1 bed per 1,000 inhabitants over the past 3 years is associated with an increase of deaths per 100,000 by 9.04.
+- `socialExp_ma3`: The increase in social expenditure by 1% of GDP over the past 3 years is associated with 5.45 fewer deaths per 100,000 this year.
+- `OBS_VALUE_gdp` : An increase in GDP by 1 dollar (constant in 2015$US) reduces avoidable mortality by  0.0034 deaths per 100,000.
+- `OBS_VALUE_unemp` : increase in unemployment by 1% of GDP is associated with 9.5 more deaths per 100,000.
+
+Third, the AIC is 7065.8 (lower than for the short-run), indicating better fit for medium-run effects.
+
+In conclusion, health and social expenditure reduce mortality over 3 years, suggesting that the effects accumulate. Unexpectedly, there is a positive association between the number of hospital beds and the avoidable mortality rate.  
+GDP continues to reduce mortality (medium-run effects are slightly smaller than the short-run ones). Moreover, the unemployement effect is much bigger in the medium-run than in the short run with an increase in 9 deaths compared to 1 previously. 
 
 *Long-run model : *
 
