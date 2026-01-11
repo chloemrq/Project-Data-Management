@@ -398,7 +398,7 @@ All explanatory variables enter the model as fixed effects, while unobserved cou
 
 **Summary of the first regression :**
 ```{r}
-first_test <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + healthExp_lag1 + healthExp_ma5 + hospBeds_lag1 + hospBeds_ma5 + socialExp_lag1 + socialExp_ma5 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
+first_test <- lmer(OBS_VALUE_mortality ~ mortality_lag1 + healthExp_lag1 + healthExp_ma5 + hospBeds_lag1 + hospBeds_ma5 + socialExp_lag1 + socialExp_ma5 + OBS_VALUE_gdp + OBS_VALUE_unemp + ( 1 | REF_AREA), 
                    control = lmerControl(autoscale = TRUE), # added after R warned some variables are on different scales 
                    data = data_lagged, 
                    REML = FALSE)
@@ -435,12 +435,15 @@ Mortality_{i,t} =\;& \gamma_{0,i}
 
 **Summary of the short-run regression :**
 ```{r}
-model_short_run <- lmer(OBS_VALUE_mortality ~ healthExp_lag1 + hospBeds_lag1 + socialExp_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
+model_short_run <- lmer(OBS_VALUE_mortality ~ healthExp_lag1 + hospBeds_lag1 + socialExp_lag1 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA) +
+    (0 + healthExp_lag1 | REF_AREA) +
+    (0 + socialExp_lag1 | REF_AREA), 
                    control = lmerControl(autoscale = TRUE),
                    data = data_lagged, 
                    REML = FALSE)
 summary(model_short_run)
 ```
+
 *Interpretation of the results* 
 
 Firstly, the variance of the random intercept `REF_AREA (Intercept)` is 7790, which is much higher than the residual variance (`Residual`) at 1371. This suggests important differences between baseline avoidable mortality within countries. The standard deviation is 88.26, suggesting a deviation of about 88 deaths per 100,000 between countries. 
@@ -487,7 +490,9 @@ Mortality_{i,t} =\;& \gamma_{0,i}
 
 **Summary of the medium-run regression :**
 ```{r}
-model_medium_run <- lmer(OBS_VALUE_mortality ~ healthExp_ma3 + hospBeds_ma3 + socialExp_ma3 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
+model_medium_run <- lmer(OBS_VALUE_mortality ~ healthExp_ma3 + hospBeds_ma3 + socialExp_ma3 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA) +
+    (0 + healthExp_ma3 | REF_AREA) +
+    (0 + socialExp_ma3 | REF_AREA), 
                    control = lmerControl(autoscale = TRUE),
                    data = data_lagged, 
                    REML = FALSE)
@@ -528,9 +533,9 @@ Mortality_{i,t} =\;& \gamma_{0,i}
 \end{equation*}
 
 **Summary of the long-run regression :**
-```{r}
-model_long_run <- lmer(OBS_VALUE_mortality ~ healthExp_ma5 + hospBeds_ma5 + socialExp_ma5 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
-                   control = lmerControl(autoscale = TRUE), 
+```{r} 
+model_long_run <- lmer(OBS_VALUE_mortality ~ healthExp_ma5 + hospBeds_ma5 + socialExp_ma5 + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA) + (0 + healthExp_ma5 | REF_AREA) + (0 + socialExp_ma5 | REF_AREA),
+    control = lmerControl(autoscale = TRUE), 
                    data = data_lagged, 
                    REML = FALSE)
 summary(model_long_run)
@@ -551,7 +556,7 @@ All coefficients are all statistically significant except for `OBS_VALUE_unemp` 
 
 Third, the AIC is 6167.7 (lower than for the short-run and medium-run models), indicating better fit for long-run effects.
 
-# Conclusion comparing short-medium-long run models
+### Conclusion comparing short-medium-long run models
 
 All three models are interesting to analyse as they show the different impacts social expenditure and health expenditure can have on mortality. 
 The first thing we notice is that in all 3 models all variables are significant at the alpha = 5% level, except `OBS_VALUE_unemp`, they have a t value superior to 1.96 in absolute value. It means that whether it is in the short, medium or long-run they can impact the level of mortality. 
