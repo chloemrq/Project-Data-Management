@@ -774,5 +774,13 @@ As in the previous section, the long-run model best fits the data.
 
 # 5. Conclusion 
 
-- We have shown using regression analysis that there is significant variability in avoidable mortality both during and outside of crises between countries. This aspect would require further modelling to determine which countries/health systems are more impacted by crises and tailor policy responses accordingly. 
-- main conclusions are that increases in health spending are by far the most important element of reducing avoidable mortality while social expenditure is not as important as we could have thought at the beginning of the analysis. 
+Our research stemmed from wondering whether having a strong health and social policy proved useful in order to have a healthy population. The results confirm our intuition. 
+
+Using a linear mixed model allowed us to capture the heterogeneity between countries. It was also key when taking into account the nature of avoidable mortality, which has a very slow evolution, meaning that for most countries the current value of avoidable mortality would be really close to its previous values. In addition a mixed model was also essential since we wanted to account for differences in social and health policies.
+We have shown using regression analysis that there is significant variability in avoidable mortality both during and outside of crises between countries. However this aspect would require further modelling to determine which countries/health systems are more impacted by crises and tailor policy responses accordingly. 
+
+Our main conclusions are that increases in health spending are by far the most important element of reducing avoidable mortality while social expenditure is not as important as we could have thought at the beginning of the analysis.
+Furthermore according to our model, during the pandemic - which we consider as the years 2020 and 2021 - health expenditure cushioned the increase in avoidable deaths, while social protection was particularly efficient as the population faces difficulties. 
+
+It is important to mention that our analysis is limited in many ways. First of all the number of countries studied is still relatively small (41 OECD countries). Then, we could not explore further the structural differences between countries or other potential variables. In spite of these limitations this report can be considered as a first clue in finding how to reduce avoidable mortality.  
+
