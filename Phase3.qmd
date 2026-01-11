@@ -601,9 +601,11 @@ More specifically it means that avoidable mortality is better explained by long-
 
 ### Testing for the Covid-19 period
 
-Regressions using our dummy variable for the Covid-19 and interaction terms, to see the impact of investment in health on avoidable mortality during the pandemic.
+We perform regressions using our dummy variable for the Covid-19 and interaction terms, to see the impact of investment in health on avoidable mortality during the pandemic.
 
 Using interaction terms for time t (current period) could lead to reverse causality problems. We might be unable to identify whether health expenditure, social expenditure and hospital beds impacted avoidable mortality or if because mortality increased suddenly during the pandemic, health expenditure, social expenditure and hospital beds were increased afterwards. 
+
+`healthexp_pandemic` and `socialexp_pandemic` pandemic` measure how the effect of spending differs during COVID-19 compared to pre-pandemic periods.
 
 **Summary of the regression :**
 ```{r}
@@ -613,8 +615,18 @@ model_covid_time_t <- lmer(OBS_VALUE_mortality ~ OBS_VALUE_hosp_beds + OBS_VALUE
                    REML = FALSE)
 summary(model_covid_time_t)
 ```
+We briefly analyse this model : 
 
-Then we want to see the impact of previous investments using our lags 
+All variables are significant at the 5% level. 
+
+- `pandemic` : Ceteris paribus, there was a average increase in mortality during Covid of 123 deaths per 100,000
+- `healthexp_pandemic` : Before the pandemic, an increase of health expenditure of 1% of GDP reduces mortality by 8.15 deaths per 100,000. During the pandemic, the same increase in health expenditure reduces mortality by only 1.16 deaths (−8.153+6.990 = −1.16). This suggests that during the pandemic, health expenditure still reduces deaths but less effectively as before. 
+- `socialexp_pandemic` : Before the pandemic, an increase of social expenditure of 1% of GDP reduces mortality by 7.88 deaths per 100,000. During the pandemic, the same increase in social expenditure reduces mortality by 13.725 deaths (−7.88-5.845 = −13.725). Therefore, social expenditure during the pandemic continues to reduce mortality. 
+
+In conclusion, avoidable deaths increases sharply during Covid (+123 deaths per 100,000). Although social expenditure continues to reduce mortality during Covid, this is not the case for heath expenditure. This can suggest that health expenditure increases had delayed effects. 
+
+
+Then we want to see the impact of previous investments using our lags.
 
 As a result, in order to clearly see the impact of previous investment on avoidable mortality during the Covid-19 crisis, we create interaction variables using our lags. 
 ```{r}
