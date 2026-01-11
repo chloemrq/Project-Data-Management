@@ -15,14 +15,14 @@ execute:
 # I. Research question 
 **How are changes in health and social protection expenditures associated with avoidable mortality across OECD countries over time?**
 
-Population health differs significantly across countries. One key factor explaining these differences is the strength of social and health protection systems. In particular, public investment in healthcare and social protection is expected to reduce mortality from causes that are considered preventable or treatable through effective public policies.
+One key factor explaining differences in population health across countries is the strength of social and health protection systems. In particular, investment in healthcare and social protection is expected to reduce mortality from causes that are considered treatable through effective public policies.
 
-This report seeks to understand the relationship between social and health protection spending and avoidable mortality, used as an indicator of the effectiveness of a country's health system. Avoidable mortality captures premature deaths (under age 75) that could be prevented through healthcare, making it a relevant proxy for population health.
+This report seeks to understand the relationship between social and health protection spending and avoidable mortality, used as an indicator of the effectiveness of a country's health system. Avoidable mortality captures premature deaths that could be prevented through healthcare, making it a relevant proxy for population health.
 
-There are two goals in our analysis. First, using panel data for 41 OECD countries between 2000 and 2023, this report aims to describe and analyse the global evolution of avoidable mortality across OECD countries and assess if high levels of social and health spending are correlated with lower avoidable mortality rates. Second, it focuses on the Covid-19 crisis, to understand if countries with a stronger health protection pre-Covid experienced lower avoidable mortality rates from 2019 to 2021.
+Using panel data for 41 OECD countries between 2000 and 2023, this report aims to analyse the global evolution of avoidable mortality across OECD countries and assess if high levels of social and health spending are correlated with lower avoidable mortality rates. A second part focuses on the Covid-19 crisis, to understand if countries with a stronger health protection pre-Covid experienced lower avoidable mortality rates from 2020 to 2021.
 
 ## Method 
-To conduct our study we will be using a **linear mixed model (LMM)**. Lagged variables will be used as investments in both the social and health systems likely impact the population's general health with a delay. Such a model will allow us to properly study the OECD countries taking into account their differences. 
+To conduct our study we will be using a **linear mixed model (LMM)**. Lagged variables will be used as investments in both the social and health systems likely impact the population's general health with a delay. 
 
 For explanatory variables, in order to estimate the strength and quality of a country’s health protection scheme, we will use the following variables: 
 
@@ -37,9 +37,9 @@ We also have more general variables such as :
 * Human development index 
 * Life expectancy
 
-They will be used as control variables, since richer countries tend to have better living conditions which may lead to a generally healthier population, without the need for a strong health protection. 
+They will be used as control variables, since richer countries tend to have better living conditions leading to a healthier population.
 
-Finally, the explained variable will be : 
+The explained variable is : 
 
 * Avoidable mortality 
 
@@ -62,7 +62,7 @@ library(performance)
 ```
 
 # II. Description of the datasets
-This report relies on 8 datasets. Here is a short description of each of them. More details on the datasets and their descriptive statistics can be found in Phase 2.
+This report relies on 8 datasets. More details on the datasets and their descriptive statistics can be found in Phase 2.
 
 #### Health expenditure - OECD (2025)
 This dataset details the annual health expenditure and financing as a percentage of GDP for 52 countries (2000-2023). It includes consumption of healthcare goods and services from different health providers.
@@ -80,15 +80,13 @@ This dataset provides data on the number of total hospitals beds per 1,000 inhab
 This dataset provides the life expectancy in years for women and men for a period ranging from 1960 to 2023, for 69 different countries or economies. 
 
 ### Social Expenditure Aggregate - OECD (2025)
-This dataset includes statistics on public and private social expenditure at program level (e.g. Old age, Survivors, Incapacity-related benefits, Health, etc) as a percentage of GDP. It covers 38 OECD countries for the period 1980-2021/23.
+This dataset includes statistics on public and private social expenditure at program level (e.g. Old age, Survivors, etc) as a percentage of GDP. It covers 38 OECD countries for the period 1980-2023.
 
 ### Unemployement Rate - IMF (2025)
-This IMF dataset describes the percentage of the labor force that is unemployed and actively seeking employment. It is available from 1980 to 2025 and features 120 geographic regions. 
+This dataset describes the percentage of the labor force that is unemployed and actively seeking employment. It is available from 1980 to 2025 and features 120 geographic regions. 
 
 ### HDI (Human Development Index) - UNDP (2025)
 This dataset describes the human development index, per country (195), annually (1990-2023). It is a summary measure of average achievement in 3 dimensions of human development: a long and healthy life, being knowledgeable and having a decent standard of living.
-
-
 
 
 ```{r}
@@ -199,10 +197,10 @@ database |>
 Most countries share the same downward sloping trend in avoidable mortality. A distinct increase appears in 2019, with a peak in 2020 and a decrease to previous trend values from 2021 in all countries. 
 The country with the lowest avoidable death rate is Switzerland (CHE) and the highest is Latvia at the beginning of the 2000s, then surpassed by Lithuania (LTU) around 2007. Additionally, there is a strong increase in avoidable deaths from around 400 to almost 650 per 100,000 inhabitants in Mexico in 2019. 
 
-It is important to note that this report primarily studies developed countries with the most available data from 2000 to 2023. We chose to exclude the following countries : South Africa (ZAF), Argentina (ARG), Peru (PER), Thailand (THA) and Brazil (BRA) as the data was not sufficient to proceed with proper data analysis. Thus, our conclusions will be biased due to the fact that we study more developed countries with, perhaps, more similar institutional structures and resistance to global health crises such as Covid-19. 
+It is important to note that this report primarily studies developed countries with the most available data from 2000 to 2023. We chose to exclude the following countries : South Africa (ZAF), Argentina (ARG), Peru (PER), Thailand (THA) and Brazil (BRA) as the data was not sufficient to proceed with proper data analysis. Thus, our conclusions will be biased due to the fact that we study more developed countries with more similar institutional structures.
 
 ### Visualising *avoidable_mortality* against independent variables
-The goal of our analysis is to determine if the evolution of health and social expenditures are correlated with the evolution of avoidable mortality. We can start the data analysis by simply plotting some independent variables against *avoidable_mortality* and observe the general trend. 
+We can start the data analysis by simply plotting some independent variables against *avoidable_mortality* and observe the general trend. 
 
 ```{r}
 ggplot(database, aes(x = OBS_VALUE_health_exp, y = OBS_VALUE_mortality)) +
@@ -228,7 +226,7 @@ ggplot(database, aes(x = OBS_VALUE_social_expenditure, y = OBS_VALUE_mortality))
   geom_smooth(method = "lm", se = FALSE)
 ```
 
-As social expenditure increases, the avoidable mortality rate decreases. Most countries' social expenditure is within 10% and 25% of their GDP. However, for these countries similar in social expenditure levels, avoidable mortality goes from 100 to almost 700 per 100,000 deaths, suggesting an important variability. This observation is consistent with the trend observed using the health expenditure variable. Fro similar levels of health or social expenditure, avoidable mortality seems to vary significantly between countries.
+As social expenditure increases, the avoidable mortality rate decreases. Most countries' social expenditure is within 10% and 25% of their GDP. However, for these countries similar in social expenditure levels, avoidable mortality goes from 100 to almost 700 per 100,000 deaths, suggesting an important variability. For similar levels of health or social expenditure, avoidable mortality varies significantly between countries.
 
 
 ```{r}
@@ -254,7 +252,7 @@ ggplot(database, aes(x = OBS_VALUE_gdp, y = OBS_VALUE_mortality)) +
     title = "Avoidable mortality against GDP per Capita") +
   geom_smooth(method = "lm", se = FALSE)
 ```
-This graph suggests that as GDP per capita increases, the rate of avoidable mortality decreases. The avoidable mortality rate doesn't seem to go below 100 deaths per 100,000 inhabitants. Thus, as GDP per capita increases, avoidable mortality remains between 100 and 300 deaths per 100,000 inhabitants suggesting marginal change in mortality as a country's population becomes richer.
+This graph suggests that as GDP per capita increases, the rate of avoidable mortality decreases. The avoidable mortality rate doesn't go below 100 deaths per 100,000 inhabitants. Thus, as GDP per capita increases, avoidable mortality remains between 100 and 300 deaths per 100,000 inhabitants suggesting marginal change in mortality as a country's population becomes richer.
 
 
 # 4. Econometric Analysis : Linear Mixed Model (LMM)
@@ -272,7 +270,7 @@ The correlation matrix reveals strong linear relationships among several control
 * Avoidable mortality is highly negatively correlated with life expectancy (-0.96), reflecting the fact that both variables capture very similar aspects of general population health. 
 * Life expectancy is also strongly correlated with HDI (0.76) and GDP per capita (0.65), meaning there is an overlap between these variables. 
 
-In order to avoid multicollinearity issues in our regression, we choose to exclude HDI and life expectancy from our control variables. We retain GDP per capita and unemployment, which can adjust for differences in economic development between countries and remain sufficiently distinct from avoidable mortality. 
+To avoid multicollinearity issues in regression models, we choose to exclude HDI and life expectancy from our control variables. We retain GDP per capita and unemployment, which can adjust for differences in economic development between countries.
 
 
 ## Creating lag operators/ lagged variables
@@ -323,11 +321,7 @@ data_lagged <- database |>
   ungroup()
 ```
 
-Before further modelling, we create lagged version of our variables. We believe that past investments in the health sector and social protection have an impact on mortality. Using one-year lags will allow us to study short term effects such as changes in government budgets from one year to the next. 3-year and 5-year moving averages will also be used to capture long-term investment impacts. Indeed, we assume increased hospital capacities or training staff takes a few years before benefiting the health system. 
-
-We will create lagged versions of 4 variables : mortality, health expenditure, social expenditure and hospital beds. 
-
-Consequently we have : 
+Before further modelling, we create lagged version of our variables. We believe that past investments in the health sector and social protection have an impact on mortality. We use 1-year lads to study short-term effects. 3-year and 5-year moving averages will be used to capture long-term investments. Indeed, we assume increased hospital capacities or training staff takes a few years before benefiting the health system. 
 
 - `mortality_lag1` : 1-year lag of avoidable mortality 
 - `healthExp_lag1` : 1-year lag of health expenditure (short-run)
@@ -340,30 +334,11 @@ Consequently we have :
 - `socialExp_ma3` : 3-year average lag of social expenditure
 - `socialExp_ma5` : 5-year average lag of social expenditure
 
-
-Additionally, to account for the Covid-19 shock, we introduce a `pandemic` dummy variable equal to 1 for the years 2020 to 2021 and 0 otherwise. We also add 2 interaction terms with health expenditure and social expenditure to assess the impact of these factors on avoidable mortality during this period.
-```{r}
-## Adding pandemic dummies
-database <- database |>
-  mutate(
-    pandemic = ifelse(TIME_PERIOD %in% c(2020:2021), 1, 0)
-  )
-
-database <- database |>
-  mutate(
-    healthexp_pandemic = OBS_VALUE_health_exp * pandemic,
-    socialexp_pandemic = OBS_VALUE_social_expenditure * pandemic
-  )
-```
-
-
 ## Model testing
 
 ### First test using multiple lags
 
 We do a first test to see how our variables interact with each other, especially lags
-
-The model we first want to test is : 
 
 \begin{equation*}
 \begin{aligned}
@@ -381,8 +356,6 @@ Mortality_{i,t} =\;& \gamma_{0,i}
 &+ \epsilon_{i,t}
 \end{aligned}
 \end{equation*}
-
-
 
 With
 
@@ -407,19 +380,25 @@ print(summary(first_test), correlation = TRUE)
 In the regression summary, `REF_AREA (Intercept)`denotes the country-level random intercept. 
 
 
-After this first test, we notice 2 problems : 
+After this first test, we notice 3 problems : 
 
-1. The correlation between `mortality_lag1` and the intercept is very high (-0.729), nullifying the effect of the random intercept which ends up having a variance and a standard deviation of 0. Indeed, when lagged mortality is included, the country-level random intercept disappears, showing that past mortality already explains most differences between countries. We will remove mortality_lag1 from the next regressions to avoid such a result.
+1. The correlation between `mortality_lag1` and the intercept is very high (-0.729), nullifying the effect of the random intercept (variance and standard deviation equal to 0). This shows that past mortality already explains most differences between countries. We decide to remove `mortality_lag1` from the next regressions.
 2. Using both the first lag and the long-run moving average of variables in the same model is not possible. The correlation between the two makes it hard to distinguish which has an effect on mortality and the long-run moving average of explanatory variables end up having incoherent coefficients. 
+3. There is an issue with the large difference in scale between the variables and `OBS_VALUE_gdp`. Indeed, it is expressed in constant 2015 US$ while other variables are expressed in % of GDP or unit per 1,000 or 100,000. We choose to rescale it in further regressions as `OBS_VALUE_gdp = OBS_VALUE_gdp / 1000`
 
-In addition to the previous problems we solved, we also decided to add 2 variables as random effects : social expenditure and health expenditure. This will allow us to better perceive the differences between countries when it comes to social and health policies. There are a lot of differences between countries known for having social protection for example and countries which refuse to give such a help to their citizens. 
+```{r}
+# rescaling the GDP per capita variable 
+data_lagged$OBS_VALUE_gdp <- data_lagged$OBS_VALUE_gdp / 1000
+```
+
+
+In addition, we decide to add 2 variables as random effects : social expenditure and health expenditure. This will allow us to better perceive the differences between countries when it comes to social and health policies.  
 The last explanatory variable, the number of hospital beds will not be added as a random effect since we noticed through testing that it does not have a causal effect on avoidable mortality. Moreover we fear it would clash with the health expenditure variable as they are heavily linked.  
 
 
 We will compare short-run, medium-run and long-run in 3 different models 
 
 ### Models for the short-run, medium-run and long-run
-
 
 *Short-run model :* 
 
@@ -450,7 +429,7 @@ print(summary(model_short_run), correlation = TRUE)
 
 *Interpretation of the results* 
 
-Firstly, the variance of the random intercept `REF_AREA (Intercept)` is 35369.29, which is much higher than the residual variance (`Residual`) at 808.14. The large random intercept variance indicates substantial between-country differences in baseline avoidable mortality that persist after controlling for observed covariates. This reveals how strong structural differences and different history are important to consider when looking at the difference in mortality between two countries.  
+Firstly, the variance of the random intercept `REF_AREA (Intercept)` is 35369.29, which is much higher than the residual variance (`Residual`) at 808.14. The large random intercept variance indicates substantial between-country differences in baseline avoidable mortality.
 The standard deviation is 188.07, suggesting a deviation of about 188 deaths per 100,000 between countries. 
 
 Second, we will interpret each coefficient : 
@@ -458,24 +437,14 @@ Second, we will interpret each coefficient :
 
 All coefficients are all statistically significant except `OBS_VALUE_unemp` (t = 0.93)
 
-- Intercept : The baseline number of avoidable deaths per 100,000 when all other predictors are 0 is 322.03.
+- `Intercept` : The baseline number of avoidable deaths per 100,000 when all other predictors are 0 is 322.03.
 - `healthExp_lag1` : An increase in health expenditure by 1% of GDP last year is associated with 17 fewer deaths per 100,000. 
-- `hospBeds_lag1` : The addition of 1 bed per 1,000 inhabitants last year is associated with 29 more deaths per 100,000. However, while this result is strange, it could be a sign that countries with higher mortality invest more in hospital beds.. 
+- `hospBeds_lag1` : The addition of 1 bed per 1,000 inhabitants last year is associated with 29 more deaths per 100,000. This could be a sign that countries with higher mortality happen to invest more in hospital beds.
 - `socialExp_lag1`: The increase in social expenditure by 1% of GDP last year is associated with around 4 fewer deaths per 100,000 this year.
-- `OBS_VALUE_gdp` : An increase in GDP by 1,000 USD (constant in 2015 USD) reduces avoidable mortality by 4.33 deaths per 100,000.
-- `OBS_VALUE_unemp` : increase in unemployment by 1% of GDP is associated with 0.53 less deaths per 100,000. It is a surprising result but this can be explained by the fact that unemployment is not a significant variable in this model. 
-
-There is an issue with the large difference in scale between the variables and `OBS_VALUE_gdp`. Indeed, it is expressed in constant 2015 US$ while other variables are expressed in % of GDP or unit per 1,000 or 100,000. We choose to rescale it in further regressions as `OBS_VALUE_gdp = OBS_VALUE_gdp / 1000`
-
-Third, the AIC is 7858.5. The residuals are centered around 0 (median : -0.0435). Looking at Q1 and Q3, the residuals seem mostly symmetric and close to the median. Max : 8.1851 indicates the presence of at least one outlier. 
+- `OBS_VALUE_gdp` : An increase in GDP by 1,000 USD reduces avoidable mortality by 4.33 deaths per 100,000.
+- `OBS_VALUE_unemp` : increase in unemployment by 1% of GDP is associated with 0.53 less deaths per 100,000. It is a surprising result but this variable is not statistically significant here.
 
 In conclusion, increases in social and particularly health expenditure reduce the avoidable mortality rate in the short-term and as expected, GDP reduces mortality. 
-
-
-```{r}
-# rescaling the GDP per capita variable 
-data_lagged$OBS_VALUE_gdp <- data_lagged$OBS_VALUE_gdp / 1000
-```
 
 
 *Medium-run model : *
@@ -504,24 +473,21 @@ model_medium_run <- lmer(OBS_VALUE_mortality ~ healthExp_ma3 + hospBeds_ma3 + so
 summary(model_medium_run)
 ```
 *Interpretation of the results* 
-First, the variance of the random intercept is still much higher than the residual variance (34118.23 against 785.21). The standard deviation is 184.71, suggesting a deviation of about 184 deaths per 100,000 between countries. This analysis is similar to the short-run regression results. 
+First, the variance of the random intercept is still much higher than the residual variance (34118.23 against 785.21). The standard deviation is 184.71, suggesting a deviation of about 184 deaths per 100,000 between countries. This is similar to the short-run results.
 
-Second, we will interpret each coefficient : 
-
-All coefficients are all statistically significant except for `OBS_VALUE_unemp` (t = 0.810) and `socialExp_ma3` (t = 0.889). 
-The loss of significance of social expenditure when going from short to medium-run can be explained by the fact that social expenditure are more of a short-run protection, as opposed to a long-run one. Therefore, while it is particularly important to counter urgent needs of the population, it is not so relevant in the medium-run analysis. 
+Second, all coefficients are all statistically significant except for `OBS_VALUE_unemp` (t = 0.810) and `socialExp_ma3` (t = 0.889). 
 
 - Intercept : The baseline number of avoidable deaths per 100,000 when all other predictors are 0 is 341.9.
 - `healthExp_ma3` : An increase in health expenditure by 1% of GDP over the past 3 years is associated with 17.66 fewer deaths per 100,000. 
 - `hospBeds_ma3` : The addition of 1 bed per 1,000 inhabitants over the past 3 years is associated with an increase of deaths per 100,000 by 27.57.
 - `socialExp_ma3`: The increase in social expenditure by 1% of GDP over the past 3 years is associated with 1.75 more deaths per 100,000 this year. Given the fact this variable is no longer significant, we can assume the model fails to capture the actual effect of social expenditure on mortality.
-- `OBS_VALUE_gdp` : An increase in GDP by 1,000 USD (constant in 2015 USD) reduces avoidable mortality by  3.37 deaths per 100,000.
+- `OBS_VALUE_gdp` : An increase in GDP by 1,000 USD reduces avoidable mortality by  3.37 deaths per 100,000.
 - `OBS_VALUE_unemp` : increase in unemployment by 1% of GDP is associated with 0.49 less deaths per 100,000.
 
 Third, the AIC is 6970.0 (lower than for the short-run), indicating better fit for medium-run effects.
 
 In conclusion, health expenditure reduces mortality over 3 years, suggesting that the effects accumulate. Social expenditure is no longer significant. Unexpectedly, there is a positive association between the number of hospital beds and the avoidable mortality rate.  
-GDP continues to reduce mortality (medium-run effects are slightly smaller than the short-run ones). Moreover, the unemployement effect is much bigger in the medium-run than in the short run with an increase in 9 deaths compared to 1 previously. 
+GDP continues to reduce mortality (medium-run effects are slightly smaller than the short-run ones). Moreover, the unemployment effect is much bigger in the medium-run than in the short run with an increase to 9 deaths compared to 1 previously. 
 
 *Long-run model : *
 
@@ -547,17 +513,15 @@ model_long_run <- lmer(OBS_VALUE_mortality ~ healthExp_ma5 + hospBeds_ma5 + soci
 summary(model_long_run)
 ```
 *Interpretation of the results*
-First, the variance of the random intercept is still higher than the residual variance (33616.43 against 776.99). The standard deviation is 77.40 , suggesting a deviation of about 183 deaths per 100,000 between countries. It is smaller than it was in the medium-run model even though the standard deviation remains more or less the same in the 3 models.
+First, the variance of the random intercept is still higher than the residual variance (33616.43 against 776.99). There is deviation of about 183 deaths per 100,000 between countries. It is smaller than it was in the medium-run model even though the standard deviation remains more or less the same in the 3 models.
 
-Second, we will interpret each coefficient : 
-
-All coefficients are all statistically significant except for `OBS_VALUE_unemp` (t = 0.408) and `socialExp_ma5` (t = 0.183)
+Second, all coefficients are all statistically significant except for `OBS_VALUE_unemp` (t = 0.408) and `socialExp_ma5` (t = 0.183)
 
 - Intercept : The baseline number of avoidable deaths per 100,000 when all other predictors are 0 is 332.
 - `healthExp_ma5` : An increase in health expenditure by 1% of GDP over the past 5 years is associated with 13.40 fewer deaths per 100,000. 
 - `hospBeds_ma5` : The addition of 1 bed per 1,000 inhabitants over the past 5 years is associated with an increase of deaths per 100,000 by 26.63.
 - `socialExp_ma5`: The increase in social expenditure by 1% of GDP over the past 5 years is associated with 0.42 fewer deaths per 100,000 this year. It is a small number but once again this can be explained by the fact that this variable is no longer significant. 
-- `OBS_VALUE_gdp` : An increase in GDP by 1,000 USD (constant in 2015 USD) reduces avoidable mortality by  2.81 deaths per 100,000.
+- `OBS_VALUE_gdp` : An increase in GDP by 1,000 USD reduces avoidable mortality by  2.81 deaths per 100,000.
 - `OBS_VALUE_unemp` : increase in unemployment by 1% of GDP is associated with 0.50 less deaths per 100,000.
 
 Third, the AIC is 6120 (lower than for the short-run and medium-run models), indicating better fit for long-run effects.
@@ -565,37 +529,15 @@ Third, the AIC is 6120 (lower than for the short-run and medium-run models), ind
 
 ### Conclusion comparing short-medium-long run models
 
-All three models are interesting to analyse as they show the different impacts social expenditure and health expenditure can have on mortality. 
-The first thing we notice is that in the models all variables are significant at the alpha = 5% level, except `OBS_VALUE_unemp` and `socialExp` (outside of the short-run one), they have a t value superior to 1.96 in absolute value. For health expenditure, whether it is in the short, medium or long-run it can impact the level of mortality. However, contrary to what we expected, social expenditure only have an impact on mortality in the short-run.
+In the short-run, we can interpret the impact of health and social expenditure on avoidable mortality as an immediate budgetary effect. Having a new monetary flow each year in the health sector is important to face urgent needs or crisis. Health expenditure reduces mortality most strongly in the short run (-17.42 deaths per 100,000). However, the number of hospital beds and social expenditure showcase a positive impact on mortality.
 
-In the short-run (represented by variables with the suffix `_lag1`) we can interpret the impact of health and social expenditure on avoidable mortality as an immediate budgetary effect. Having a new monetary flow each year in the health sector, or for households in general is important to face urgent needs or crisis. Health expenditure reduces mortality most strongly in the short run (-11.09 deaths per 100,000), followed by the number of hospital beds (-10.2) and social expenditure also has an immediate effect (-3.61). 
+Over a 3-year horizon, cumulative government spending begins to show efficiency: health expenditure reduces mortality by -17.66, hospital beds still show a positive association with mortality (+27.57). This could reflect important investments in the number of beds per 1,000 inhabitants rather than a causal effect on mortality. This highlights that medium-run effects are partly shaped by policy planning and investment patterns, rather than short-run decisions. 
 
-In the medium-run (represented by variables with the suffix `_ma3`), health expenditure is no longer there to cover an urgent need but are an investment. Government invest with certain policies in mind in order to reduce mortality and to improve welfare in the country in general. There is a cumulative effect, meaning that thanks to the money invested throughout the years, policies were able to show their efficiency afterwards.
-Over a 3-year horizon, cumulative government spending begins to show efficiency: health expenditure reduces mortality by -17.66, hospital beds now show a positive association with mortality (+27.57). This could reflect important investments in the number of beds per 1,000 inhabitants rather than a causal effect on mortality. This highlights that medium-run effects are partly shaped by policy planning and investment patterns, rather than short-run decisions. 
-
-In the long-run (represented by variables with the suffix `_ma5`), the impact of health expenditure  and the number of hospital beds can be interpreted as a structural effect. Some countries have an history of public intervention, especially through health and social expenditure. These structural differences can sometimes make a difference in how easy or hard it will be for a country to reduce their avoidable mortality. It can influence the efficiency of policies pursued through health and social expenditure. 
-Health expenditure reduces deaths by -13.40 over five years, showing a persistent effect, although slightly smaller than medium-run averages for health expenditure. Hospital beds remain positively associated with mortality (+26.63). 
-Moreover, GDP consistently reduces mortality across all horizons, while is not significant since the short-run. 
+In the long-run, the impact of health expenditure  and the number of hospital beds can be interpreted as a structural effect. Health expenditure reduces deaths by -13.40 over five years, showing a persistent effect, although slightly smaller than medium-run averages for health expenditure. Hospital beds remain positively associated with mortality (+26.63). GDP consistently reduces mortality across all horizons.
 
 
 
 ### Comparing short-run, medium run and long-run
-
-*Looking at the R² :*
-
-The first results are for the short-run model, the second for the medium-run, and the third for the short-run
-```{r}
-r2(model_short_run)
-r2(model_medium_run)
-r2(model_long_run)
-```
-
-R² - also called the coefficient of determination - is a measure of how well the explanatory variables of a model explain the observed variable. In a linear mixed model R² is divided in two parts : the conditional R² for random effect which shows how structural differences explain the observed variable, and the marginal R² for fixed effect which shows how other fixed variables explain the observed variable. 
-When R² is close to one it means that the observed variable is well explained by the chosen explanatory variables, otherwise not so much. 
-
-Here we can see that no matter the model (short, medium or long-run), R² has more or less the same value meaning that none of the model is strictly "better than the other", they simply explain different notions. 
-Moreover while conditional R² always have a high value (~0.9) it is not the case for marginal R². This can be explained by the fact that avoidable mortality highly varies from a country to another and that there are a lot of structural differences (the country's history and specific aspects). Since health and social expenditure are also random effects, it means that they also  For example in a country the amount of avoidable deaths for a certain year is highly linked to that of the previous year. 
-
 
 *Looking at the AIC : *
 
@@ -603,43 +545,16 @@ Moreover while conditional R² always have a high value (~0.9) it is not the cas
 - For the medium-run model : 6970.0
 - For the long-run model : 6120
 
-The AIC - Akaike information criterion - is a measure for how well fitted a model is. The AIC verifies both if explanatory variables explain the observed variable correctly and if the number of parameters in the model is too high. Having a high number of parameters to make the model "fit better" is a negative thing as it lowers chances of the model working well outside the sample.  
+The AIC - Akaike information criterion - is a measure for how well fitted a model is. The AIC verifies both if explanatory variables explain the observed variable correctly. 
 
-Generally the lower the AIC is, the better the model is.
-We notice that the short-run model has the highest while the long-run model has the lowest AIC.
-Considering all 3 models have the same number of parameters, a lower AIC means avoidable mortality is better explained by the long-run model and then medium-run one. 
-More specifically it means that avoidable mortality is better explained by long-term investments than short-term influx of expenditures. This conclusion matches our initial intuition :  Avoidable mortality can be impacted by sustained investments. 
-
-
+The lower the AIC is, the better the model is. Here, the long-run model has the lowest AIC.
+Considering all 3 models have the same number of parameters, a lower AIC means avoidable mortality is better explained by the long-run model. 
 
 ### Testing for the Covid-19 period
 
-We perform regressions using our dummy variable for the Covid-19 and interaction terms, to see the impact of investment in health on avoidable mortality during the pandemic.
+We perform regressions using lags and the Covid-19 dummy variable. Moreover, in order to clearly see the impact of previous investment on avoidable mortality during the Covid-19 crisis, we create interaction variables using our lags. 
 
-Using interaction terms for time t (current period) could lead to reverse causality problems. We might be unable to identify whether health expenditure, social expenditure and hospital beds impacted avoidable mortality or if because mortality increased suddenly during the pandemic, health expenditure, social expenditure and hospital beds were increased afterwards. 
-
-`healthexp_pandemic` and `socialexp_pandemic` pandemic` measure how the effect of spending differs during COVID-19 compared to pre-pandemic periods.
-
-**Summary of the regression :**
-```{r}
-model_covid_time_t <- lmer(OBS_VALUE_mortality ~ OBS_VALUE_hosp_beds + OBS_VALUE_health_exp + OBS_VALUE_social_expenditure + pandemic + healthexp_pandemic + socialexp_pandemic + OBS_VALUE_gdp + OBS_VALUE_unemp + (1 | REF_AREA), 
-                   control = lmerControl(autoscale = TRUE), 
-                   data = database, 
-                   REML = FALSE)
-summary(model_covid_time_t)
-```
-We briefly analyse this model : 
-
-All variables are significant at the 5% level. 
-
-- `pandemic` : Ceteris paribus, there was an average increase in mortality during Covid of 123 deaths per 100,000
-- `healthexp_pandemic` : Before the pandemic, an increase of health expenditure of 1% of GDP reduces mortality by 8.15 deaths per 100,000. During the pandemic, the same increase in health expenditure reduces mortality by only 1.16 deaths (−8.153+6.990 = −1.16). This suggests that during the pandemic, health expenditure still reduces deaths but less effectively as before. 
-- `socialexp_pandemic` : Before the pandemic, an increase of social expenditure of 1% of GDP reduces mortality by 7.88 deaths per 100,000. During the pandemic, the same increase in social expenditure reduces mortality by 13.725 deaths (−7.88-5.845 = −13.725). Therefore, social expenditure during the pandemic continues to reduce mortality. 
-
-In conclusion, avoidable deaths increases sharply during Covid (+123 deaths per 100,000). Although social expenditure continues to reduce mortality during Covid, this is not the case for heath expenditure. This can suggest that health expenditure increases had delayed effects. 
-
-
-Then we want to see the impact of previous investments using lags. Moreover, in order to clearly see the impact of previous investment on avoidable mortality during the Covid-19 crisis, we create interaction variables using our lags. 
+We note that using interaction terms for time t could lead to reverse causality problems. We might be unable to identify whether health expenditure, social expenditure and hospital beds impacted avoidable mortality or if because mortality increased suddenly during the pandemic, health expenditure, social expenditure and hospital beds were increased afterwards. 
 ```{r}
 data_lagged <- data_lagged |>
   mutate(
@@ -663,9 +578,6 @@ data_lagged <- data_lagged |>
 - `socialexp_pandemic_lag1` = interaction term between the `pandemic` dummy variable and `socialExp_lag1`
 - `socialexp_pandemic_ma3` = interaction term between the `pandemic` dummy variable and `socialExp_ma3`
 - `socialexp_pandemic_ma5` = interaction term between the `pandemic` dummy variable and `socialExp_ma5`
-
-
-The interaction coefficient measures whether the association between pre-existing investment and mortality differed during the pandemic period relative to normal years.
 
 The following variables will be interpreted as : 
 
@@ -847,7 +759,7 @@ Second, we analyse the fixed effects. Some variables are not significant : `soci
 - `healthexp_pandemic_ma3` : The effect of health expenditure is reduced by 0.24 during Covid, -17.4 deaths in total. The effect is, again, barely impacted by the Covid period. 
 - `socialexp_pandemic_ma3` : The effect of social expenditure is reduced by 4.4 during Covid, decreasing deaths by 4.6 in total. This time, social expenditure is negative, suggesting that its effects are more latent and decrease the avoidable mortality rate in the long-run.
 
-In conclusion, in the long-run, health expenditure remains the mpst important factor in reducing avoidable mortality. Social expenditure, which showed positive correlations with avoidable mortality in the short- and medium-run now shows a slight negative effect. This might suggest, social expenditure might take longer to have a concrete impact. Random effects indicate that country-level differences remain important, though slightly smaller than in shorter-term models. Overall, one key finding of our analysis is that sustained health investment is important for reducing avoidable deaths, while social spending contributes more gradually, with long-term benefits appearing later.
+In conclusion, in the long-run, health expenditure remains the most important factor in reducing avoidable mortality. Social expenditure, which showed positive correlations with avoidable mortality in the short- and medium-run now shows a slight negative effect. This might suggest, social expenditure might take longer to have a concrete impact. Random effects indicate that country-level differences remain important, though slightly smaller than in shorter-term models. Overall, one key finding of our analysis is that sustained health investment is important for reducing avoidable deaths, while social spending contributes more gradually, with long-term benefits appearing later.
 
 Moreover, we compare the 3 model's AIC to determine which fits best the data. 
 
